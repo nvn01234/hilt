@@ -17,6 +17,8 @@ services:
           connections:
             kafka-local:
               properties:
-                bootstrap.servers: "kafka-0:9092,kafka-1:9092,kafka-2:9092"
+                bootstrap.servers: kafka-0:9092,kafka-1:9092,kafka-2:9092
               schema-registry:
                 url: "http://schema-registry:8085"
+              debezium-connect:
+                url: "http://debezium:8083"

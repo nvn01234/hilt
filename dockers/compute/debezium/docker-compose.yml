@@ -5,7 +5,7 @@ services:
   debezium:
     image: quay.io/debezium/connect:1.8.1.Final
     environment:
-      BOOTSTRAP_SERVERS: kafka:9092
+      BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
       GROUP_ID: dbz-1
       CONFIG_STORAGE_TOPIC: debezium.configs
       OFFSET_STORAGE_TOPIC: debezium.offsets
