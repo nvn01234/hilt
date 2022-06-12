@@ -61,7 +61,7 @@ services:
     networks:
       - hadoop
     volumes:
-      - hadoop_historyserver:/hadoop/yarn/timeline
+      - historyserver:/hadoop/yarn/timeline
     depends_on:
       - namenode
       - datanode
@@ -73,7 +73,7 @@ services:
 volumes:
   datanode:
   namenode:
-  hadoop_historyserver:
+  historyserver:
 
 networks:
   hadoop:
