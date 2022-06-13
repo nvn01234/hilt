@@ -1,0 +1,10 @@
+route:
+  receiver: 'slack'
+
+receivers:
+  - name: 'slack'
+    slack_configs:
+      - send_resolved: true
+        username: Dog
+        channel: '#alerts-channel'
+        api_url: https://hooks.slack.com/services/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
