@@ -3,7 +3,7 @@ version: "2"
 services:
 
   debezium:
-    image: quay.io/debezium/connect:1.8.1.Final
+    image: quay.io/debezium/connect:1.9.3.Final
     environment:
       BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
       GROUP_ID: dbz-1
@@ -21,3 +21,8 @@ services:
       - schema-registry
     ports:
       - 8083:8083
+
+networks:
+  default:
+    name: streaming_network
+    external: true

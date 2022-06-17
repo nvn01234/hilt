@@ -1,11 +1,28 @@
-docker compose -f ../storage/mysql/docker-compose.yml \
-               -f ../storage/kafka/docker-compose.yml \
-               -f ../storage/kafka/docker-compose.yml \
-               -f ../storage/kafka/docker-compose-sr.yml \
-               -f ../storage/kafka/docker-compose-akhq.yml \
-               -f ../compute/debezium/docker-compose.yml \
-               down
+source ./script-utils.sh
 
-# sleep 10s
-# cd ../compute/debezium/bin
-# ./dbz-create-connector.sh 
+if [ -z "$1" ]
+then
+    echo "One of actions up or down is required"
+    exit 1
+fi
+
+case $1 in
+    up)
+        service mysql up
+        service kafka up
+        service schema-registry up docker-compose-sr.yml
+        service akhq up docker-compose-akhq.yml
+        service debezium up
+        ;;
+    down)
+        service akhq down docker-compose-akhq.yml
+        service schema-registry down docker-compose-sr.yml
+        service kafka down
+        service mysql down
+        service debezium down
+        ;;
+    *)
+        echo "Streaming flow action must be up or down"
+        exit 1
+        ;;
+esac

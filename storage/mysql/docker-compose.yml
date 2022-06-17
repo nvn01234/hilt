@@ -22,3 +22,8 @@ services:
 
 volumes:
   mysql_data:
+
+networks:
+  default:
+    name: streaming_network
+    external: true

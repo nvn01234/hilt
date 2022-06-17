@@ -59,3 +59,8 @@ volumes:
     driver: local
   kafka_2_data:
     driver: local
+
+networks:
+  default:
+    name: streaming_network
+    external: true

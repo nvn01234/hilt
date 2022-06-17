@@ -1,1 +1,1 @@
-docker exec -it $1 mysql -uroot -pSuperSecr3t
+docker compose exec -it mysql mysql -uroot -pSuperSecr3t

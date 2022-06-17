@@ -23,3 +23,8 @@ services:
               connect:
                 - name: debezium
                   url: http://debezium:8083
+
+networks:
+  default:
+    name: streaming_network
+    external: true

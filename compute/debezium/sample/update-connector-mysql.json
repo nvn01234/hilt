@@ -11,6 +11,8 @@
     "snapshot.new.tables": "parallel",
     "snapshot.locking.mode": "none",
     "database.include.list": "sakila",
+    "signal.kafka.topic": "debezium.sakila.signals",
+    "signal.kafka.bootstrap.servers": "kafka-0:9092,kafka-1:9092,kafka-2:9092",
     "database.history.kafka.bootstrap.servers": "kafka-0:9092,kafka-1:9092,kafka-2:9092",
     "database.history.kafka.topic": "debezium.mysql.sakila.dbhistory",
     "table.include.list": "sakila.address,sakila.category,sakila.film,sakila.city,sakila.country",
