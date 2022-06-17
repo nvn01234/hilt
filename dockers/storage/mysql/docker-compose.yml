@@ -20,6 +20,5 @@ services:
       - ./sample/sakila-db:/docker-entrypoint-initdb.d/
       - mysql_data:/var/lib/mysql
 
-
 volumes:
   mysql_data:
