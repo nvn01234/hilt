@@ -18,3 +18,8 @@ services:
 
 volumes:
   grafana_data:
+
+networks:
+  default:
+    name: local_common_network
+    external: true
