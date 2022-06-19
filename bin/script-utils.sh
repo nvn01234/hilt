@@ -37,3 +37,9 @@ function service {
             ;;
     esac
 }
+
+function create_network {
+    NETWORK_NAME="${1:-common_local_network}"
+    NETWORK_DRIVER="${2:-bridge}"
+    docker network create -d $NETWORK_DRIVER $NETWORK_NAME
+}

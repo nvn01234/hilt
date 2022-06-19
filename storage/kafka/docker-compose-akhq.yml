@@ -26,5 +26,5 @@ services:
 
 networks:
   default:
-    name: streaming_network
+    name: local_common_network
     external: true

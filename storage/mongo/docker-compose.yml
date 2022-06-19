@@ -14,3 +14,8 @@ services:
 
 volumes:
   mongo_data:
+
+networks:
+  default:
+    name: local_common_network
+    external: true

@@ -13,6 +13,8 @@ services:
     volumes:
       - minio_data:/data
 
-volumes:
-  minio_data:
+networks:
+  default:
+    name: local_common_network
+    external: true
 

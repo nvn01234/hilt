@@ -76,4 +76,6 @@ volumes:
   historyserver:
 
 networks:
-  hadoop:
+  default:
+    name: local_common_network
+    external: true
