@@ -7,9 +7,7 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - kafka-0
-      - kafka-1
-      - kafka-2
+      - kafka
       - schema-registry
     environment:
       AKHQ_CONFIGURATION: |
@@ -17,7 +15,7 @@ services:
           connections:
             kafka-local:
               properties:
-                bootstrap.servers: kafka-0:9092,kafka-1:9092,kafka-2:9092
+                bootstrap.servers: kafka:9092
               schema-registry:
                 url: "http://schema-registry:8085"
               connect:

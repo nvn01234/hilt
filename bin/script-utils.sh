@@ -22,14 +22,14 @@ function service {
 
     cd ${SERVICES_HOME["$1"]}
     SERVICE_ACTION=$2
-    COMPOSE_FILE="${3:-docker-compose.yml}"
+    COMPOSE_FILE="${3:-docker compose.yml}"
     
     case $SERVICE_ACTION in
         up)
             docker compose -f $COMPOSE_FILE up -d
             ;;
         down)
-            docker compose -f $COMPOSE_FILE down --remove-orphans
+            docker compose -f $COMPOSE_FILE down --remove-orphans --volumes
             ;;
         *)
             echo "Service action must be up or down"

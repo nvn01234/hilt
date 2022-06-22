@@ -5,7 +5,7 @@ services:
   debezium:
     image: quay.io/debezium/connect:1.9.3.Final
     environment:
-      BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+      BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: dbz-1
       CONFIG_STORAGE_TOPIC: debezium.configs
       OFFSET_STORAGE_TOPIC: debezium.offsets
@@ -15,9 +15,7 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
     depends_on:
-      - kafka-0
-      - kafka-1
-      - kafka-2
+      - kafka
       - schema-registry
     ports:
       - 8083:8083
