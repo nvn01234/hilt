@@ -1,4 +1,4 @@
-docker-compose -f ../docker-compose.yml exec kafka-0 kafka-console-consumer.sh \
+docker compose -f ../docker compose.yml exec kafka kafka-console-consumer.sh \
     --bootstrap-server kafka-0:9092,kafka-1:9092,kafka-2:9092 \
     --topic $1 \
     --from-beginning \

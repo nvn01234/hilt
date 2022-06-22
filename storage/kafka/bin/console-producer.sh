@@ -1,4 +1,4 @@
-docker-compose -f ../docker-compose.yml exec kafka bin/kafka-console-producer.sh \
+docker compose -f ../docker compose.yml exec kafka bin/kafka-console-producer.sh \
     --bootstrap-server kafka:9092 \
     --property "parse.key=true" \
     --property "key.serializer=org.apache.kafka.common.serialization.StringSerializer" \
