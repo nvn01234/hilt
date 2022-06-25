@@ -5,6 +5,7 @@ declare -A SERVICES_HOME
 SERVICES_HOME[debezium]=$DEBEZIUM_HOME
 # Serving
 SERVICES_HOME[grafana]=$GRAFANA_HOME
+SERVICES_HOME[oncall]=$GRAFANA_HOME
 SERVICES_HOME[prometheus]=$PROMETHEUS_HOME
 # Storage
 SERVICES_HOME[hadoop]=$HADOOP_HOME
@@ -12,6 +13,8 @@ SERVICES_HOME[kafka]=$KAFKA_HOME
 SERVICES_HOME[akhq]=$KAFKA_HOME
 SERVICES_HOME[schema-registry]=$KAFKA_HOME
 SERVICES_HOME[mysql]=$MYSQL_HOME
+SERVICES_HOME[rabbitmq]=$RABBITMQ_HOME
+SERVICES_HOME[redis]=$REDIS_HOME
 
 function service {
     if [ -z "$1" ] || [ -z "$2" ]
@@ -22,7 +25,7 @@ function service {
 
     cd ${SERVICES_HOME["$1"]}
     SERVICE_ACTION=$2
-    COMPOSE_FILE="${3:-docker compose.yml}"
+    COMPOSE_FILE="${3:-docker-compose.yml}"
     
     case $SERVICE_ACTION in
         up)

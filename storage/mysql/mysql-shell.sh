@@ -1,1 +1,1 @@
-docker compose exec -it mysql mysql -uroot -pSuperSecr3t -D sakila
+docker compose exec -it mysql mysql -uroot -pSuperSecr3t -D $1

@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: docker.io/bitnami/rabbitmq:3.10.5
+    ports:
+      - 4369:4369
+      - 5551:5551
+      - 5552:5552
+      - 5672:5672
+      - 25672:25672
+      - 15672:15672
+    environment:
+      - RABBITMQ_VHOST=/
+      - RABBITMQ_USERNAME=rabbitmq
+      - RABBITMQ_PASSWORD=SuperSecr3t
+    volumes:
+      - rabbitmq_data:/bitnami/rabbitmq/mnesia
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  default:
+    name: local_common_network
+    external: true

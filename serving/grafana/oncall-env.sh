@@ -1,0 +1,16 @@
+BASE_URL=http://localhost:8080
+SECRET_KEY=SuperSecr3tSuperSecr3tSuperSecr3tSuperSecr3t
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_USERNAME=rabbitmq
+RABBITMQ_PASSWORD=SuperSecr3t
+RABBITMQ_DEFAULT_VHOST=/
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_DB_NAME=gf_oncall
+MYSQL_PASSWORD=SuperSecr3t
+REDIS_URI=redis://redis:6379/0
+DJANGO_SETTINGS_MODULE=settings.hobby
+OSS=True
+CELERY_WORKER_QUEUE=default,critical,long,slack,telegram,webhook,retry,celery
