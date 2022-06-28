@@ -1,40 +1,44 @@
-version: '3'
+version: '3.7'
 
 services:
   namenode:
     image: sondn1/hadoop-namenode:0.1.0-hadoop_3.3.1
-    networks:
-      - hadoop
     volumes:
       - namenode:/hadoop/dfs/name
     ports:
       - 9870:9870
+    profiles:
+      - hdfs
     deploy:
       mode: global
       restart_policy:
         condition: on-failure
+    networks:
+      - local_common_network
 
   datanode:
     image: sondn1/hadoop-datanode:0.1.0-hadoop_3.3.1
-    networks:
-      - hadoop
     volumes:
       - datanode:/hadoop/dfs/data
     depends_on:
       - namenode
+    profiles:
+      - hdfs
     deploy:
       mode: replicated
       replicas: 5
       restart_policy:
         condition: on-failure
+    networks:
+      - local_common_network
 
   resourcemanager:
     image: sondn1/hadoop-resourcemanager:0.1.0-hadoop_3.3.1
-    networks:
-      - hadoop
     depends_on:
       - namenode
       - datanode
+    profiles:
+      - mapreduce
     deploy:
       mode: replicated
       replicas: 1
@@ -42,33 +46,39 @@ services:
         condition: on-failure
     healthcheck:
       disable: true
+    networks:
+      - local_common_network
 
   nodemanager:
     image: sondn1/hadoop-nodemanager:0.1.0-hadoop_3.3.1
-    networks:
-      - hadoop
     depends_on:
       - namenode
       - datanode
       - resourcemanager
+    profiles:
+      - mapreduce
     deploy:
       mode: global
       restart_policy:
         condition: on-failure
+    networks:
+      - local_common_network
 
   historyserver:
     image: sondn1/hadoop-historyserver:0.1.0-hadoop_3.3.1
-    networks:
-      - hadoop
     volumes:
       - historyserver:/hadoop/yarn/timeline
     depends_on:
       - namenode
       - datanode
       - resourcemanager
+    profiles:
+      - mapreduce
     deploy:
       mode: replicated
       replicas: 1
+    networks:
+      - local_common_network
 
 volumes:
   datanode:
@@ -76,6 +86,5 @@ volumes:
   historyserver:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

@@ -15,14 +15,16 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperSecr3t
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
     volumes:
-      - ./sample/dvdrental-db:/docker-entrypoint-initdb.d/
+      - ./sample/hive-init:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - local_common_network
 
 volumes:
   postgres_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

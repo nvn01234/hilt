@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+
+  hive-server:
+    image: sondn1/hive:0.1.0
+    depends_on:
+      - hive-metastore
+    ports:
+      - 10000:10000
+    networks:
+      - local_common_network
+
+  hive-metastore:
+    image: sondn1/hive:0.1.0
+    command: hive --service metastore --verbose --hiveconf hive.root.logger=INFO,console
+    depends_on:
+      - namenode
+      - datanode
+      - postgresql
+      - init_metastore_db
+    ports:
+      - 9083:9083
+    networks:
+      - local_common_network
+
+  init_metastore_db:
+    image: sondn1/hive:0.1.0
+    command: >
+      schematool -url jdbc:postgresql://postgresql:5432/metastore \
+                 -dbType postgres -userName hive -passWord SuperSecr3t \
+                 -driver org.postgresql.Driver \
+                 -initSchema \
+                 --verbose
+    depends_on:
+      - postgresql
+    networks:
+      - local_common_network
+
+networks:
+  local_common_network:
+    external: true
