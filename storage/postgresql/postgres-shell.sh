@@ -1,1 +1,1 @@
-docker compose exec -it postgresql psql -U postgres -W -d $1
+docker-compose exec -it postgresql psql -U hive -W -d $1
