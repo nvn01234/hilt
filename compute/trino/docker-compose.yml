@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:  
+  trino:
+    image: trinodb/trino:387
+    ports:
+      - 8080:8080
+    volumes:
+      - ./configurations:/etc/trino
+      - trino_data:/data
+    networks:
+      - local_common_network
+
+volumes:
+  trino_data:
+
+networks:
+  local_common_network:
+    external: true
