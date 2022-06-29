@@ -21,11 +21,12 @@ services:
     volumes:
       - ./sample/grafana-init:/docker-entrypoint-initdb.d/
       - mysql_data:/var/lib/mysql
+    networks:
+      - local_common_network
 
 volumes:
   mysql_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

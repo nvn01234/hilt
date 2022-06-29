@@ -10,6 +10,8 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
       - zookeeper_data:/bitnami/zookeeper
+    networks:
+      - local_common_network
 
   kafka:
     image: docker.io/bitnami/kafka:3.2
@@ -22,6 +24,8 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+    networks:
+      - local_common_network
 
 volumes:
   zookeeper_data:
@@ -30,6 +34,5 @@ volumes:
     driver: local
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

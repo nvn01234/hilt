@@ -19,6 +19,8 @@ services:
       #   condition: service_started
       # redis:
       #   condition: service_started
+    networks:
+      - local_common_network
 
   celery:
     image: grafana/oncall:v1.0.2
@@ -40,6 +42,8 @@ services:
         condition: service_started
       redis:
         condition: service_started
+    networks:
+      - local_common_network
 
   oncall_db_migration:
     image: grafana/oncall
@@ -51,8 +55,9 @@ services:
       #   condition: service_healthy
       rabbitmq:
         condition: service_started
+    networks:
+      - local_common_network
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

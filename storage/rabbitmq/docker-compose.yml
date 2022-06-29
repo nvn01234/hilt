@@ -16,11 +16,12 @@ services:
       - RABBITMQ_PASSWORD=SuperSecr3t
     volumes:
       - rabbitmq_data:/bitnami/rabbitmq/mnesia
+    networks:
+      - local_common_network
 
 volumes:
   rabbitmq_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

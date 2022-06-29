@@ -13,8 +13,9 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: 'schema-registry'
       SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8085'
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: 'INFO'
+    networks:
+      - local_common_network
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true
