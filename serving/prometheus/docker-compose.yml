@@ -4,20 +4,27 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.36.1
-    volumes:
-      - ./prometheus:/etc/prometheus/
-      - prometheus_data:/prometheus
+    restart: unless-stopped
+    ports:
+      - 9090:9090
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --web.console.libraries=/usr/share/prometheus/console_libraries
       - --web.console.templates=/usr/share/prometheus/consoles
-    ports:
-      - 9090:9090
-    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
+    networks:
+      - local_common_network
 
   node-exporter:
     image: prom/node-exporter:v1.3.1
+    restart: unless-stopped
+    ports:
+      - 9100:9100
+    deploy:
+      mode: global
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -27,29 +34,27 @@ services:
       - --path.sysfs=/host/sys
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-    ports:
-      - 9100:9100
-    restart: unless-stopped
-    deploy:
-      mode: global
+    networks:
+      - local_common_network
 
   alertmanager:
     image: prom/alertmanager:v0.24.0
     ports:
       - 9093:9093
-    volumes:
-      - ./alertmanager:/etc/alertmanager/
-      - alertmanager_data:/alertmanager
     restart: unless-stopped
     command:
       - --config.file=/etc/alertmanager/config.yml
       - --storage.path=/alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager/
+      - alertmanager_data:/alertmanager
+    networks:
+      - local_common_network
 
 volumes:
     prometheus_data:
     alertmanager_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

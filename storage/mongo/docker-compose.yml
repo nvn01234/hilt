@@ -7,15 +7,16 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: SuperSecr3t
     ports:
-    - 27017:27017
+      - 27017:27017
     volumes:
-    - ./sample/:/docker-entrypoint-initdb.d/
-    - mongo_data:/data/db
+      - ./sample/:/docker-entrypoint-initdb.d/
+      - mongo_data:/data/db
+    networks:
+      - local_common_network
 
 volumes:
   mongo_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

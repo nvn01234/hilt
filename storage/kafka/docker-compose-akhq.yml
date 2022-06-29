@@ -21,8 +21,9 @@ services:
               connect:
                 - name: debezium
                   url: http://debezium:8083
+    networks:
+      - local_common_network
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true

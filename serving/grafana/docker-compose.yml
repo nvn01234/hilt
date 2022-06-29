@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     ports:
       - 3000:3000
+    depends_on:
+      - mysql
     environment:
       - GF_DATABASE_TYPE=mysql
       - GF_DATABASE_HOST=mysql
@@ -20,13 +22,12 @@ services:
       - GF_INSTALL_PLUGINS=grafana-oncall-app
     volumes:
       - grafana_data:/var/lib/grafana
-    depends_on:
-      - mysql
+    networks:
+      - local_common_network
 
 volumes:
   grafana_data:
 
 networks:
-  default:
-    name: local_common_network
+  local_common_network:
     external: true
