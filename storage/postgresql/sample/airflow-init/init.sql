@@ -1,0 +1,2 @@
+CREATE USER airflow WITH PASSWORD 'SuperSecr3t' CREATEDB;
+CREATE DATABASE airflow OWNER airflow
