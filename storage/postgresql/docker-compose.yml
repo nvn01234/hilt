@@ -15,9 +15,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperSecr3t
-      POSTGRES_INITDB_ARGS: "--auth-host=md5"
     volumes:
-      - ./sample/airflow-init:/docker-entrypoint-initdb.d/
+      - ./sample/app-init:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data
     networks:
       - local_common_network
