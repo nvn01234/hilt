@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgresql
+      DB_SCHEMA: public
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: SuperSecr3t
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: SuperSecr3t
+      # JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8081:8080
+    networks:
+      - local_common_network
+
+volumes:
+  postgres_data:
+      driver: local
+
+networks:
+  local_common_network:
+    external: true

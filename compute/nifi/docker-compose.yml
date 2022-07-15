@@ -1,0 +1,34 @@
+version: '3'
+services:
+  nifi:
+    image: apache/nifi:1.16.3
+    # restart: unless-stopped
+    ports:
+      - 8443:8443/tcp     # HTTPS
+      # - 8080:8080/tcp   # HTTP
+      # - 10000:10000/tcp   # Remote Input Socket
+      # - 8000:8000/tcp   # JVM Debugger
+      # - 11443:11443/tcp  # Cluster Node Protocol
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: ThisIsSuperSecr3t
+    volumes:
+      - ./external-jars:/opt/nifi/nifi-1.16.3/external
+      - ./configurations/nifi.properties:/opt/nifi/nifi-1.16.3/config/nifi.properties
+      - ./configurations/zookeeper.properties:/opt/nifi/nifi-1.16.3/config/zookeeper.properties
+      
+      # A custom nifi.properties file can be mounted as follows.
+      #- /var/lib/nifi/conf/nifi.properties:/opt/nifi/nifi-current/conf/nifi.properties:ro
+    networks:
+      - local_common_network
+
+volumes:
+  database_repository:
+  flowfile_repository:
+  content_repository:
+  provenance_repository:
+  state:
+    
+networks:
+  local_common_network:
+    external: true
