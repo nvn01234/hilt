@@ -129,6 +129,7 @@ ENV/
 
 # Gradle:
 .gradle
+**/gradlew*
 gradle
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -159,7 +160,6 @@ fabric.properties
 
 ### Eclipse template
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
