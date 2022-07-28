@@ -1,4 +1,4 @@
-package me.example.quartz;
+package me.example.quartz.jobs;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;

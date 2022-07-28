@@ -1,5 +1,8 @@
 package me.example.quartz;
 
+import me.example.quartz.jobs.JobA;
+import me.example.quartz.jobs.LongJob;
+import me.example.quartz.jobs.SimpleJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -12,25 +15,41 @@ public class SimpleScheduler {
 
             Scheduler sched = schedFact.getScheduler();
 
-            JobDetail job = JobBuilder.newJob(SimpleJob.class)
+            JobDetail job = JobBuilder.newJob(LongJob.class)
                     .withIdentity("myJob", "group1")
-                    .usingJobData("jobSays", "Hello World!")
-                    .usingJobData("myFloatValue", 3.141f)
+                    .usingJobData("jobRun", 3000)
+                    .usingJobData("extraRun", 1000)
                     .build();
 
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("myTrigger", "group1")
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                            .withIntervalInSeconds(40)
-                            .repeatForever())
+                            .repeatForever()
+//                            .withMisfireHandlingInstructionIgnoreMisfires()
+//                            .withMisfireHandlingInstructionFireNow()
+//                            .withMisfireHandlingInstructionNextWithExistingCount()
+                            .withMisfireHandlingInstructionNextWithRemainingCount()
+//                            .withMisfireHandlingInstructionNowWithExistingCount()
+//                            .withMisfireHandlingInstructionNowWithRemainingCount()
+                            .withIntervalInMilliseconds(3500))
                     .startNow()
                     .build();
 
             sched.scheduleJob(job, trigger);
             sched.start();
 
+            System.out.println("Sleeping");
+            Thread.sleep(5000);
+            System.out.println("Waked up");
+            JobDetail otherJob = JobBuilder.newJob(JobA.class)
+                    .withIdentity("jobA", "group3")
+                    .build();
+            sched.scheduleJob(otherJob, trigger);
+
         } catch (SchedulerException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
