@@ -1,5 +1,7 @@
 package me.example.quartz;
 
+import me.example.quartz.jobs.JobA;
+import me.example.quartz.jobs.JobB;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
