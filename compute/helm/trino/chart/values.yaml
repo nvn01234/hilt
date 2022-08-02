@@ -1,0 +1,174 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: trinodb/trino
+  tag: "390"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+trino:
+  node.properties:
+    node.environment: kubernetes
+    node.data-dir: /data/trino
+    plugin.dir: /usr/lib/trino/plugin
+  # Default values from: https://github.com/trinodb/trino/blob/master/core/docker/default/etc/jvm.config
+  jvm.config: |
+    -server
+    -Xmx1G
+    -XX:-UseBiasedLocking
+    -XX:+UseG1GC
+    -XX:G1HeapRegionSize=32M
+    -XX:+ExplicitGCInvokesConcurrent
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+UseGCOverheadLimit
+    -XX:+ExitOnOutOfMemoryError
+    -XX:ReservedCodeCacheSize=256M
+    -Djdk.attach.allowAttachSelf=true
+    -Djdk.nio.maxCachedBufferSize=2000000
+  log.properties:
+    io.trino: INFO
+  # https://trino.io/docs/current/admin/properties.html
+  config.properties: {}
+
+catalog: {}
+  # memory.properties: |
+  #   connector.name=memory
+  # tpcds.properties: |
+  #   connector.name=tpcds
+  #   tpcds.splits-per-node=4
+
+httpServer:
+  http:
+    enabled: true
+    port: 8080
+  https:
+    enabled: false
+    port: 8443
+  keystore:
+    path:
+    key:
+  truststore:
+    path:
+    key:
+
+authen:
+  # Option: custom | kerberos | ldap | passwordFile | oauth2
+  type: custom
+
+  kerberos:
+    config: /etc/krb5.conf
+    keytab:
+    # ref: https://web.mit.edu/kerberos/krb5-1.12/doc/appdev/gssapi.html#name-types
+    nameType: # HOSTBASED_SERVICE (default) | USER_NAME
+    serviceName:
+    principalHostname:
+
+  ldap:
+    url:
+    userBaseDN:
+    userBindPattern:
+    groupAuthPattern:
+    cacheTtl:
+
+    # Trino server can use dedicated LDAP service user for doing user group membership queries.
+    bindDN:
+    bindPassword:
+
+  passwordFile:
+    path:
+    refreshPeriod:
+    cacheSize:
+
+  oauth2:
+    authUrl:
+    jwksUrl:
+    tokenUrl:
+    clientId:
+    clientSecret:
+    principalField:
+
+systemAccessControl:
+  # Option: custom | allow-all | read-only | file
+  name: allow-all
+
+  file:
+    refreshPeriod:
+    rules:
+      catalogs: []
+      queries: []
+      impersonation: []
+    existingRulesPath:
+
+commons:
+  command: []
+  args: []
+
+  labels: {}
+  podLabels: {}
+  annotations: {}
+  podAnnotations: {}
+
+  resources: {}
+  securityContext: {}
+  podSecurityContext: {}
+
+  schedulerName: null
+  runtimeClassName: null
+  priorityClassName: null
+
+  affinity: {}
+  tolerations: []
+  nodeSelector: {}
+
+  extraVolumeMounts: []
+  extraVolumes: []
+
+coordinator: {}
+worker:
+  replicas: null
+
+cache:
+  enabled: false
+
+  persistence:
+    enabled: false
+    accessModes:
+    - ReadWriteOnce
+    storageClass: "-"
+    size: 10Gi
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+metrics:
+  enabled: false
+  port: 9090
+  podMonitor:
+    enabled: false
+
+service:
+  type: ClusterIP
+  httpPort: 8080
+  httpsPort: 8443
+  annotations: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  hosts:
+    - host: trino.local
+      paths: []
+  tls: []
+  #  - secretName: trino.local-tls
+  #    hosts:
+  #      - trino.local

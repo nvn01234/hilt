@@ -1,0 +1,66 @@
+# global:
+#   postgresql:
+#     auth:
+#       postgresPassword: "SuperSecr3t"
+#       username: "admin"
+#       password: "SuperSecr3t"
+#       database: "postgres"
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: SuperSecr3t
+  username: admin
+  password: SuperSecr3t
+  database: postgres
+
+containerPorts:
+  postgresql: 5432
+
+volumePermissions:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+psp:
+  create: true
+
+
+# usePasswordFile: false
+# postgresqlPassword: SuperSecr3t
+# postgresqlPostgresPassword: SuperSecr3t
+# postgresqlDatabase: postgres
+
+# postgresqlMaxConnections: 512     # Maximum total connections, default 100
+# postgresqlStatementTimeout: 600   # Default 0 means turns off the timeout
+
+# resources:
+#   requests:
+#     cpu: 250m
+#     memory: 256Mi
+#   limits:
+#     cpu: 4000m
+#     memory: 4Gi
+
+# serviceAccount:
+#   create: true
+
+# rbac:
+#   create: true
+
+# psp:
+#   create: true
+
+# metrics:
+#   enabled: false
+#   serviceMonitor:
+#     enabled: true
+#   prometheusRule:
+#     enabled: false

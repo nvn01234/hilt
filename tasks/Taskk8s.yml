@@ -1,0 +1,14 @@
+version: '3'
+
+vars:
+  NAMESPACE: '{{.NAMESPACE | default "default"}}'
+  RELEASE: '{{.RELEASE | default "funny"}}'
+  VALUES: '{{.VALUES | default "./values.yaml"}}'
+
+tasks:
+  get-all:
+    cmds:
+    - kubectl get all -n {{ .CLI_ARGS }}
+
+
+

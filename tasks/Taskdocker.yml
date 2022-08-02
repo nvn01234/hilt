@@ -1,0 +1,19 @@
+version: '3'
+
+tasks:
+  stop-containers:
+    cmds:
+    - docker stop $(docker ps -aq)
+
+  rm-containers:
+    cmds:
+    - docker rm $(docker ps -aq)
+
+  force-rm-containers:
+    cmds:
+    - task: stop-containers
+    - docker rm $(docker ps -aq)
+
+  create-local-network:
+    cmds:
+    - docker network create local_common_network

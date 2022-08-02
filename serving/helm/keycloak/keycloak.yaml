@@ -1,0 +1,51 @@
+replicaCount: 1
+
+auth:
+  createAdminUser: true
+  adminUser:     dataops
+  adminPassword: SuperSecr3t
+  managementUser:     sondn
+  managementPassword: SuperSecr3t
+
+proxyAddressForwarding: true
+serviceDiscovery:
+  enabled: true
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+pdb:
+  create: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  tls: true
+  certManager: true
+  hostname: keycloak.data.vnpay.local
+
+postgresql:
+  enabled: false
+
+externalDatabase:
+  host: postgresql.postgresql.svc.cluster.local
+  port: 5432
+  user:     admin
+  password: SuperSecr3t
+  database: postgres
+
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: true

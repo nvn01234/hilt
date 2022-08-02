@@ -1,0 +1,8 @@
+releases:
+- name: airflow
+  namespace: airflow
+  chart: bitnami/airflow
+  version: 0.7.0
+  values:
+  - ./airflow.yaml
+  - fullnameOverride: airflow

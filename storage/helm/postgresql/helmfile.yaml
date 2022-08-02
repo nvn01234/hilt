@@ -1,0 +1,8 @@
+releases:
+- name: postgresql
+  namespace: postgresql
+  chart: bitnami/postgresql
+  version: 11.6.19
+  values:
+  - ./postgresql.yaml
+  - fullnameOverride: postgresql

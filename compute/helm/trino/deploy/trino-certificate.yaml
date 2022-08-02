@@ -1,0 +1,38 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: localhost
+  namespace: trino
+spec:
+  duration:    2160h # 90d
+  renewBefore: 360h  # 15d
+  isCA: false
+  usages:
+  - server auth
+  - client auth
+  commonName: localhost
+  dnsNames:
+  - trino.trino.svc
+  - trino.trino.svc.cluster.local
+  - localhost
+  issuerRef:
+    group: cert-manager.io
+    kind:  ClusterIssuer
+    name:  ca-issuer
+  secretName: localhost-tls
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        key:  keystore.key
+        name: trino-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trino-secret
+  namespace: trino
+type: Opaque
+stringData:
+  keystore.key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
