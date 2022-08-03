@@ -1,0 +1,27 @@
+version: '3'
+
+vars:
+  NAMESPACE: trino
+
+tasks:
+  install-cert:
+    cmds:
+    - kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
+  apply-cert:
+    cmds: 
+    - kubectl apply -n trino -f ../deploy/trino-certificate.yaml
+  get-all:
+    cmds:
+    - kubectl get all -n trino
+  port-fw:
+    cmds:
+    - kubectl port-forward -n trino service/trino 8081:8443
+  deploy:
+    cmds:
+    - helm upgrade --install trino .
+        --namespace=trino
+        --values=../deploy/trino.yaml
+        --create-namespace
+  destroy:
+    cmds:
+    - helm uninstall trino -n trino

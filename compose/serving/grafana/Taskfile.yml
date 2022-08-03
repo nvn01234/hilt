@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+
+  start:
+    cmds:
+    - docker compose -f docker-compose.yml \
+                     -f docker-compose-oncall.yml \
+                     up -d --remove-orphans
+  
+  stop:
+    cmds:
+    - docker compose -f docker-compose.yml \
+                     -f docker-compose-oncall.yml \
+                     down

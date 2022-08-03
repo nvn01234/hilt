@@ -1,0 +1,16 @@
+repositories:
+- name: bitnami
+  url:  https://charts.bitnami.com/bitnami
+
+helmDefaults:
+  wait: true
+  force: true
+  verify: true
+  createNamespace: true
+  timeout: 600
+
+helmfiles:
+- path: storage/postgresql/helmfile.yaml
+- path: serving/keycloak/helmfile.yaml
+# - path: compute/trino/deploy/helmfile.yaml
+

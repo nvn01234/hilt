@@ -1,0 +1,41 @@
+version: '3'
+
+tasks:
+
+  start-all:
+    cmds:
+    - docker compose -f docker-compose.yml
+                     -f docker-compose-akhq.yml
+                     -f docker-compose-sr.yml
+                     up -d --remove-orphans
+
+  stop-all:
+    cmds:
+    - docker compose -f docker-compose.yml
+                     -f docker-compose-akhq.yml
+                     -f docker-compose-sr.yml
+                     down
+
+  start-kafka:
+    cmds:
+    - docker compose up -d --remove-orphans
+  
+  stop-kafka:
+    cmds:
+    - docker compose down
+
+  start-akhq:
+    cmds:
+    - docker compose -f docker-compose-akhq.yml up -d --remove-orphans
+  
+  stop-akhq:
+    cmds:
+    - docker compose -f docker-compose-akhq.yml down
+
+  start-schema-registry:
+    cmds:
+    - docker compose -f docker-compose-sr.yml up -d --remove-orphans
+  
+  stop-schema-registry:
+    cmds:
+    - docker compose -f docker-compose-sr.yml down

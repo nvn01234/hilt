@@ -1,0 +1,23 @@
+version: '3'
+
+vars:
+  HIVE_VERSION: '{{.HIVE_VERSION | default "0.1.0"}}'
+
+tasks:
+
+  start:
+    cmds:
+    - docker compose up -d --remove-orphans
+  
+  stop:
+    cmds:
+    - docker compose down
+
+  shell:
+    cmds:
+    - docker-compose exec -it hive-metastore hive
+
+  build:
+    cmds:
+    - docker build --tag sondn1/hive:{{ .HIVE_VERSION }} .
+    # - docker push sondn1/hive:{{ .HIVE_VERSION }}

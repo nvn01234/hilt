@@ -1,0 +1,235 @@
+image:
+  repository: trinodb/trino
+  tag: 391
+
+trino:
+  ### JVM on Container
+  # * https://merikan.com/2019/04/jvm-in-a-container/
+  jvm.config: |
+    -server
+    -XX:+UseG1GC
+    -XX:G1HeapRegionSize=32M
+    -XX:+UseGCOverheadLimit
+    -XX:+ExplicitGCInvokesConcurrent
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+ExitOnOutOfMemoryError
+    -XX:ReservedCodeCacheSize=256M
+    -XX:+UseContainerSupport
+    -XX:MaxRAMPercentage=96.0
+    -XX:-UseCompressedOops
+    -Djavax.net.ssl.trustStore=/etc/pki/k8s/truststore.p12
+    -Djavax.net.ssl.trustStorePassword=jTATy27H2jQquoGHTxar3gGXgdg354GSA
+  ### Tuning Trino
+  # * https://trino.io/docs/current/admin/tuning.html
+  # * https://trino.io/docs/current/admin/properties-query-management.html
+  # * https://docs.qubole.com/en/latest/troubleshooting-guide/ts-presto/presto-tuning.html
+  config.properties:
+    task.concurrency: 2
+    query.max-run-time:       15m
+    query.max-execution-time: 15m
+    query.max-memory:         500MB
+    query.max-total-memory:   1GB
+    query.max-memory-per-node:       500MB
+    memory.heap-headroom-per-node:   500MB
+  rules.json: |
+    {
+      "impersonation":
+        [
+          {
+            "original_user": "service-account-superset",
+            "new_user": ".*",
+            "allow": true
+          }
+        ],
+        "catalogs": [
+          {
+            "user": ".*",
+            "catalog": "system",
+            "allow": "read-only"
+          }
+        ],
+        "schemas": [
+          {
+            "group": "admin",
+            "catalog": ".*",
+            "schema": ".*",
+            "owner": true
+          }
+        ],"tables": [
+          {
+            "group": "admin",
+            "catalog": ".*",
+            "schema": ".*",
+            "table": ".*",
+            "privileges": ["SELECT", "INSERT", "DELETE", "OWNERSHIP", "GRANT_SELECT"]
+          }
+        ],
+        "system_information": [
+          {
+            "user": ".*",
+            "allow": ["read"]
+          }
+        ]
+    }
+
+  access-control.properties: |
+    access-control.name=file
+    security.config-file=etc/rules.json
+    security.refresh-period=60s
+  group-provider.properties: |
+    group-provider.name=file
+    file.group-file=etc/group.txt
+    file.refresh-period=60s
+  group.txt: |
+    admin:luyen.nv@teko.vn,dung.dm@teko.vn,son.dn@teko.vn,hung.vp@teko.vn,loan.ht1@teko.vn,tien.tq@teko.vn
+
+commons:
+  # resources:
+  #   requests:
+  #     cpu: "1"
+  #     memory: "1Gi"
+  #   limits:
+  #     cpu: "2"       # x4 request
+  #     memory: "2Gi" # x4 request
+  extraVolumeMounts:
+  - name: certificate
+    mountPath: /etc/pki/k8s/
+    readOnly: true
+  extraVolumes:
+  - name: certificate
+    secret:
+      secretName: localhost-tls
+
+worker:
+  replicas: 3
+
+cache:
+  enabled: false
+
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    storageClass: topolvm-hdd
+    size: 300Gi
+
+httpServer:
+  http:
+    enabled: true
+    port: 8080
+  https:
+    enabled: true
+    port: 8443
+  keystore:
+    path: /etc/pki/k8s/keystore.p12
+    key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
+  truststore:
+    path: /etc/pki/k8s/truststore.p12
+    key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
+
+catalog:
+  jmx.properties: |
+    connector.name=jmx
+
+  hive.properties: |
+    connector.name=hive-hadoop2
+
+    ### Metastore configs
+    # Options: file | glue | thrift
+    # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
+    hive.metastore=thrift
+    hive.metastore.uri=thrift://hive-metastore.hive.svc:9083
+    hive.metastore-timeout=1m
+
+    ### Storage configs
+    hive.s3select-pushdown.enabled=true
+    hive.parquet.use-column-names=true
+    hive.orc.use-column-names=true
+    hive.s3.endpoint=http://s3.data.vnpay.local:7480
+    hive.s3.path-style-access=true
+    hive.s3.aws-access-key=lolol
+    hive.s3.aws-secret-key=lolol
+
+    ### Storage caching config
+    # hive.cache.enabled=false
+    # hive.cache.location=/opt/trino/cache/hive
+    # hive.cache.data-transfer-port=9000
+    # hive.cache.bookkeeper-port=19000
+
+    ### Security configs
+    hive.security=read-only
+
+  vnpay_datalake.properties: |
+    connector.name=hive-hadoop2
+
+    ### Metastore configs
+    # Options: file | glue | thrift
+    # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
+    hive.metastore=thrift
+    hive.metastore.uri=thrift://hive-vnpay-datalake-metastore.hive.svc:9083
+    hive.metastore-timeout=1m
+
+    ### Storage configs
+    hive.s3select-pushdown.enabled=true
+    hive.parquet.use-column-names=true
+    hive.orc.use-column-names=true
+    hive.s3.endpoint=http://minio.default.svc.cluster.local:9091/
+    hive.s3.path-style-access=true
+    hive.s3.aws-access-key=sondn
+    hive.s3.aws-secret-key=sondn1234
+
+    ### Storage caching config
+    # hive.cache.enabled=false
+    # hive.cache.location=/opt/trino/cache/vnpay_datalake
+    # hive.cache.data-transfer-port=9003
+    # hive.cache.bookkeeper-port=19003
+
+    ### Security configs
+    hive.security=read-only
+
+service:
+  annotations:
+    projectcontour.io/upstream-protocol.tls: "8443"
+
+
+cache:
+  enabled: false
+
+  persistence:
+    enabled: false
+    accessModes:
+    - ReadWriteOnce
+    storageClass: "-"
+    size: 10Gi
+
+metrics:
+  enabled: false
+  port: 9090
+  podMonitor:
+    enabled: true
+
+# ingress:
+#   enabled: false
+#   annotations:
+#     ingress.kubernetes.io/force-ssl-redirect: "true"
+#     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#   hosts:
+#   - host: trino.data.vnpay.local
+#     paths: [/]
+#   tls:
+#   - secretName: trino.data.vnpay.local-tls
+#     hosts:
+#     - trino.data.vnpay.local
+
+authen:
+  type: oauth2
+  sharedSecret: SuperSecr3t
+
+  oauth2:
+    issuer: http://keycloak.keycloak.svc.cluster.local/realms/master
+    clientId: trino
+    clientSecret: iW18TfoUTKdiaKvycQ56jikEhY1Iu2vw
+    authUrl:  http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/auth
+    jwksUrl:  http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/certs
+    tokenUrl: http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/token
+    principalField: preferred_username
