@@ -24,17 +24,3 @@ fi
 
 dockerd-rootless-setuptool.sh install -f
 docker context use rootless
-
-# Start minikube
-minikube start --driver=docker \
-               --mount \
-               --mount-string="/data1/minikube:/data1" \
-               --container-runtime=containerd \
-               --memory 8192 --cpus 4 \
-               --nodes 1
-
-# Stop minikube
-minikube stop --all
-
-# Delete minikube containers
-minikube delete

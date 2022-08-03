@@ -1,1 +1,0 @@
-docker compose exec -it mongo mongo --host localhost sakila

@@ -1,0 +1,90 @@
+version: '3'
+
+vars:
+  NAMESPACE: '{{.NAMESPACE | default "default"}}'
+  RELEASE: '{{.RELEASE | default "funny"}}'
+  VALUES: '{{.VALUES | default "./values.yaml"}}'
+
+includes:
+  trino:
+    taskfile: ./compute/trino/chart/Taskfile.yml
+    dir: ./compute/trino/chart
+  postgresql:
+    taskfile: ./storage/postgresql/Taskfile.yml
+    dir: ./storage/postgresql
+  keycloak:
+    taskfile: ./serving/keycloak/Taskfile.yml
+    dir: ./serving/keycloak
+
+tasks:
+
+  minikube-up:
+    cmds:
+    - minikube start --driver=docker \
+                     --mount \
+                     --mount-string="/data1/minikube:/data1" \
+                     --container-runtime=containerd \
+                     --memory 8192 --cpus 4 \
+                     --nodes 1
+
+  minikube-down:
+    cmds:
+    - minikube stop --all
+
+  deploy-all:
+    cmds:
+    - helmfile apply
+
+  destroy-all:
+    cmds:
+    - helmfile destroy
+
+  dep:
+    cmds:
+    - helm dependency update
+
+  gen:
+    cmds:
+    - mkdir -p ./build
+    - rm   -rf ./build/*
+    - helm template {{.RELEASE}} .
+        --namespace={{.NAMESPACE}}
+        --values={{.VALUES}}
+        --output-dir=build
+
+  clean:
+    cmds:
+    - rm -rf ./build
+
+  diff:
+    cmds:
+    - helm diff upgrade {{.RELEASE}} .
+        --namespace={{.NAMESPACE}}
+        --values={{.VALUES}}
+        --allow-unreleased
+
+  apply:
+    cmds:
+    - helm upgrade --install {{.RELEASE}} .
+        --namespace={{.NAMESPACE}}
+        --values={{.VALUES}}
+        --create-namespace
+
+  show:
+    cmds:
+    - kubectl --namespace={{.NAMESPACE}} get pod
+        -l app.kubernetes.io/instance={{.RELEASE}}
+
+  deploy:
+    cmds:
+    - helmfile apply
+
+  destroy:
+    cmds:
+    - helm uninstall {{.RELEASE}} --namespace={{.NAMESPACE}}
+
+  # push:
+  #   cmds:
+  #   - task: dep
+  #   # TODO: BasicAuth https://github.com/chartmuseum/helm-push#basic-auth
+  #   - helm cm-push . teko
