@@ -25,10 +25,12 @@ service:
   type: ClusterIP
 
 ingress:
-  enabled: false
+  ingressClassName: nginx
+  enabled: true
   tls: true
-  certManager: true
   hostname: keycloak.data.vnpay.local
+  annotations:
+    cert-manager.io/cluster-issuer: ca-issuer
 
 postgresql:
   enabled: false

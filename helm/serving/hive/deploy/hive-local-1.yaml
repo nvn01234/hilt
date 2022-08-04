@@ -1,0 +1,43 @@
+image:
+  repository: hub.teko.vn/dataops/hive
+  tag: 3.1.3
+
+hiveConfig:
+  hive-site.xml:
+    hive.metastore.event.db.notification.api.auth: false
+    # https://prestosql.io/docs/current/connector/hive.html#metastore-configuration-for-avro
+    metastore.storage.schema.reader.impl: org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader
+    # Enable cleaner threads to support Hive transactions
+    # https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706483#HiveTransactions-Configuration
+    hive.compactor.initiator.on: true
+    hive.compactor.worker.threads: 1
+
+metastore:
+  replicas: 1
+
+warehouse:
+  dir: s3a://vnshop-datalake/alluvial/.warehouse/
+
+metrics:
+  enabled: true
+  port: 9028
+  podMonitor:
+    enabled: true
+
+filesystem:
+  s3a:
+    enabled: true
+    endpoint:  http://s3.data.vnpay.local:7480/
+    accessKey: {{ requiredEnv "HIVE_S3A_VNSHOP_DATALAKE_ACCESSKEY" | quote }}
+    secretKey: {{ requiredEnv "HIVE_S3A_VNSHOP_DATALAKE_SECRETKEY" | quote }}
+
+postgresql:
+  enabled: false
+
+externalDatabase:
+  type: postgres
+  host: infradb.data.vnpay.local
+  port: 5432
+  database: hive-metastore-vnshop-datalake
+  username: postgres
+  password: SuperSecr3t

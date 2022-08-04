@@ -1,8 +1,0 @@
-releases:
-- name: keycloak
-  namespace: keycloak
-  chart: bitnami/keycloak
-  version: 9.6.1
-  values:
-  - ./keycloak.yaml
-  - fullnameOverride: keycloak

@@ -20,11 +20,11 @@ tasks:
 
   minikube-up:
     cmds:
-    - minikube start --driver=docker \
-                     --mount \
-                     --mount-string="/data1/minikube:/data1" \
-                     --container-runtime=containerd \
-                     --memory 8192 --cpus 4 \
+    - minikube start --driver=docker
+                     --mount
+                     --mount-string="/data1/minikube:/data1"
+                     --container-runtime=containerd
+                     --memory 8192 --cpus 4
                      --nodes 1
 
   minikube-down:
