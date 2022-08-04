@@ -2,7 +2,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: localhost
+  name: trino.data.vnpay.local
   namespace: trino
 spec:
   duration:    2160h # 90d
@@ -11,16 +11,16 @@ spec:
   usages:
   - server auth
   - client auth
-  commonName: localhost
+  commonName: trino.data.vnpay.local
   dnsNames:
   - trino.trino.svc
   - trino.trino.svc.cluster.local
-  - localhost
+  - trino.data.vnpay.local
   issuerRef:
     group: cert-manager.io
     kind:  ClusterIssuer
     name:  ca-issuer
-  secretName: localhost-tls
+  secretName: trino.data.vnpay.local-tls
   keystores:
     pkcs12:
       create: true

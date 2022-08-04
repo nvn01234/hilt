@@ -4,3 +4,11 @@ tasks:
   port-fw:
     cmds:
     - kubectl port-forward -n keycloak service/keycloak 8080:80
+
+  destroy:
+    cmds:
+    - helmfile destroy
+
+  deploy:
+    cmds:
+    - helmfile apply

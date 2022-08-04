@@ -17,6 +17,7 @@ trino:
     -XX:+UseContainerSupport
     -XX:MaxRAMPercentage=96.0
     -XX:-UseCompressedOops
+    -Dtrust_all_cert=true
     -Djavax.net.ssl.trustStore=/etc/pki/k8s/truststore.p12
     -Djavax.net.ssl.trustStorePassword=jTATy27H2jQquoGHTxar3gGXgdg354GSA
   ### Tuning Trino
@@ -98,7 +99,7 @@ commons:
   extraVolumes:
   - name: certificate
     secret:
-      secretName: localhost-tls
+      secretName: trino.data.vnpay.local-tls
 
 worker:
   replicas: 3
@@ -131,61 +132,61 @@ catalog:
   jmx.properties: |
     connector.name=jmx
 
-  hive.properties: |
-    connector.name=hive-hadoop2
+  # hive.properties: |
+  #   connector.name=hive-hadoop2
 
-    ### Metastore configs
-    # Options: file | glue | thrift
-    # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
-    hive.metastore=thrift
-    hive.metastore.uri=thrift://hive-metastore.hive.svc:9083
-    hive.metastore-timeout=1m
+  #   ### Metastore configs
+  #   # Options: file | glue | thrift
+  #   # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
+  #   hive.metastore=thrift
+  #   hive.metastore.uri=thrift://hive-metastore.hive.svc:9083
+  #   hive.metastore-timeout=1m
 
-    ### Storage configs
-    hive.s3select-pushdown.enabled=true
-    hive.parquet.use-column-names=true
-    hive.orc.use-column-names=true
-    hive.s3.endpoint=http://s3.data.vnpay.local:7480
-    hive.s3.path-style-access=true
-    hive.s3.aws-access-key=lolol
-    hive.s3.aws-secret-key=lolol
+  #   ### Storage configs
+  #   hive.s3select-pushdown.enabled=true
+  #   hive.parquet.use-column-names=true
+  #   hive.orc.use-column-names=true
+  #   hive.s3.endpoint=http://s3.data.vnpay.local:7480
+  #   hive.s3.path-style-access=true
+  #   hive.s3.aws-access-key=lolol
+  #   hive.s3.aws-secret-key=lolol
 
-    ### Storage caching config
-    # hive.cache.enabled=false
-    # hive.cache.location=/opt/trino/cache/hive
-    # hive.cache.data-transfer-port=9000
-    # hive.cache.bookkeeper-port=19000
+  #   ### Storage caching config
+  #   # hive.cache.enabled=false
+  #   # hive.cache.location=/opt/trino/cache/hive
+  #   # hive.cache.data-transfer-port=9000
+  #   # hive.cache.bookkeeper-port=19000
 
-    ### Security configs
-    hive.security=read-only
+  #   ### Security configs
+  #   hive.security=read-only
 
-  vnpay_datalake.properties: |
-    connector.name=hive-hadoop2
+  # vnpay_datalake.properties: |
+  #   connector.name=hive-hadoop2
 
-    ### Metastore configs
-    # Options: file | glue | thrift
-    # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
-    hive.metastore=thrift
-    hive.metastore.uri=thrift://hive-vnpay-datalake-metastore.hive.svc:9083
-    hive.metastore-timeout=1m
+  #   ### Metastore configs
+  #   # Options: file | glue | thrift
+  #   # See: https://github.com/prestosql/presto/tree/master/presto-hive/src/main/java/io/prestosql/plugin/hive/metastore
+  #   hive.metastore=thrift
+  #   hive.metastore.uri=thrift://hive-vnpay-datalake-metastore.hive.svc:9083
+  #   hive.metastore-timeout=1m
 
-    ### Storage configs
-    hive.s3select-pushdown.enabled=true
-    hive.parquet.use-column-names=true
-    hive.orc.use-column-names=true
-    hive.s3.endpoint=http://minio.default.svc.cluster.local:9091/
-    hive.s3.path-style-access=true
-    hive.s3.aws-access-key=sondn
-    hive.s3.aws-secret-key=sondn1234
+  #   ### Storage configs
+  #   hive.s3select-pushdown.enabled=true
+  #   hive.parquet.use-column-names=true
+  #   hive.orc.use-column-names=true
+  #   hive.s3.endpoint=http://minio.default.svc.cluster.local:9091/
+  #   hive.s3.path-style-access=true
+  #   hive.s3.aws-access-key=sondn
+  #   hive.s3.aws-secret-key=sondn1234
 
-    ### Storage caching config
-    # hive.cache.enabled=false
-    # hive.cache.location=/opt/trino/cache/vnpay_datalake
-    # hive.cache.data-transfer-port=9003
-    # hive.cache.bookkeeper-port=19003
+  #   ### Storage caching config
+  #   # hive.cache.enabled=false
+  #   # hive.cache.location=/opt/trino/cache/vnpay_datalake
+  #   # hive.cache.data-transfer-port=9003
+  #   # hive.cache.bookkeeper-port=19003
 
-    ### Security configs
-    hive.security=read-only
+  #   ### Security configs
+  #   hive.security=read-only
 
 service:
   annotations:
@@ -208,28 +209,28 @@ metrics:
   podMonitor:
     enabled: true
 
-# ingress:
-#   enabled: false
-#   annotations:
-#     ingress.kubernetes.io/force-ssl-redirect: "true"
-#     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-#   hosts:
-#   - host: trino.data.vnpay.local
-#     paths: [/]
-#   tls:
-#   - secretName: trino.data.vnpay.local-tls
-#     hosts:
-#     - trino.data.vnpay.local
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  hosts:
+  - host: trino.data.vnpay.local
+    paths: [/]
+  tls:
+  - secretName: trino.data.vnpay.local-tls
+    hosts:
+    - trino.data.vnpay.local
 
 authen:
   type: oauth2
   sharedSecret: SuperSecr3t
 
   oauth2:
-    issuer: http://keycloak.keycloak.svc.cluster.local/realms/master
+    issuer: https://keycloak.data.vnpay.local/realms/master
     clientId: trino
-    clientSecret: iW18TfoUTKdiaKvycQ56jikEhY1Iu2vw
-    authUrl:  http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/auth
-    jwksUrl:  http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/certs
-    tokenUrl: http://keycloak.keycloak.svc.cluster.local/realms/master/protocol/openid-connect/token
+    clientSecret: qFfP14o2AFZIYFPO5vtfaQ03xDHCJ526
+    authUrl:  https://keycloak.data.vnpay.local/realms/master/protocol/openid-connect/auth
+    jwksUrl:  https://keycloak.data.vnpay.local/realms/master/protocol/openid-connect/certs
+    tokenUrl: https://keycloak.data.vnpay.local/realms/master/protocol/openid-connect/token
     principalField: preferred_username
