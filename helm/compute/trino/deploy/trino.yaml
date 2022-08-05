@@ -213,7 +213,7 @@ ingress:
   enabled: true
   annotations:
     ingress.kubernetes.io/force-ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
   hosts:
   - host: trino.data.vnpay.local
     paths: [/]

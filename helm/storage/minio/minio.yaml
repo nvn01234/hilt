@@ -1,0 +1,43 @@
+image:
+  registry: docker.io
+  repository: bitnami/minio
+  tag: 2022.8.2-debian-11-r1
+
+clientImage:
+  registry: docker.io
+  repository: bitnami/minio-client
+  tag: 2022.7.29-debian-11-r2
+  
+mode: standalone
+
+auth:
+  rootUser: admin
+  rootPassword: SuperSecr3t
+  forcePassword: false
+  
+defaultBuckets: develop
+
+containerPorts:
+  api: 9000
+  console: 9001
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+service:
+  type: ClusterIP
+  ports:
+    api: 9000
+    console: 9001
+
+persistence:
+  enabled: true
+  mountPath: /data
+  accessModes:
+    - ReadWriteOnce
+  size: 5Gi
