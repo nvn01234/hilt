@@ -10,7 +10,9 @@ helmDefaults:
   timeout: 600
 
 helmfiles:
-- path: storage/postgresql/helmfile.yaml
+# - path: compute/airflow/helmfile.yaml
+- path: compute/trino/helmfile.yaml
 - path: serving/keycloak/helmfile.yaml
-# - path: compute/trino/deploy/helmfile.yaml
-
+- path: serving/hive/helmfile.yaml
+- path: storage/postgresql/helmfile.yaml
+- path: storage/minio/helmfile.yaml

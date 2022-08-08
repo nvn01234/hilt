@@ -7,14 +7,8 @@ vars:
 
 includes:
   trino:
-    taskfile: ./compute/trino/chart/Taskfile.yml
-    dir: ./compute/trino/chart
-  postgresql:
-    taskfile: ./storage/postgresql/Taskfile.yml
-    dir: ./storage/postgresql
-  keycloak:
-    taskfile: ./serving/keycloak/Taskfile.yml
-    dir: ./serving/keycloak
+    taskfile: ./compute/trino/Taskfile.yml
+    dir: ./compute/trino
 
 tasks:
 
@@ -31,30 +25,22 @@ tasks:
     cmds:
     - minikube stop --all
 
-  deploy-all:
+  deploy:
     cmds:
     - helmfile apply
 
-  destroy-all:
+  destroy:
     cmds:
     - helmfile destroy
 
-  dep:
+  # task template -- name=<release_name>,layer=<layer>,...gen
+  template:
     cmds:
-    - helm dependency update
-
-  gen:
-    cmds:
-    - mkdir -p ./build
-    - rm   -rf ./build/*
-    - helm template {{.RELEASE}} .
-        --namespace={{.NAMESPACE}}
-        --values={{.VALUES}}
-        --output-dir=build
+    - helmfile --selector {{ .CLI_ARGS }} template --output-dir=./build
 
   clean:
     cmds:
-    - rm -rf ./build
+    - for layer in */ ; do for platform in $layer ; do echo $layer/$platform ; done ; done
 
   diff:
     cmds:
@@ -74,17 +60,3 @@ tasks:
     cmds:
     - kubectl --namespace={{.NAMESPACE}} get pod
         -l app.kubernetes.io/instance={{.RELEASE}}
-
-  deploy:
-    cmds:
-    - helmfile apply
-
-  destroy:
-    cmds:
-    - helm uninstall {{.RELEASE}} --namespace={{.NAMESPACE}}
-
-  # push:
-  #   cmds:
-  #   - task: dep
-  #   # TODO: BasicAuth https://github.com/chartmuseum/helm-push#basic-auth
-  #   - helm cm-push . teko

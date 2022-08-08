@@ -1,0 +1,118 @@
+auth:
+  username: user
+  password: ""
+  fernetKey: ""
+  secretKey: ""
+  existingSecret: ""
+
+dags:
+  existingConfigmap: ""
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r22
+    
+web:
+  image:
+    registry: docker.io
+    repository: bitnami/airflow
+    tag: 2.3.3-debian-11-r10
+    debug: false
+  containerPorts:
+    http: 8080
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+
+scheduler:
+  image:
+    registry: docker.io
+    repository: bitnami/airflow-scheduler
+    tag: 2.3.3-debian-11-r10
+    debug: false
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+
+worker:
+  image:
+    registry: docker.io
+    repository: bitnami/airflow-worker
+    tag: 2.3.3-debian-11-r11
+    debug: false
+  containerPorts:
+    http: 8793
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+
+git:
+  image:
+    registry: docker.io
+    repository: bitnami/git
+    tag: 2.37.1-debian-11-r8
+  dags:
+    enabled: false
+    repositories:
+      - repository: ""
+        branch: ""
+        name: ""
+        path: ""
+  plugins:
+    enabled: false
+    repositories:
+      - repository: ""
+        branch: ""
+        name: ""
+        path: ""
+  clone:
+    command: []
+    args: []
+    extraVolumeMounts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    resources: {}
+  sync:
+    interval: 60
+    command: []
+    args: []
+    extraVolumeMounts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    resources: {}
+
+service:
+  type: ClusterIP
+  ports:
+    http: 8080
+
+postgresql:
+  enabled: false
+
+externalDatabase:
+  host: postgresql.postgresql.svc.cluster.local
+  port: 5432
+  user: airflow
+  database: airflow
+  password: "SuperSecr3t"
+  
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: ""
+  architecture: standalone
+
+# externalRedis:
+#   host: localhost
+#   port: 6379
+#   username: ""
+#   password: ""
+#   existingSecret: ""
+#   existingSecretPasswordKey: ""
