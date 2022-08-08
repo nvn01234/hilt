@@ -1,0 +1,8 @@
+releases:
+- name: vnshop-datalake
+  namespace: hive
+  chart: ../chart
+  version: 0.3.1
+  values:
+  - ./hive-local-1.yaml
+  - fullnameOverride: vnshop-datalake

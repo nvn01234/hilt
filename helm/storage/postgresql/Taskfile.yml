@@ -1,6 +1,0 @@
-version: '3'
-
-tasks:
-  port-fw:
-    cmds:
-    - kubectl port-forward -n postgresql postgresql-0 5432:5432
