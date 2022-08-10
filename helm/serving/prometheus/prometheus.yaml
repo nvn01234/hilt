@@ -1,0 +1,74 @@
+operator:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/prometheus-operator
+    tag: 0.58.0-debian-11-r6
+  service:
+    type: ClusterIP
+    ports:
+      http: 8080
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+
+prometheus:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/prometheus
+    tag: 2.37.0-debian-11-r8
+    
+  service:
+    type: ClusterIP
+    ports:
+      http: 9090
+
+  persistence:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+alertmanager:
+  enabled: false
+  
+exporters:
+  node-exporter:
+    enabled: true
+  kube-state-metrics:
+    enabled: false
+    
+node-exporter:
+  service:
+    labels:
+      jobLabel: node-exporter
+  serviceMonitor:
+    enabled: true
+    jobLabel: jobLabel
+  extraArgs:
+    collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+    collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
+    
+kubelet:
+  enabled: true
+
+blackboxExporter:
+  enabled: true
+
+kubeApiServer:
+  enabled: true
+  
+kubeScheduler:
+  enabled: true
+  
+coreDns:
+  enabled: true
+
+kubeProxy:
+  enabled: true
+
+rbac:
+  create: true
+  pspEnabled: true

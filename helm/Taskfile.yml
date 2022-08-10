@@ -25,6 +25,10 @@ tasks:
     cmds:
     - minikube stop --all
 
+  minikube-delete:
+    cmds:
+    - minikube delete
+
   deploy:
     cmds:
     - helmfile apply

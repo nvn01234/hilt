@@ -1,0 +1,8 @@
+releases:
+- name: prometheus
+  namespace: prometheus
+  chart: bitnami/kube-prometheus
+  version: 8.0.14
+  values:
+  - ./prometheus.yaml
+  - fullnameOverride: prometheus

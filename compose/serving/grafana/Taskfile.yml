@@ -4,12 +4,10 @@ tasks:
 
   start:
     cmds:
-    - docker compose -f docker-compose.yml \
-                     -f docker-compose-oncall.yml \
+    - docker compose -f docker-compose.yml 
                      up -d --remove-orphans
   
   stop:
     cmds:
-    - docker compose -f docker-compose.yml \
-                     -f docker-compose-oncall.yml \
+    - docker compose -f docker-compose.yml 
                      down
