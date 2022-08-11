@@ -1,0 +1,29 @@
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 3.2.1-debian-11-r4
+
+service:
+  type: ClusterIP
+  ports:
+    client: 9092
+    internal: 9093
+    external: 9094
+
+persistence:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  size: 2Gi
+
+zookeeper:
+  enabled: true
+  replicaCount: 1
+  persistence:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+
+externalZookeeper:
+  servers: []

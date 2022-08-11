@@ -1,0 +1,8 @@
+releases:
+- name: kafka
+  namespace: kafka
+  chart: bitnami/kafka
+  version: 18.0.8
+  values:
+  - ./kafka.yaml
+  - fullnameOverride: kafka

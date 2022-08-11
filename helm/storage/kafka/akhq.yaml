@@ -1,0 +1,21 @@
+image:
+  repository: tchiotludo/akhq
+  tag: "0.21.0"
+
+secrets:
+  akhq:
+    connections:
+      mini-kafka:
+        properties:
+          bootstrap.servers: "kafka:9092"
+        schema-registry:
+          url: "http://schema-registry:8085"
+          type: "confluent"
+        connect:
+          - name: "debezium"
+            url: "http://connect:8083"
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080
