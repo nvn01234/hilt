@@ -1,8 +1,10 @@
 repositories:
 - name: bitnami
   url:  https://charts.bitnami.com/bitnami
+- name: akhq
+  url:  https://akhq.io/
 - name: prometheus-community
-  url: https://prometheus-community.github.io/helm-charts
+  url:  https://prometheus-community.github.io/helm-charts
 
 helmDefaults:
   wait: true
@@ -16,6 +18,8 @@ helmfiles:
 # - path: compute/trino/helmfile.yaml
 # - path: serving/keycloak/helmfile.yaml
 # - path: serving/hive/helmfile.yaml
-- path: serving/prometheus/helmfile.yaml
+# - path: serving/prometheus/helmfile.yaml
+- path: storage/kafka/helmfile.yaml
 # - path: storage/postgresql/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
+- path: storage/zookeeper/helmfile.yaml

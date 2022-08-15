@@ -1,0 +1,31 @@
+image:
+  repository: tchiotludo/akhq
+  tag: "0.21.0"
+
+secrets:
+  akhq:
+    connections:
+      mini-kafka:
+        properties:
+          bootstrap.servers: "kafka:9092"
+        schema-registry:
+          url: "http://schema-registry:8085"
+          type: "confluent"
+        # debezium:
+        #   - name: "my-connect"
+        #     url: "http://connect:8083"
+        #     basic-auth-username: basic-auth-user
+        #     basic-auth-password: basic-auth-pass
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  paths:
+    - /
+  hosts:
+    - akhq.demo.com

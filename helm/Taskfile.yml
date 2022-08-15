@@ -37,10 +37,9 @@ tasks:
     cmds:
     - helmfile destroy
 
-  # task template -- name=<release_name>,layer=<layer>,...gen
   template:
     cmds:
-    - helmfile --selector {{ .CLI_ARGS }} template --output-dir=./build
+    - helmfile template --output-dir=./build
 
   clean:
     cmds:
