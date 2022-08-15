@@ -1,0 +1,8 @@
+releases:
+- name: strimzi
+  namespace: strimzi-kafka
+  chart: strimzi/strimzi-kafka-operator
+  version: 0.30.0
+  values:
+  - ./strimzi-kafka.yaml
+  - fullnameOverride: strimzi-kafka

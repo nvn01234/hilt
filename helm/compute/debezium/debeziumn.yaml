@@ -1,0 +1,25 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: debezium
+  namespace: kafka
+  annotations:
+   strimzi.io/use-connector-resources: "true"
+spec:
+  version: 2.8.1
+  replicas: 1
+  bootstrapServers: kafka.kafka.svc.cluster.local:9092
+  image: hub.teko.vn/dataops/kafka/debezium:1.9.1-kafka-2.8.1
+  config:
+    group.id: kafka.connect.debezium
+    config.storage.topic: _debezium.configs
+    offset.storage.topic: _debezium.offsets
+    status.storage.topic: _debezium.status
+    key.converter:    io.confluent.connect.avro.AvroConverter
+    value.converter:  io.confluent.connect.avro.AvroConverter
+    key.converter.schema.registry.url:    http://schema-registry.kafka.svc.cluster.local:8081
+    value.converter.schema.registry.url:  http://schema-registry.kafka.svc.cluster.local:8081
+    topic.creation.default.replication.factor:  1
+    topic.creation.default.partitions:  1
+    topic.creation.default.cleanup.policy: compact
+
