@@ -1,0 +1,9 @@
+version: '3'
+
+vars:
+  NAMESPACE: zookeeper
+  RELEASE: zookeeper
+  VALUES: ./zookeeper.yaml
+
+includes:
+- helm: ../../

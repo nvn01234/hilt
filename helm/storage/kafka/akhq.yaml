@@ -11,11 +11,21 @@ secrets:
         schema-registry:
           url: "http://schema-registry:8085"
           type: "confluent"
-        connect:
-          - name: "debezium"
-            url: "http://connect:8083"
+        # debezium:
+        #   - name: "my-connect"
+        #     url: "http://connect:8083"
+        #     basic-auth-username: basic-auth-user
+        #     basic-auth-password: basic-auth-pass
 
 service:
   enabled: true
   type: ClusterIP
   port: 8080
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  paths:
+    - /
+  hosts:
+    - akhq.demo.com

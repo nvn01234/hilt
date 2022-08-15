@@ -3,6 +3,8 @@ image:
   repository: bitnami/kafka
   tag: 3.2.1-debian-11-r4
 
+replicaCount: 1
+
 service:
   type: ClusterIP
   ports:
@@ -17,13 +19,8 @@ persistence:
   size: 2Gi
 
 zookeeper:
-  enabled: true
-  replicaCount: 1
-  persistence:
-    enabled: false
-    accessModes:
-      - ReadWriteOnce
-    size: 1Gi
+  enabled: false
 
+zookeeperChrootPath: /kafka
 externalZookeeper:
-  servers: []
+  servers: zookeeper.zookeeper.svc.cluster.local:2181

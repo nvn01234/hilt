@@ -1,0 +1,45 @@
+image:
+  registry: docker.io
+  repository: bitnami/zookeeper
+  tag: 3.8.0-debian-11-r24
+  debug: false
+  
+
+tickTime: 2000
+initLimit: 10
+syncLimit: 5
+preAllocSize: 65536
+snapCount: 100000
+maxClientCnxns: 60
+maxSessionTimeout: 40000
+heapSize: 1024
+
+autopurge:
+  snapRetainCount: 3
+  purgeInterval: 0
+
+logLevel: ERROR
+
+containerPorts:
+  client: 2181
+  tls: 3181
+  follower: 2888
+  election: 3888
+
+service:
+  type: ClusterIP
+  ports:
+    client: 2181
+    tls: 3181
+    follower: 2888
+    election: 3888
+
+persistence:
+  enabled: false
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence
+  size: 8Gi
+
+metrics:
+  enabled: false
