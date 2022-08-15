@@ -14,7 +14,7 @@ tasks:
 
   minikube-up:
     cmds:
-    - minikube start --driver=docker
+    - minikube start --driver=virtualbox
                      --mount
                      --mount-string="/data1/minikube:/data1"
                      --container-runtime=containerd
