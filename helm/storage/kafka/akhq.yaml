@@ -9,13 +9,11 @@ secrets:
         properties:
           bootstrap.servers: "kafka:9092"
         schema-registry:
-          url: "http://schema-registry:8085"
+          url: "http://schema-registry.kafka.svc.cluster.local:8081"
           type: "confluent"
-        # debezium:
-        #   - name: "my-connect"
-        #     url: "http://connect:8083"
-        #     basic-auth-username: basic-auth-user
-        #     basic-auth-password: basic-auth-pass
+        connect:
+          - name: "mini-debezium"
+            url: "http://debezium-connect-api.kafka.svc.cluster.local:8083"
 
 service:
   enabled: true

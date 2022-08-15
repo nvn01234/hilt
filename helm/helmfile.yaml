@@ -5,6 +5,8 @@ repositories:
   url:  https://akhq.io/
 - name: prometheus-community
   url:  https://prometheus-community.github.io/helm-charts
+- name: strimzi
+  url:  https://strimzi.io/charts/
 
 helmDefaults:
   wait: true
@@ -14,6 +16,7 @@ helmDefaults:
   timeout: 600
 
 helmfiles:
+- path: operators/strimzi/helmfile.yaml
 # - path: compute/airflow/helmfile.yaml
 # - path: compute/trino/helmfile.yaml
 # - path: serving/keycloak/helmfile.yaml

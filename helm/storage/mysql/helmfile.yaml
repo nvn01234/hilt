@@ -4,5 +4,5 @@ releases:
   chart: bitnami/mysql
   version: 9.2.6
   values:
-  - ./mysql.yaml.gotmpl
+  - ./mysql.yaml
   - fullnameOverride: mysql
