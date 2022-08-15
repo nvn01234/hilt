@@ -1,0 +1,28 @@
+image:
+  registry: docker.io
+  repository: bitnami/mysql
+  tag: 8.0.30-debian-11-r6
+
+architecture: standalone
+
+auth:
+  rootPassword: "SuperSecr3t"
+  createDatabase: true
+  database: "mydb"
+  username: "myuser"
+  password: "SuperSecr3t"
+  replicationUser: replicator
+  replicationPassword: "SuperSecr3t"
+
+primary:
+  name: primary
+  persistence:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+
+  service:
+    type: ClusterIP
+    ports:
+      mysql: 3306
