@@ -1,0 +1,8 @@
+releases:
+- name: mysql
+  namespace: mysql
+  chart: bitnami/mysql
+  version: 9.2.6
+  values:
+  - ./mysql.yaml.gotmpl
+  - fullnameOverride: mysql
