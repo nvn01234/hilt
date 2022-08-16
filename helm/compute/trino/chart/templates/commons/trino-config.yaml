@@ -17,25 +17,39 @@
   {{- $_ := set $config "http-server.https.keystore.key"    $httpServer.keystore.key  }}
   {{- $_ := set $config "http-server.https.truststore.path" $httpServer.truststore.path }}
   {{- $_ := set $config "http-server.https.truststore.key"  $httpServer.truststore.key  }}
-  {{- $_ := set $config "internal-communication.shared-secret"  $authen.sharedSecret  }}
 {{- end }}
 
 {{- $coordinatorConfig := deepCopy $config }}
 {{- $workerConfig := deepCopy $config }}
 
-{{- $authen := .Values.authen }}
-{{- $_ := set $coordinatorConfig "web-ui.enabled" "true" }}
-{{- if eq $authen.type "oauth2" }}
-  {{- $_ := set $coordinatorConfig "web-ui.authentication.type" "oauth2" }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.type" "oauth2" }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.auth-url" $authen.oauth2.authUrl }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.jwks-url" $authen.oauth2.jwksUrl }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.token-url" $authen.oauth2.tokenUrl }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.issuer" $authen.oauth2.issuer }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.client-id" $authen.oauth2.clientId }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.client-secret" $authen.oauth2.clientSecret }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.oauth2.principal-field" $authen.oauth2.principalField }}
+{{- if $authen.enabled }}
+  {{- $_ := set $coordinatorConfig "http-server.authentication.type" $authen.type }}
+  {{- $_ := set $coordinatorConfig "internal-communication.https.required" true }}
+  {{- $_ := set $workerConfig "internal-communication.https.required" true }}
+  {{- $sharedSecret := required "sharedSecret is required when authentication is enabled" $authen.sharedSecret }}
+  {{- $_ := set $coordinatorConfig "internal-communication.shared-secret" $sharedSecret }}
+  {{- $_ := set $workerConfig "internal-communication.shared-secret" $sharedSecret }}
+
+  {{- if eq $authen.type "OAUTH2" }}
+    {{- $_ := set $coordinatorConfig "web-ui.authentication.type" "oauth2" }}
+    {{- range $key, $value := $authen.oauth2 }}
+      {{- $_ := set $coordinatorConfig (printf "http-server.authentication.oauth2.%s" $key) $value }}
+    {{- end }}
+  {{- end }}
+
+  ## TODO: Support password authentication
+  # {{- if eq $authen.type "PASSWORD" }}
+  # {{- end }}
+
+  {{- if eq $authen.type "KERBEROS" }}
+    {{- $_ := set $coordinatorConfig "web-ui.authentication.type" "kerberos" }}
+    {{- range $key, $value := $authen.kerberos }}
+      {{- $_ := set $coordinatorConfig (printf "http-server.authentication.krb5.%s" $key) $value }}
+    {{- end }}
+  {{- end }}
+
 {{- end }}
+
 {{- $_ := include "dict-cleanup" $coordinatorConfig }}
 {{- $_ := include "dict-cleanup" $workerConfig }}
 ---
@@ -50,7 +64,7 @@ data:
     coordinator=true
     node-scheduler.include-coordinator=false
     discovery-server.enabled=true
-    discovery.uri={{ printf "http://%s:8080" (include "trino.fullname" .) }}
+    discovery.uri=http://localhost:8080
     {{- range $key, $value := $coordinatorConfig }}
     {{ $key }}={{ $value }}
     {{- end }}

@@ -3,8 +3,6 @@ releases:
   namespace: trino
   chart: ./chart
   version: 0.7.0
-  labels:
-    name=trino
   values:
-  - ./trino.yaml
+  - ./trino.yaml.gotmpl
   - fullnameOverride: trino

@@ -10,5 +10,5 @@ tasks:
 
   apply-cert:
     cmds: 
-    - kubectl apply -n trino -f ../deploy/trino-certificate.yaml
+    - kubectl apply -n trino -f ./trino-certificate.yaml
 
