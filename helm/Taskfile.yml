@@ -17,7 +17,6 @@ tasks:
     - minikube start --driver=virtualbox
                      --mount
                      --mount-string="/data1/minikube:/data1"
-                     --container-runtime=containerd
                      --memory 8192 --cpus 4
                      --nodes 1
 
