@@ -3,43 +3,52 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.58.0-debian-11-r6
+    tag: 0.58.0-debian-11-r8
   service:
     type: ClusterIP
     ports:
       http: 8080
-  serviceAccount:
-    create: true
-    name: ""
-    automountServiceAccountToken: true
 
 prometheus:
   enabled: true
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.37.0-debian-11-r8
-    
+    tag: 2.37.0-debian-11-r9
   service:
     type: ClusterIP
     ports:
       http: 9090
+  additionalScrapeConfigs:
+    enabled: true
+    type: internal
+    internal:
+      jobList:
+      - job_name: "debezium"
+        scrape_interval: 5s
+        static_configs:
+        - targets: ['debezium-connect-metrics.kafka.svc.cluster.local:9404']
 
-  persistence:
-    enabled: false
-    accessModes:
-      - ReadWriteOnce
-    size: 8Gi
+
+
 
 alertmanager:
-  enabled: false
-  
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/alertmanager
+    tag: 0.24.0-debian-11-r22
+  service:
+    type: ClusterIP
+    ports:
+      http: 9093
+
 exporters:
   node-exporter:
     enabled: true
   kube-state-metrics:
-    enabled: false
-    
+    enabled: true
+
 node-exporter:
   service:
     labels:
@@ -50,24 +59,108 @@ node-exporter:
   extraArgs:
     collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
     collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
-    
+
+kube-state-metrics:
+  serviceMonitor:
+    enabled: true
+    honorLabels: true
+
 kubelet:
   enabled: true
+  namespace: kube-system
+  serviceMonitor:
+    https: true
 
 blackboxExporter:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/blackbox-exporter
+    tag: 0.22.0-debian-11-r0
+  configuration:  |
+    "modules":
+      "http_2xx":
+        "http":
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "http_post_2xx":
+        "http":
+          "method": "POST"
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "irc_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "send": "NICK prober"
+          - "send": "USER prober prober prober :prober"
+          - "expect": "PING :([^ ]+)"
+            "send": "PONG ${1}"
+          - "expect": "^:[^ ]+ 001"
+      "pop3s_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^+OK"
+          "tls": true
+          "tls_config":
+            "insecure_skip_verify": false
+      "ssh_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^SSH-2.0-"
+      "tcp_connect":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+  service:
+    type: ClusterIP
+    ports:
+      http: 19115
 
 kubeApiServer:
   enabled: true
-  
+
+kubeControllerManager:
+  enabled: true
+  service:
+    enabled: true
+    ports:
+      http: 10252
+    targetPorts:
+      http: 10252
+
 kubeScheduler:
   enabled: true
-  
+  service:
+    enabled: true
+    ports:
+      http: 10251
+    targetPorts:
+      http: 10251
+
 coreDns:
   enabled: true
+  namespace: kube-system
+  service:
+    enabled: true
+    ports:
+      http: 9153
+    targetPorts:
+      http: 9153
 
 kubeProxy:
   enabled: true
+  service:
+    enabled: true
+    ports:
+      http: 10249
+    targetPorts:
+      http: 10249
 
 rbac:
   create: true

@@ -12,9 +12,9 @@ spec:
   image: hub.teko.vn/dataops/kafka/debezium:1.9.1-kafka-2.8.1
   config:
     group.id: kafka.connect.debezium
-    config.storage.topic: _debezium.configs
-    offset.storage.topic: _debezium.offsets
-    status.storage.topic: _debezium.status
+    config.storage.topic: debezium.configs
+    offset.storage.topic: debezium.offsets
+    status.storage.topic: debezium.status
     key.converter:    io.confluent.connect.avro.AvroConverter
     value.converter:  io.confluent.connect.avro.AvroConverter
     key.converter.schema.registry.url:    http://schema-registry.kafka.svc.cluster.local:8081
@@ -22,4 +22,15 @@ spec:
     topic.creation.default.replication.factor:  1
     topic.creation.default.partitions:  1
     topic.creation.default.cleanup.policy: compact
+  metricsConfig:
+    type: jmxPrometheusExporter
+    valueFrom:
+      configMapKeyRef:
+        name: kafka-metrics
+        key: kafka-connect-metrics.yaml
 
+  template:
+    connectContainer:
+      env:
+        - name: KAFKA_JMX_OPTS
+          value: "-Dcom.sun.management.jmxremote.port=9012 -Dcom.sun.management.jmxremote.rmi.port=9012 -Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"

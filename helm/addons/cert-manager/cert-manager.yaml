@@ -1,0 +1,21 @@
+installCRDs: true
+replicaCount: 1
+
+image:
+  repository: quay.io/jetstack/cert-manager-controller
+
+prometheus:
+  enabled: false
+
+webhook:
+  replicaCount: 1
+  timeoutSeconds: 10
+  image:
+    repository: quay.io/jetstack/cert-manager-webhook
+
+cainjector:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: quay.io/jetstack/cert-manager-cainjector

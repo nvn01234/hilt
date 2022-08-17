@@ -1,0 +1,28 @@
+image:
+  registry: docker.io
+  repository: bitnami/grafana
+  tag: 9.0.7-debian-11-r0
+
+admin:
+  user: "admin"
+  password: "SuperSecr3t"
+
+grafana:
+  replicaCount: 1
+  containerPorts:
+    grafana: 3000
+
+persistence:
+  enabled: false
+
+service:
+  type: ClusterIP
+  ports:
+    grafana: 3000
+
+ingress:
+  enabled: true
+  pathType: ImplementationSpecific
+  apiVersion: ""
+  hostname: grafana.demo.com
+  path: /
