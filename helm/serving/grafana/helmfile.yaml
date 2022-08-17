@@ -1,0 +1,8 @@
+releases:
+- name: grafana
+  namespace: grafana
+  chart: bitnami/grafana
+  version: 8.1.0
+  values:
+  - ./grafana.yaml
+  - fullnameOverride: grafana
