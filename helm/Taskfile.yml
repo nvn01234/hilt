@@ -17,7 +17,7 @@ tasks:
     - minikube start --driver=virtualbox
                      --mount
                      --mount-string="/data1/minikube:/data1"
-                     --memory 8192 --cpus 4
+                     --memory 10240 --cpus 4
                      --nodes 1
 
   minikube-down:
@@ -36,13 +36,17 @@ tasks:
     cmds:
     - helmfile destroy
 
+  deploy-kustomize:
+    cmds:
+    - kubectl apply -k ./
+
+  destroy-kustomize:
+    cmds:
+    - kubectl delete -k ./
+
   template:
     cmds:
     - helmfile template --output-dir=./build
-
-  clean:
-    cmds:
-    - for layer in */ ; do for platform in $layer ; do echo $layer/$platform ; done ; done
 
   diff:
     cmds:

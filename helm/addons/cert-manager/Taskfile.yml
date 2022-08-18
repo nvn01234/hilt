@@ -1,0 +1,20 @@
+version: '3'
+
+vars:
+  NAMESPACE: trino
+
+tasks:
+
+  install-cmctl:
+    env:
+      OS: linux
+      ARCH: amd64
+      CMCTL_VERSION: v1.9.1
+    cmds:
+    - DOWNLOAD_LINK=https://github.com/cert-manager/cert-manager/releases/download/${CMCTL_VERSION}/cmctl-${OS}-${ARCH}.tar.gz &&
+      wget $DOWNLOAD_LINK -O /tmp/cmctl.tar.gz &&
+      tar -xvzf /tmp/cmctl.tar.gz -C /tmp
+    - echo "This installation requires password for sudo command. Password for sudo command " &&
+      read SUDO_PASSWORD &&
+      echo $SUDO_PASSWORD | sudo -S install -m 0755 /tmp/cmctl /usr/local/bin/cmctl &&
+      rm -rf /tmp/cmctl*

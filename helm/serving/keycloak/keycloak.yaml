@@ -28,7 +28,7 @@ ingress:
   ingressClassName: nginx
   enabled: true
   tls: true
-  hostname: keycloak.data.vnpay.local
+  hostname: keycloak.demo.com
   annotations:
     cert-manager.io/cluster-issuer: ca-issuer
 
