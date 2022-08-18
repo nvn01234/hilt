@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: data.vnpay.local-ca
+  name: demo.com-ca
   namespace: cert-manager
 type: kubernetes.io/tls
 stringData:

@@ -60,7 +60,7 @@ commons:
   extraVolumes:
   - name: certificate
     secret:
-      secretName: trino.data.vnpay.local-tls
+      secretName: trino.demo.com-tls
 
 worker:
   replicas: 3
@@ -94,6 +94,8 @@ catalog:
     {{ tpl (readFile "catalogs/jmx.properties") . | nindent 4 | trim }}
   postgresql.properties: |
     {{ tpl (readFile "catalogs/postgresql.properties") . | nindent 4 | trim }}
+  mysql.properties: |
+    {{ tpl (readFile "catalogs/mysql.properties") . | nindent 4 | trim }}
 
 service:
   annotations:
@@ -120,14 +122,14 @@ ingress:
   enabled: true
   annotations:
     ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
   hosts:
-  - host: trino.data.vnpay.local
+  - host: trino.demo.com
     paths: [/]
   tls:
-  - secretName: trino.data.vnpay.local-tls
+  - secretName: trino.demo.com-tls
     hosts:
-    - trino.data.vnpay.local
+    - trino.demo.com
 
 authen:
   enabled: true
@@ -135,7 +137,7 @@ authen:
   sharedSecret: SuperSecr3t
 
   oauth2:
-    issuer:   https://keycloak.data.vnpay.local/realms/master
+    issuer:   https://keycloak.demo.com/realms/master
     client-id: trino
-    client-secret: yv6ArWqaYnFfRWhvWi3tPqUsKsZDkj0E
+    client-secret: kiFmrbQoQZ0QxaxWZt16tevxIJXW8eh2
     principal-field: preferred_username
