@@ -11,13 +11,13 @@ spec:
     database.hostname:  mysql.mysql.svc.cluster.local
     database.port:      3306
     database.user:      "root"
-    database.password:  "U2l2EJrHqw"
-    database.server.name: debezium.demo.my-database
-    database.include.list: my_database
+    database.password:  "SuperSecr3t"
+    database.server.name: debezium.demo.mydb
+    database.include.list: mydb
     provide.transaction.metadata: true
     include.schema.changes: true
     database.history.store.only.captured.tables.ddl: true
     database.history.kafka.bootstrap.servers: kafka.kafka.svc.cluster.local:9092
-    database.history.kafka.topic: debezium.demo.my-database.dbhistory
+    database.history.kafka.topic: debezium.demo.mydb.dbhistory
     converters: boolean
     boolean.type: io.debezium.connector.mysql.converters.TinyIntOneToBooleanConverter

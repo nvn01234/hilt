@@ -2,6 +2,7 @@ releases:
 - name: prometheus
   namespace: prometheus
   chart: bitnami/kube-prometheus
+  disableValidation: true
   version: 8.0.14
   values:
   - ./prometheus.yaml
