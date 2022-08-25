@@ -1,17 +1,12 @@
-# global:
-#   postgresql:
-#     auth:
-#       postgresPassword: "SuperSecr3t"
-#       username: "admin"
-#       password: "SuperSecr3t"
-#       database: "postgres"
-
 auth:
   enablePostgresUser: true
   postgresPassword: SuperSecr3t
   username: admin
   password: SuperSecr3t
   database: postgres
+  replicationUsername: repl
+  replicationPassword: SuperSecr3t
+
 
 containerPorts:
   postgresql: 5432
