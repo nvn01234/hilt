@@ -17,6 +17,7 @@ services:
       KAFKA_OPTS: -javaagent:/kafka/etc/jmx_prometheus_javaagent.jar=8080:/kafka/etc/config.yml
       JMXHOST: debezium
       JMXPORT: 9012
+      LOG_LEVEL: DEBUG
     depends_on:
       - kafka
       - schema-registry

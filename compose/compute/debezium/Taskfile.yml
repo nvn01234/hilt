@@ -8,14 +8,14 @@ tasks:
 
   stop:
     cmds:
-    - docker compose down
+    - docker compose down --volumes
 
   create-connector:
     cmds:
     - curl -i -X POST http://localhost:8083/connectors/
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./sample/connector-mysql.json
+              -d @./sample/connector-postgresql.json
 
   delete-connector:
     cmds:
@@ -42,6 +42,6 @@ tasks:
     - curl -i -X PUT http://localhost:8083/connectors/{{ .CLI_ARGS }}/config
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./sample/update-connector-mysql.json
+              -d @./sample/update-connector-postgresql.json
 
 

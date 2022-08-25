@@ -29,7 +29,7 @@ helmfiles:
 - path: serving/prometheus/helmfile.yaml
 
 - path: storage/kafka/helmfile.yaml
-# - path: storage/postgresql/helmfile.yaml
+- path: storage/postgresql/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
 - path: storage/mysql/helmfile.yaml
 - path: storage/zookeeper/helmfile.yaml

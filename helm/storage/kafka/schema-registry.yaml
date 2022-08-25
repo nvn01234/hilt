@@ -25,3 +25,8 @@ kafka:
 externalKafka:
   brokers:
     - PLAINTEXT://kafka.kafka.svc.cluster.local:9092
+  auth:
+    protocol: plaintext
+    jaas:
+      user: sr
+      password: SuperSecr3t

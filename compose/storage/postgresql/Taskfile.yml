@@ -5,11 +5,11 @@ tasks:
   start:
     cmds:
     - docker compose up -d --remove-orphans
-  
+
   stop:
     cmds:
-    - docker compose down
+    - docker compose down --volumes
 
   shell:
     cmds:
-    - echo "SuperSecr3t" | docker-compose exec -it postgresql psql -U postgres -W -d postgres
+    - echo SuperSecr3t | docker compose exec -it postgresql psql -U postgres -W -d postgres
