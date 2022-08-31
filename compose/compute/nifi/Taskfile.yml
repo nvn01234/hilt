@@ -5,7 +5,12 @@ tasks:
   start:
     cmds:
     - docker compose up -d --remove-orphans
-  
+
   stop:
     cmds:
-    - docker compose down
+    - docker compose down --volumes
+
+  get-jars:
+    dir: ./external-jars
+    cmds:
+    - sh ./download-jars.sh
