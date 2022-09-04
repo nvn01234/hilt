@@ -18,20 +18,16 @@ tasks:
 
   start-kafka:
     cmds:
-    - docker compose up -d --remove-orphans
+    - docker compose -f docker-compose.yml
+                     -f docker-compose-akhq.yml
+                     up -d --remove-orphans
 
   stop-kafka:
     cmds:
-    - docker compose down --volumes
-
-  start-akhq:
-    cmds:
-    - docker compose -f docker-compose-akhq.yml up -d --remove-orphans
-
-  stop-akhq:
-    cmds:
-    - docker compose -f docker-compose-akhq.yml down
-
+    - docker compose -f docker-compose.yml
+                     -f docker-compose-akhq.yml
+                     down --volumes
+                     
   start-schema-registry:
     cmds:
     - docker compose -f docker-compose-sr.yml up -d --remove-orphans
