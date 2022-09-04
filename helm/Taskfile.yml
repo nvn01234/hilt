@@ -4,11 +4,9 @@ vars:
   NAMESPACE: '{{.NAMESPACE | default "default"}}'
   RELEASE: '{{.RELEASE | default "funny"}}'
   VALUES: '{{.VALUES | default "./values.yaml"}}'
-
-includes:
-  trino:
-    taskfile: ./compute/trino/Taskfile.yml
-    dir: ./compute/trino
+  CLUSTER_MOUNTPATH: '{{.CLUSTER_MOUNTPATH | default "/data1/minikube"}}'
+  CLUSTER_MEMORY: '{{.CLUSTER_MEMORY | default "8192"}}'
+  CLUSTER_CPUS: '{{.CLUSTER_CPUS | default "4"}}'
 
 tasks:
 
@@ -16,8 +14,9 @@ tasks:
     cmds:
     - minikube start --driver=virtualbox
                      --mount
-                     --mount-string="/data1/minikube:/data1"
-                     --memory 8192 --cpus 4
+                     --mount-string="/data1/minikube:{{ .CLUSTER_MOUNTPATH }}"
+                     --memory {{ .CLUSTER_MEMORY }}
+                     --cpus {{ .CLUSTER_CPUS }}
                      --nodes 1
 
   minikube-down:
@@ -35,7 +34,6 @@ tasks:
   destroy:
     cmds:
     - helmfile destroy
-    - kubectl apply -k ./
 
   deploy-kustomize:
     cmds:
