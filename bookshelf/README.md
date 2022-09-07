@@ -5,6 +5,8 @@ Commands, terminologies/definitions,... evething helpful for your work & study
 ## Libs
 Library testing. Here I have:
 - [quartz-scheduler](http://www.quartz-scheduler.org/)
+## Logo
+Logo self-designed from https://app.logo.com/
 ## Setup
 Installation commands instruction for essential tools. Here I have:
 - [Docker](https://www.docker.com/) (a popular containerization tool, you may get fed up of hearing about it)
