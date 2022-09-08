@@ -244,7 +244,7 @@ bh_unicode_properties.cache
 GitHub.sublime-settings
 
 ### VisualStudioCode template
-.vscode/*
+# .vscode/*
 #!.vscode/settings.json
 #!.vscode/tasks.json
 #!.vscode/launch.json

@@ -1,0 +1,25 @@
+{
+  "files.associations": {
+    "*.tpl": "go",
+    "*.tmpl": "go",
+    "*.yml.gotmpl": "yaml",
+    "*.yaml.gotmpl": "yaml"
+  },
+  "material-icon-theme.folders.associations": {
+    "bookshelf": "tools",
+    "logo": "theme",
+    "cheatsheets": "docs",
+    "taskfile": "tasks",
+    "computation": "core",
+    "monitoring": "benchmark",
+    "warehouse": "webpack",
+    "storage": "queue",
+    "operators": "context",
+    "setup": "controller"
+  },
+  "material-icon-theme.files.associations": {
+    "helmfile.yaml": "helm",
+    "Taskfile.yml": "webpack",
+    "control-panel.yaml": "settings"
+  }
+}

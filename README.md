@@ -1,4 +1,4 @@
-# Platforms
+# Hilt
 ![Alt text](./bookshelf/logo/high-resolution-logo_resized400x300.png "Title")
 
 This project is mainly for building a local dev environment
