@@ -2,60 +2,64 @@ version: '3'
 
 includes:
   airflow:
-    taskfile: ./compute/airflow/Taskfile.yml
+    taskfile: ./computation/airflow/Taskfile.yml
     dir: ./compute/airflow
-  debezium: 
-    taskfile: ./compute/debezium/Taskfile.yml
+  debezium:
+    taskfile: ./computation/debezium/Taskfile.yml
     dir: ./compute/debezium
-  nifi: 
-    taskfile: ./compute/nifi/Taskfile.yml
+  nifi:
+    taskfile: ./computation/nifi/Taskfile.yml
     dir: ./compute/nifi
-  spark: 
-    taskfile: ./compute/spark/Taskfile.yml
+  spark:
+    taskfile: ./computation/spark/Taskfile.yml
     dir: ./compute/spark
-  trino: 
-    taskfile: ./compute/trino/Taskfile.yml
+  trino:
+    taskfile: ./computation/trino/Taskfile.yml
     dir: ./compute/trino
+
   grafana:
-    taskfile: ./serving/grafana/Taskfile.yml
+    taskfile: ./monitoring/grafana/Taskfile.yml
     dir: ./serving/grafana
-  hive: 
-    taskfile: ./serving/hive/Taskfile.yml
-    dir: ./serving/hive
-  keycloak: 
-    taskfile: ./serving/keycloak/Taskfile.yml
-    dir: ./serving/keycloak
-  prometheus: 
-    taskfile: ./serving/prometheus/Taskfile.yml
+  prometheus:
+    taskfile: ./monitoring/prometheus/Taskfile.yml
     dir: ./serving/prometheus
 
-  hadoop: 
+  hive:
+    taskfile: ./warehouse/hive/Taskfile.yml
+    dir: ./serving/hive
+
+  keycloak:
+    taskfile: ./security/keycloak/Taskfile.yml
+    dir: ./serving/keycloak
+
+  hadoop:
     taskfile: ./storage/hadoop/Taskfile.yml
     dir: ./storage/hadoop
-  kafka: 
+  kafka:
     taskfile: ./storage/kafka
     dir: ./storage/kafka
-  minio: 
+  minio:
     taskfile: ./storage/minio/Taskfile.yml
     dir: ./storage/minio
-  mongo: 
-    taskfile: ./storage/mongo/Taskfile.yml
-    dir: ./storage/mongo
-  mysql: 
-    taskfile: ./storage/mysql/Taskfile.yml
-    dir: ./storage/mysql
-  postgresql: 
-    taskfile: ./storage/postgresql/Taskfile.yml
-    dir: ./storage/postgresql
-  rabbitmq: 
-    taskfile: ./storage/rabbitmq/Taskfile.yml
-    dir: ./storage/rabbitmq
-  redis: 
-    taskfile: ./storage/redis/Taskfile.yml
-    dir: ./storage/rabbitmq
-  zookeeper: 
+  zookeeper:
     taskfile: ./storage/zookeeper/Taskfile.yml
     dir: ./storage/zookeeper
+
+  mongo:
+    taskfile: ./databases/mongo/Taskfile.yml
+    dir: ./storage/mongo
+  mysql:
+    taskfile: ./databases/mysql/Taskfile.yml
+    dir: ./storage/mysql
+  postgresql:
+    taskfile: ./databases/postgresql/Taskfile.yml
+    dir: ./storage/postgresql
+  rabbitmq:
+    taskfile: ./databases/rabbitmq/Taskfile.yml
+    dir: ./storage/rabbitmq
+  redis:
+    taskfile: ./databases/redis/Taskfile.yml
+    dir: ./storage/rabbitmq
 
 vars:
   BASE_VERSION: '{{.BASE_VERSION | default "0.1.0"}}'
@@ -64,9 +68,14 @@ vars:
 tasks:
 
   build-base:
+    dir: ./base
     cmds:
     - docker build -t sondn1/base:{{ .BASE_VERSION }} .
     # - docker push sondn1/base:{{ .BASE_VERSION }}
+
+  push-base:
+    cmds:
+    - docker push sondn1/base:{{ .BASE_VERSION }}
 
   stop-containers:
     cmds:
