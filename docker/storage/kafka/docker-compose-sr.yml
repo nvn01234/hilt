@@ -1,9 +1,10 @@
-version: "2"
+version: "2.5"
 
 services:
 
   schema-registry:
     image: confluentinc/cp-schema-registry
+    restart: unless-stopped
     depends_on:
       - kafka
     ports:

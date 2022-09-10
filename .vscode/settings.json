@@ -6,7 +6,7 @@
     "*.yaml.gotmpl": "yaml"
   },
   "material-icon-theme.folders.associations": {
-    "bookshelf": "tools",
+    "bookshelf": "stack",
     "logo": "theme",
     "cheatsheets": "docs",
     "taskfile": "tasks",

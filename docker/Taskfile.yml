@@ -3,34 +3,34 @@ version: '3'
 includes:
   airflow:
     taskfile: ./computation/airflow/Taskfile.yml
-    dir: ./compute/airflow
+    dir: ./computation/airflow
   debezium:
     taskfile: ./computation/debezium/Taskfile.yml
-    dir: ./compute/debezium
+    dir: ./computation/debezium
   nifi:
     taskfile: ./computation/nifi/Taskfile.yml
-    dir: ./compute/nifi
+    dir: ./computation/nifi
   spark:
     taskfile: ./computation/spark/Taskfile.yml
-    dir: ./compute/spark
+    dir: ./computation/spark
   trino:
     taskfile: ./computation/trino/Taskfile.yml
-    dir: ./compute/trino
+    dir: ./computation/trino
 
   grafana:
     taskfile: ./monitoring/grafana/Taskfile.yml
-    dir: ./serving/grafana
+    dir: ./monitoring/grafana
   prometheus:
     taskfile: ./monitoring/prometheus/Taskfile.yml
-    dir: ./serving/prometheus
+    dir: ./monitoring/prometheus
 
   hive:
     taskfile: ./warehouse/hive/Taskfile.yml
-    dir: ./serving/hive
+    dir: ./warehouse/hive
 
   keycloak:
     taskfile: ./security/keycloak/Taskfile.yml
-    dir: ./serving/keycloak
+    dir: ./security/keycloak
 
   hadoop:
     taskfile: ./storage/hadoop/Taskfile.yml
@@ -47,19 +47,19 @@ includes:
 
   mongo:
     taskfile: ./databases/mongo/Taskfile.yml
-    dir: ./storage/mongo
+    dir: ./databases/mongo
   mysql:
     taskfile: ./databases/mysql/Taskfile.yml
-    dir: ./storage/mysql
+    dir: ./databases/mysql
   postgresql:
     taskfile: ./databases/postgresql/Taskfile.yml
-    dir: ./storage/postgresql
+    dir: ./databases/postgresql
   rabbitmq:
     taskfile: ./databases/rabbitmq/Taskfile.yml
-    dir: ./storage/rabbitmq
+    dir: ./databases/rabbitmq
   redis:
     taskfile: ./databases/redis/Taskfile.yml
-    dir: ./storage/rabbitmq
+    dir: ./databases/rabbitmq
 
 vars:
   BASE_VERSION: '{{.BASE_VERSION | default "0.1.0"}}'

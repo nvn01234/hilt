@@ -1,0 +1,5 @@
+version: '3'
+
+includes:
+  helm: ./Task-helm.yml
+  compose: ./Task-compose.yml

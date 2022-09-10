@@ -1,4 +1,4 @@
-version: "2"
+version: "2.5"
 
 services:
 
@@ -15,12 +15,7 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       KAFKA_OPTS: -javaagent:/kafka/etc/jmx_prometheus_javaagent.jar=8080:/kafka/etc/config.yml
-      JMXHOST: debezium
-      JMXPORT: 9012
-      LOG_LEVEL: DEBUG
-    depends_on:
-      - kafka
-      - schema-registry
+    restart: unless-stopped
     ports:
       - 8083:8083
       - 9012:9012
