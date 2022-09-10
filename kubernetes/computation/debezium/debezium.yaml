@@ -28,9 +28,3 @@ spec:
       configMapKeyRef:
         name: kafka-metrics
         key: kafka-connect-metrics.yaml
-
-  template:
-    connectContainer:
-      env:
-        - name: KAFKA_JMX_OPTS
-          value: "-Dcom.sun.management.jmxremote.port=9012 -Dcom.sun.management.jmxremote.rmi.port=9012 -Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"

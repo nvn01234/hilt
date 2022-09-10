@@ -1,14 +1,12 @@
-version: "2"
+version: "2.5"
 
 services:
 
   akhq:
     image: tchiotludo/akhq
+    restart: unless-stopped
     ports:
       - 8080:8080
-    depends_on:
-      - kafka
-      - schema-registry
     environment:
       AKHQ_CONFIGURATION: |
         akhq:
@@ -16,11 +14,6 @@ services:
             kafka-local:
               properties:
                 bootstrap.servers: kafka:9092
-              schema-registry:
-                url: "http://schema-registry:8085"
-              connect:
-                - name: debezium
-                  url: http://debezium:8083
     networks:
       - local_common_network
 

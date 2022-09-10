@@ -1,9 +1,10 @@
-version: "2"
+version: "2.5"
 
 services:
 
   zookeeper:
     image: docker.io/bitnami/zookeeper:3.8
+    restart: unless-stopped
     ports:
       - 2181:2181
     environment:

@@ -1,15 +1,15 @@
 # Use root/example as user/password credentials
-version: '3.1'
+version: '2.5'
 
 services:
 
   mysql:
     image: mysql:8.0
-    command: 
+    command:
       - --gtid-mode=ON
       - --enforce_gtid_consistency=ON
       - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8mb4 
+      - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     ports:

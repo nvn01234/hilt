@@ -1,0 +1,73 @@
+version: "2.5"
+
+services:
+
+  zookeeper:
+    extends:
+      file: ../../docker/storage/zookeeper/docker-compose.yml
+      service: zookeeper
+
+  kafka:
+    extends:
+      file: ../../docker/storage/kafka/docker-compose.yml
+      service: kafka
+
+  schema-registry:
+    extends:
+      file: ../../docker/storage/kafka/docker-compose-sr.yml
+      service: schema-registry
+
+  akhq:
+    extends:
+      file: ../../docker/storage/kafka/docker-compose-akhq.yml
+      service: akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            kafka-local:
+              properties:
+                bootstrap.servers: kafka:9092
+              schema-registry:
+                url: "http://schema-registry:8085"
+              connect:
+                - name: debezium
+                  url: http://debezium:8083
+
+  debezium:
+    extends:
+      file: ../../docker/computation/debezium/docker-compose.yml
+      service: debezium
+
+  mysql:
+    extends:
+      file: ../../docker/databases/mysql/docker-compose.yml
+      service: mysql
+
+  postgresql:
+    extends:
+      file: ../../docker/databases/postgresql/docker-compose.yml
+      service: postgresql
+
+  # prometheus:
+  #   extends:
+  #     file: ../../docker/monitoring/prometheus/docker-compose.yml
+  #     service: prometheus
+
+  # grafana:
+  #   extends:
+  #     file: ../../docker/monitoring/grafana/docker-compose.yml
+  #     service: grafana
+
+
+networks:
+  local_common_network:
+    external: true
+
+volumes:
+  kafka_data:
+    driver: local
+  zookeeper_data:
+    driver: local
+  mysql_data:
+    driver: local

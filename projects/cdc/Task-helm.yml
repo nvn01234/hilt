@@ -1,0 +1,30 @@
+version: '3'
+
+tasks:
+
+  start:
+    cmds:
+    - helmfile apply
+    - kubectl -n kafka apply -k ./
+
+  stop:
+    cmds:
+    - helmfile destroy
+    - kubectl -n kafka delete -k ./
+
+  create-connector:
+    cmds:
+    - kubectl -n kafka apply -f ./connectors/helm/connector-{{ .CLI_ARGS }}.yml
+
+  delete-connector:
+    cmds:
+    - curl -i -X DELETE localhost:8083/connectors/{{ .CLI_ARGS }}
+              -H "Accept:application/json"
+
+  get-connector:
+    cmds:
+    - kubectl -n kafka delete -f ./connectors/helm/connector-{{ .CLI_ARGS }}.yml
+
+  list-connectors:
+    cmds:
+    - kubectl -n kafka get KafkaConnector
