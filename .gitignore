@@ -294,13 +294,16 @@ override.tf.json
 ### Custom ignore
 !.gitkeep
 
-# Compute
-compute/airflow/logs
-compute/nifi/external-jars/*.jar
+# Computation
+docker/computation/airflow/logs
 
-# Storage
-
-# Serving
+# Projects
+projects/postgresql-replication/master_data
+projects/postgresql-replication/secondary_data
+projects/postgresql-replication/slave_data
 
 # Misc
-bookshelf/drafts/
+**/drafts/
+**/*.jar
+
+
