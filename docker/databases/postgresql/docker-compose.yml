@@ -10,26 +10,16 @@ services:
       - wal_level=logical
       - -c
       - wal_compression=on
-    # ports:
-    #   - 5432:5432
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperSecr3t
     volumes:
-      # - ./sample/app-init:/docker-entrypoint-initdb.d/
+      - ./sample/app-init:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data
     networks:
       - local_common_network
-
-  # postgresql:
-  #   image: quay.io/debezium/example-postgres:1.9.3.Final
-  #   ports:
-  #    - 5432:5432
-  #   environment:
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_PASSWORD=SuperSecr3t
-  #   networks:
-  #     - local_common_network
 
 volumes:
   postgres_data:

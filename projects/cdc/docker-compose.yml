@@ -38,11 +38,13 @@ services:
     extends:
       file: ../../docker/computation/debezium/docker-compose.yml
       service: debezium
+    environment:
+      LOG_LEVEL: TRACE
 
-  mysql:
-    extends:
-      file: ../../docker/databases/mysql/docker-compose.yml
-      service: mysql
+  # mysql:
+  #   extends:
+  #     file: ../../docker/databases/mysql/docker-compose.yml
+  #     service: mysql
 
   postgresql:
     extends:
@@ -66,8 +68,6 @@ networks:
 
 volumes:
   kafka_data:
-    driver: local
   zookeeper_data:
-    driver: local
   mysql_data:
-    driver: local
+  postgres_data:

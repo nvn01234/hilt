@@ -10,6 +10,10 @@ tasks:
     cmds:
     - docker compose down --volumes
 
+  bash:
+    cmds:
+    - docker compose exec -it {{ .CLI_ARGS }} bash
+
   create-connector:
     cmds:
     - curl -i -X POST http://localhost:8083/connectors/
