@@ -41,26 +41,15 @@ services:
     environment:
       LOG_LEVEL: TRACE
 
-  # mysql:
-  #   extends:
-  #     file: ../../docker/databases/mysql/docker-compose.yml
-  #     service: mysql
+  mysql:
+    extends:
+      file: ../../docker/databases/mysql/docker-compose.yml
+      service: mysql
 
   postgresql:
     extends:
       file: ../../docker/databases/postgresql/docker-compose.yml
       service: postgresql
-
-  # prometheus:
-  #   extends:
-  #     file: ../../docker/monitoring/prometheus/docker-compose.yml
-  #     service: prometheus
-
-  # grafana:
-  #   extends:
-  #     file: ../../docker/monitoring/grafana/docker-compose.yml
-  #     service: grafana
-
 
 networks:
   local_common_network:

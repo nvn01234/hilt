@@ -1,0 +1,27 @@
+version: "2.5"
+
+services:
+
+  prometheus:
+    extends:
+      file: ../../docker/monitoring/prometheus/docker-compose.yml
+      service: prometheus
+
+  node-exporter:
+    extends:
+      file: ../../docker/monitoring/prometheus/docker-compose.yml
+      service: node-exporter
+
+  grafana:
+    extends:
+      file: ../../docker/monitoring/grafana/docker-compose.yml
+      service: grafana
+
+
+networks:
+  local_common_network:
+    external: true
+
+volumes:
+  prometheus_data:
+  grafana_data:
