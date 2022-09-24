@@ -4,22 +4,22 @@ services:
 
   zookeeper:
     extends:
-      file: ../../docker/storage/zookeeper/docker-compose.yml
+      file: ../../../docker/storage/zookeeper/docker-compose.yml
       service: zookeeper
 
   kafka:
     extends:
-      file: ../../docker/storage/kafka/docker-compose.yml
+      file: ../../../docker/storage/kafka/docker-compose.yml
       service: kafka
 
   schema-registry:
     extends:
-      file: ../../docker/storage/kafka/docker-compose-sr.yml
+      file: ../../../docker/storage/kafka/docker-compose-sr.yml
       service: schema-registry
 
   akhq:
     extends:
-      file: ../../docker/storage/kafka/docker-compose-akhq.yml
+      file: ../../../docker/storage/kafka/docker-compose-akhq.yml
       service: akhq
     environment:
       AKHQ_CONFIGURATION: |
@@ -36,19 +36,19 @@ services:
 
   debezium:
     extends:
-      file: ../../docker/computation/debezium/docker-compose.yml
+      file: ../../../docker/computation/debezium/docker-compose.yml
       service: debezium
     environment:
       LOG_LEVEL: TRACE
 
   mysql:
     extends:
-      file: ../../docker/databases/mysql/docker-compose.yml
+      file: ../../../docker/databases/mysql/docker-compose.yml
       service: mysql
 
   postgresql:
     extends:
-      file: ../../docker/databases/postgresql/docker-compose.yml
+      file: ../../../docker/databases/postgresql/docker-compose.yml
       service: postgresql
 
 networks:
