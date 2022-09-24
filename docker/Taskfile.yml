@@ -31,6 +31,9 @@ includes:
   keycloak:
     taskfile: ./security/keycloak/Taskfile.yml
     dir: ./security/keycloak
+  vault:
+    taskfile: ./security/vault/Taskfile.yml
+    dir: ./security/vault
 
   hadoop:
     taskfile: ./storage/hadoop/Taskfile.yml
