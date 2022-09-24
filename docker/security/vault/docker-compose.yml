@@ -1,0 +1,16 @@
+version: "2.5"
+
+services:
+  vault:
+    image: vault:1.9.9
+    ports:
+      - 8200:8200
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: "SuperTok3n"
+    networks:
+      - local_common_network
+
+networks:
+  local_common_network:
+    external: true
