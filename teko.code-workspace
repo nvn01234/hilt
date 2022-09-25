@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "/home/sondn/Workspace/teko/dataops/baseline"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/compute.cluster"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/serving.cluster"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/storage.cluster"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/configurer"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/datasources.next"
+    },{
+      "path": "/home/sondn/Workspace/teko/dataops/data-stacks"
+    }
+  ]
+}
