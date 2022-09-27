@@ -14,16 +14,12 @@ tasks:
 
   create-connector:
     cmds:
-    - kubectl -n kafka apply -f ./connectors/helm/connector-{{ .CLI_ARGS }}.yml
+    - kubectl -n kafka apply -f ./connectors/connector-{{ .CLI_ARGS }}.yaml
 
   delete-connector:
     cmds:
     - curl -i -X DELETE localhost:8083/connectors/{{ .CLI_ARGS }}
               -H "Accept:application/json"
-
-  get-connector:
-    cmds:
-    - kubectl -n kafka delete -f ./connectors/helm/connector-{{ .CLI_ARGS }}.yml
 
   list-connectors:
     cmds:

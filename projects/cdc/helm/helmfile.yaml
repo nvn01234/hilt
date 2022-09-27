@@ -17,10 +17,8 @@ helmDefaults:
 
 helmfiles:
 
-- path: ../../kubernetes/storage/zookeeper/helmfile.yaml
-- path: ../../kubernetes/storage/kafka/helmfile.yaml
-- path: ../../kubernetes/databases/mysql/helmfile.yaml
-# - path: ../../kubernetes/databases/postgresql/helmfile.yaml
-
-# - path: serving/grafana/helmfile.yaml
-# - path: serving/prometheus/helmfile.yaml
+- path: ../../../kubernetes/storage/zookeeper/helmfile.yaml
+- path: ../../../kubernetes/storage/kafka/helmfile.yaml
+- path: ../../../kubernetes/databases/mysql/helmfile.yaml
+- path: ../../../kubernetes/operators/strimzi/helmfile.yaml
+# - path: ../../../kubernetes/databases/postgresql/helmfile.yaml
