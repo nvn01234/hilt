@@ -13,7 +13,7 @@ data:
     from typing import List, Dict
 
 
-    logging.basicConfig(level = logging.INFO)
+    logging.basicConfig(level = logging.INFO, format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
     logger = logging.getLogger(__name__)
 
     __DEBEZIUM_CONNECT_API_URL = os.environ.get('DEBEZIUM_CONNECT_API_URL', 'http://localhost:8083')
@@ -21,8 +21,7 @@ data:
     __RUN_SCHEDULE = int(os.environ.get('RUN_SCHEDULE', 10))
 
     def get_connectors() -> List[str]:
-        __LIST_CONNECTORS = 'connectors'
-        url = f'{__DEBEZIUM_CONNECT_API_URL}/{__LIST_CONNECTORS}'
+        url = f'{__DEBEZIUM_CONNECT_API_URL}/connectors'
         req = request.Request(url, method='GET')
         with request.urlopen(req) as res:
             data = json.load(res)
@@ -30,8 +29,7 @@ data:
         return data
 
     def get_connector_status(connector: str) -> List[Dict]:
-        __GET_CONNECTOR_STATUS = f'connectors/{connector}/status'
-        url = f'{__DEBEZIUM_CONNECT_API_URL}/{__GET_CONNECTOR_STATUS}'
+        url = f'{__DEBEZIUM_CONNECT_API_URL}/connectors/{connector}/status'
         req = request.Request(url, method='GET')
         with request.urlopen(req) as res:
             data = json.load(res)
@@ -40,21 +38,34 @@ data:
 
         return tasks_info
 
+    def get_task_status(connector: str, task_id: int) -> str:
+        url = f'{__DEBEZIUM_CONNECT_API_URL}/connectors/{connector}/tasks/{task_id}/status'
+        req = request.Request(url, method='GET')
+        with request.urlopen(req) as res:
+            data = json.load(res)
+
+        state = data['state']
+        return state
+
     def restart_connector_task(connector: str, task_id: int):
         logger.info(f'Attemp to restart connector %s', connector)
 
-        __RESTART_CONNECTOR_TASK = f'connectors/{connector}/tasks/{task_id}/restart'
-        url = f'{__DEBEZIUM_CONNECT_API_URL}/{__RESTART_CONNECTOR_TASK}'
+        url = f'{__DEBEZIUM_CONNECT_API_URL}/connectors/{connector}/tasks/{task_id}/restart'
         req = request.Request(url, method='POST')
 
         with request.urlopen(req) as res:
             res.read()
+            connector_status = get_task_status(connector, task_id)
+            if connector_status != 'RUNNING':
+                logger.info('Failed to restart task %s of connector %s', task_id, connector)
+            else:
+                logger.info('Connector %s task %s has been restarted successfully', connector, task_id)
 
 
     # if __name__ == "__main__":
     while True:
         connectors = get_connectors()
-        logger.info(f'Got %s active connectors', len(connectors))
+        logger.info('Got %s active connectors', len(connectors))
         for connector in connectors:
             tasks_info = get_connector_status(connector)
             for task_info in tasks_info:
@@ -62,7 +73,7 @@ data:
                 state = task_info['state']
                 if state != 'RUNNING':
                     trace = task_info['trace']
-                    logger.info(f'Connector %s is not running. Trace: %s', connector, trace)
+                    logger.info('Connector %s is not running. Trace: %s', connector, trace)
                     restart_connector_task(connector, task_id)
 
         time.sleep(__RUN_SCHEDULE)

@@ -3,4 +3,5 @@ version: '3'
 tasks:
   clean:
     cmds:
-    - 
+    - git clean -dfX
+    - mkdir -p bookshelf/drafts
