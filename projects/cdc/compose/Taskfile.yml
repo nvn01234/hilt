@@ -19,7 +19,7 @@ tasks:
     - curl -i -X POST http://localhost:8083/connectors/
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./connectors/compose/connector-{{ .CLI_ARGS }}.json
+              -d @./connectors/connector-{{ .CLI_ARGS }}.json
 
   delete-connector:
     cmds:
@@ -46,6 +46,6 @@ tasks:
     - curl -i -X PUT http://localhost:8083/connectors/{{ .CLI_ARGS }}/config
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./connectors/compose/update-connector-postgresql.json
+              -d @./connectors/connector-postgresql.json
 
 
