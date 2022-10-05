@@ -1,10 +1,10 @@
 version: '3.7'
 
-services:  
+services:
   trino:
     image: trinodb/trino:387
     ports:
-      - 8080:8080
+      - 18080:8080
     volumes:
       - ./configurations:/etc/trino
       - trino_data:/data
