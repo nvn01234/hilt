@@ -21,7 +21,6 @@
   "material-icon-theme.files.associations": {
     "helmfile.yaml": "helm",
     "Taskfile.yml": "webpack",
-    "control-panel.yaml": "settings",
-    "docker-compose*.yml": "Docker"
+    "control-panel.yaml": "settings"
   }
 }
