@@ -4,22 +4,17 @@ services:
 
   grafana:
     image: grafana/grafana
-    user: "472"
     restart: unless-stopped
     ports:
       - 3000:3000
-    depends_on:
-      - mysql
     environment:
-      - GF_DATABASE_TYPE=mysql
-      - GF_DATABASE_HOST=mysql
+      - GF_DATABASE_TYPE=postgresql
+      - GF_DATABASE_HOST=postgresql
       - GF_DATABASE_USER=root
       - GF_DATABASE_PASSWORD=SuperSecr3t
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=SuperSecr3t
-      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=grafana-oncall-app
-      - GF_INSTALL_PLUGINS=grafana-oncall-app
     volumes:
       - grafana_data:/var/lib/grafana
     networks:

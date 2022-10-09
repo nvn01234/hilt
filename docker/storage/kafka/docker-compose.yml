@@ -15,6 +15,18 @@ services:
     networks:
       - local_common_network
 
+  akhq:
+    image: tchiotludo/akhq
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            kafka-local:
+              properties:
+                bootstrap.servers: kafka:9092
 
 volumes:
   kafka_data:

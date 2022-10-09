@@ -1,6 +1,6 @@
 version: '3.7'
 
-services:  
+services:
   minio:
     image: minio/minio
     command: [ server, --address=:9000, --console-address=:9001, /data ]
@@ -14,6 +14,9 @@ services:
       - minio_data:/data
     networks:
       - local_common_network
+
+volumes:
+  minio_data:
 
 networks:
   local_common_network:

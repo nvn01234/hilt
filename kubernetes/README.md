@@ -20,20 +20,25 @@ helmfiles:
 
 # - path: addons/cert-manager/helmfile.yaml
 
-# - path: operators/strimzi/helmfile.yaml
-# - path: compute/airflow/helmfile.yaml
-# - path: compute/trino/helmfile.yaml
+# - path: computation/airflow/helmfile.yaml
+# - path: computation/trino/helmfile.yaml
 
-# - path: serving/grafana/helmfile.yaml
-# - path: serving/keycloak/helmfile.yaml
-# - path: serving/hive/helmfile.yaml
-# - path: serving/prometheus/helmfile.yaml
+# - path: databases/mysql/helmfile.yaml
+# - path: databases/postgresql/helmfile.yaml
+# - path: databases/redis/helmfile.yaml
+
+# - path: operators/strimzi/helmfile.yaml
+
+# - path: monitoring/prometheus/helmfile.yaml
+# - path: monitoring/grafana/helmfile.yaml
+
+# - path: security/keycloak/helmfile.yaml
 
 - path: storage/kafka/helmfile.yaml
-# - path: storage/postgresql/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
-# - path: storage/mysql/helmfile.yaml
 - path: storage/zookeeper/helmfile.yaml
+
+# - path: warehouse/hive/helmfile.yaml
 ```
 Kustomize provides a solution for customizing Kubernetes resource configuration free from templates and DSLs. Edit the ```kustomization.yaml``` file to apply the essential free resource files to your k8s
 

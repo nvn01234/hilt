@@ -16,7 +16,6 @@ services:
 
 volumes:
   zookeeper_data:
-    driver: local
 
 networks:
   local_common_network:

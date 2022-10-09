@@ -1,0 +1,149 @@
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: 7.0.5-debian-11-r3
+
+## Allowed values: `standalone` or `replication`
+architecture: standalone
+auth:
+  enabled: true
+  sentinel: true
+  password: SuperSecr3t
+
+master:
+  count: 1
+  containerPorts:
+    redis: 6379
+
+  startupProbe:
+    enabled: false
+
+  livenessProbe:
+    enabled: false
+
+  readinessProbe:
+    enabled: false
+
+  # resources:
+  #   limits:
+  #     cpu: 250m
+  #     memory: 256Mi
+  #   requests:
+  #     cpu: 250m
+  #     memory: 256Mi
+
+  persistence:
+    enabled: false
+    sizeLimit: 10Gi
+    path: /data
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+  service:
+    type: ClusterIP
+    ports:
+      redis: 6379
+
+replica:
+  replicaCount: 3
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  externalMaster:
+    enabled: false
+  containerPorts:
+    redis: 6379
+
+  startupProbe:
+    enabled: false
+
+  livenessProbe:
+    enabled: false
+
+  readinessProbe:
+    enabled: false
+
+  # resources:
+  #   limits:
+  #     cpu: 250m
+  #     memory: 256Mi
+  #   requests:
+  #     cpu: 250m
+  #     memory: 256Mi
+
+  persistence:
+    enabled: false
+    sizeLimit: 10Gi
+    path: /data
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+  service:
+    type: ClusterIP
+
+    ports:
+      redis: 6379
+
+sentinel:
+  enabled: false
+
+  image:
+    registry: docker.io
+    repository: bitnami/redis-sentinel
+    tag: 7.0.5-debian-11-r2
+
+  masterSet: sentinel-master
+  quorum: 2
+
+  containerPorts:
+    sentinel: 26379
+
+  startupProbe:
+    enabled: false
+
+  livenessProbe:
+    enabled: false
+
+  readinessProbe:
+    enabled: false
+
+  persistence:
+    enabled: false
+
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 100Mi
+
+  # resources:
+  #   limits:
+  #     cpu: 250m
+  #     memory: 256Mi
+  #   requests:
+  #     cpu: 250m
+  #     memory: 256Mi
+
+  service:
+    type: ClusterIP
+    ports:
+      redis: 6379
+      sentinel: 26379
+
+networkPolicy:
+  enabled: false
+
+rbac:
+  create: false
+
+serviceAccount:
+  create: true
+
+pdb:
+  create: false
+
+metrics:
+  enabled: false

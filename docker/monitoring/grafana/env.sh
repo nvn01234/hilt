@@ -1,0 +1,2 @@
+GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=grafana-oncall-app
+GF_INSTALL_PLUGINS=grafana-oncall-app

@@ -1,17 +1,13 @@
 auth:
-  username: user
-  password: ""
-  fernetKey: ""
-  secretKey: ""
-  existingSecret: ""
+  username: airflow
+  password: SuperSecr3t
 
 dags:
-  existingConfigmap: ""
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
     tag: 11-debian-11-r22
-    
+
 web:
   image:
     registry: docker.io
@@ -21,9 +17,13 @@ web:
   containerPorts:
     http: 8080
   replicaCount: 1
-  resources:
-    limits: {}
-    requests: {}
+  # resources:
+  #   requests:
+  #     cpu: "1"
+  #     memory: "1Gi"
+  #   limits:
+  #     cpu: "2"       # x4 request
+  #     memory: "2Gi" # x4 request
 
 scheduler:
   image:
@@ -32,9 +32,13 @@ scheduler:
     tag: 2.3.3-debian-11-r10
     debug: false
   replicaCount: 1
-  resources:
-    limits: {}
-    requests: {}
+  # resources:
+  #   requests:
+  #     cpu: "1"
+  #     memory: "1Gi"
+  #   limits:
+  #     cpu: "2"       # x4 request
+  #     memory: "2Gi" # x4 request
 
 worker:
   image:
@@ -45,9 +49,13 @@ worker:
   containerPorts:
     http: 8793
   replicaCount: 1
-  resources:
-    limits: {}
-    requests: {}
+  # resources:
+  #   requests:
+  #     cpu: "1"
+  #     memory: "1Gi"
+  #   limits:
+  #     cpu: "2"       # x4 request
+  #     memory: "2Gi" # x4 request
 
 git:
   image:
@@ -100,19 +108,14 @@ externalDatabase:
   user: airflow
   database: airflow
   password: "SuperSecr3t"
-  
-redis:
-  enabled: true
-  auth:
-    enabled: true
-    password: ""
-    existingSecret: ""
-  architecture: standalone
 
-# externalRedis:
-#   host: localhost
-#   port: 6379
-#   username: ""
-#   password: ""
-#   existingSecret: ""
-#   existingSecretPasswordKey: ""
+redis:
+  enabled: false
+
+externalRedis:
+  host: localhost
+  port: 6379
+  username: ""
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: ""

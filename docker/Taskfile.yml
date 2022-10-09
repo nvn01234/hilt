@@ -1,6 +1,8 @@
 version: '3'
 
 includes:
+
+  # Computation
   airflow:
     taskfile: ./computation/airflow/Taskfile.yml
     dir: ./computation/airflow
@@ -17,37 +19,7 @@ includes:
     taskfile: ./computation/trino/Taskfile.yml
     dir: ./computation/trino
 
-  grafana:
-    taskfile: ./monitoring/grafana/Taskfile.yml
-    dir: ./monitoring/grafana
-  prometheus:
-    taskfile: ./monitoring/prometheus/Taskfile.yml
-    dir: ./monitoring/prometheus
-
-  hive:
-    taskfile: ./warehouse/hive/Taskfile.yml
-    dir: ./warehouse/hive
-
-  keycloak:
-    taskfile: ./security/keycloak/Taskfile.yml
-    dir: ./security/keycloak
-  vault:
-    taskfile: ./security/vault/Taskfile.yml
-    dir: ./security/vault
-
-  hadoop:
-    taskfile: ./storage/hadoop/Taskfile.yml
-    dir: ./storage/hadoop
-  kafka:
-    taskfile: ./storage/kafka
-    dir: ./storage/kafka
-  minio:
-    taskfile: ./storage/minio/Taskfile.yml
-    dir: ./storage/minio
-  zookeeper:
-    taskfile: ./storage/zookeeper/Taskfile.yml
-    dir: ./storage/zookeeper
-
+  # Databases
   mongo:
     taskfile: ./databases/mongo/Taskfile.yml
     dir: ./databases/mongo
@@ -62,7 +34,42 @@ includes:
     dir: ./databases/rabbitmq
   redis:
     taskfile: ./databases/redis/Taskfile.yml
-    dir: ./databases/rabbitmq
+    dir: ./databases/redis
+
+  # Monitoring
+  grafana:
+    taskfile: ./monitoring/grafana/Taskfile.yml
+    dir: ./monitoring/grafana
+  prometheus:
+    taskfile: ./monitoring/prometheus/Taskfile.yml
+    dir: ./monitoring/prometheus
+
+  # Security
+  keycloak:
+    taskfile: ./security/keycloak/Taskfile.yml
+    dir: ./security/keycloak
+  vault:
+    taskfile: ./security/vault/Taskfile.yml
+    dir: ./security/vault
+
+  # Storage
+  hadoop:
+    taskfile: ./storage/hadoop/Taskfile.yml
+    dir: ./storage/hadoop
+  kafka:
+    taskfile: ./storage/kafka
+    dir: ./storage/kafka
+  minio:
+    taskfile: ./storage/minio/Taskfile.yml
+    dir: ./storage/minio
+  zookeeper:
+    taskfile: ./storage/zookeeper/Taskfile.yml
+    dir: ./storage/zookeeper
+
+  # Warehouse
+  hive:
+    taskfile: ./warehouse/hive/Taskfile.yml
+    dir: ./warehouse/hive
 
 vars:
   BASE_VERSION: '{{.BASE_VERSION | default "0.1.0"}}'
@@ -75,10 +82,6 @@ tasks:
     cmds:
     - docker build -t sondn1/base:{{ .BASE_VERSION }} .
     # - docker push sondn1/base:{{ .BASE_VERSION }}
-
-  push-base:
-    cmds:
-    - docker push sondn1/base:{{ .BASE_VERSION }}
 
   stop-containers:
     cmds:
