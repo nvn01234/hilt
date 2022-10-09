@@ -4,19 +4,14 @@ env:
   START_WITH_ESSENTIAL_SERVICE: '{{ .START_WITH_ESSENTIAL_SERVICE | default true }}'
   STOP_WITH_ESSENTIAL_SERVICE: '{{ .STOP_WITH_ESSENTIAL_SERVICE | default false }}'
 
-includes:
-  on-call:
-    taskfile: ./on-call/Taskfile.yml
-    dir: ./on-call
-
 tasks:
 
   start:
     cmds:
     - task: start-essential-service
       vars:
-        SERVICE_DIR: ../../databases/postgresql
-        SERVICE_NAME: postgresql
+        SERVICE_DIR: ../../databases/mysql
+        SERVICE_NAME: mysql
     - docker compose up -d --remove-orphans
 
   start-essential-service:
@@ -35,8 +30,8 @@ tasks:
     - docker compose down --volumes
     - task: stop-essential-service
       vars:
-        SERVICE_DIR: ../../databases/postgresql
-        SERVICE_NAME: postgresql
+        SERVICE_DIR: ../../databases/mysql
+        SERVICE_NAME: mysql
 
   stop-essential-service:
     internal: true

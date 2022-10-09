@@ -8,14 +8,10 @@ tasks:
   start:
     cmds:
     - docker compose up -d --remove-orphans
-  
+
   stop:
     cmds:
     - docker compose down
-
-  shell:
-    cmds:
-    - docker-compose exec -it hive-metastore hive
 
   build:
     cmds:

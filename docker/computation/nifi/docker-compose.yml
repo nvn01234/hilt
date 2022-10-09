@@ -2,13 +2,13 @@ version: '3'
 services:
   nifi:
     image: apache/nifi:1.16.3
-    # restart: unless-stopped
+    restart: unless-stopped
     ports:
       - 8443:8443/tcp     # HTTPS
-      # - 8080:8080/tcp   # HTTP
+      # - 8080:8080/tcp     # HTTP
       # - 10000:10000/tcp   # Remote Input Socket
-      # - 8000:8000/tcp   # JVM Debugger
-      # - 11443:11443/tcp  # Cluster Node Protocol
+      # - 8000:8000/tcp     # JVM Debugger
+      # - 11443:11443/tcp   # Cluster Node Protocol
     environment:
       SINGLE_USER_CREDENTIALS_USERNAME: admin
       SINGLE_USER_CREDENTIALS_PASSWORD: ThisIsSuperSecr3t

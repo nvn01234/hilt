@@ -1,37 +1,57 @@
 version: '3'
 
+env:
+  START_WITH_ESSENTIAL_SERVICE: '{{ .START_WITH_ESSENTIAL_SERVICE | default true }}'
+  STOP_WITH_ESSENTIAL_SERVICE: '{{ .STOP_WITH_ESSENTIAL_SERVICE | default false }}'
+
 tasks:
 
-  start-all:
+  start:
     cmds:
-    - docker compose -f docker-compose.yml
-                     -f docker-compose-akhq.yml
-                     -f docker-compose-sr.yml
+    - task: start-kafka
+    - docker compose -f docker-compose-sr.yml
                      up -d --remove-orphans
 
-  stop-all:
+  stop:
     cmds:
-    - docker compose -f docker-compose.yml
-                     -f docker-compose-akhq.yml
-                     -f docker-compose-sr.yml
+    - docker compose -f docker-compose-sr.yml
                      down --volumes
+    - task: stop-kafka
 
   start-kafka:
     cmds:
-    - docker compose -f docker-compose.yml
-                     -f docker-compose-akhq.yml
-                     up -d --remove-orphans
+    - task: start-essential-service
+      vars:
+        SERVICE_DIR: ../../storage/zookeeper
+        SERVICE_NAME: zookeeper
+    - docker compose up -d --remove-orphans
+
+  start-essential-service:
+    internal: true
+    dir: "{{ .SERVICE_DIR }}"
+    cmds:
+    - |
+      if $START_WITH_ESSENTIAL_SERVICE; then
+        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
+          docker compose up -d --remove-orphans --wait
+        fi
+      fi
 
   stop-kafka:
     cmds:
-    - docker compose -f docker-compose.yml
-                     -f docker-compose-akhq.yml
-                     down --volumes
-                     
-  start-schema-registry:
-    cmds:
-    - docker compose -f docker-compose-sr.yml up -d --remove-orphans
+    - docker compose down --volumes
+    - task: stop-essential-service
+      vars:
+        SERVICE_DIR: ../../storage/zookeeper
+        SERVICE_NAME: zookeeper
 
-  stop-schema-registry:
+  stop-essential-service:
+    internal: true
+    dir: "{{ .SERVICE_DIR }}"
     cmds:
-    - docker compose -f docker-compose-sr.yml down
+    - |
+      if $STOP_WITH_ESSENTIAL_SERVICE; then
+        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
+          docker compose up -d --remove-orphans --wait
+        fi
+      fi

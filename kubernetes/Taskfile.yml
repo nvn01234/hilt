@@ -46,12 +46,13 @@ tasks:
 
   deploy-all:
     cmds:
+    - task: deploy-kustomize
     - helmfile apply
 
   destroy-all:
     cmds:
     - helmfile destroy
-    - kubectl delete -k ./
+    - task: destroy-kustomize
 
   template:
     cmds:

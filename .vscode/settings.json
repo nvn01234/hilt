@@ -3,7 +3,8 @@
     "*.tpl": "go",
     "*.tmpl": "go",
     "*.yml.gotmpl": "yaml",
-    "*.yaml.gotmpl": "yaml"
+    "*.yaml.gotmpl": "yaml",
+    "*.yaml.default": "yaml"
   },
   "material-icon-theme.folders.associations": {
     "bookshelf": "stack",
