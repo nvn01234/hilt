@@ -16,5 +16,5 @@ services:
       - ./slave_data/data/pg_wal:/bitnami/postgresql/archive
 
 networks:
-  local_common_network:
+  local:
     external: true

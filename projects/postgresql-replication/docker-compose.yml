@@ -17,7 +17,7 @@ services:
       - POSTGRESQL_DATABASE=postgres
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
-      - local_common_network
+      - local
 
   slave:
     image: docker.io/bitnami/postgresql:14
@@ -36,8 +36,8 @@ services:
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
-      - local_common_network
+      - local
 
 networks:
-  local_common_network:
+  local:
     external: true

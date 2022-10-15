@@ -18,12 +18,12 @@ services:
     ports:
       - 8081:8080
     networks:
-      - local_common_network
+      - local
 
 volumes:
   postgres_data:
       driver: local
 
 networks:
-  local_common_network:
+  local:
     external: true

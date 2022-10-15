@@ -12,11 +12,11 @@ services:
     volumes:
       - zookeeper_data:/bitnami/zookeeper
     networks:
-      - local_common_network
+      - local
 
 volumes:
   zookeeper_data:
 
 networks:
-  local_common_network:
+  local:
     external: true

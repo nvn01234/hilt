@@ -3,6 +3,7 @@ version: '3'
 vars:
   DEFAULT_NETWORK: '{{.DEFAULT_NETWORK | default "local_net"}}'
   HADOOP_VERSION: '{{.HADOOP_VERSION | default "3.3.1"}}'
+  HADOOP_BASE_VERSION: '{{.HADOOP_BASE_VERSION | default "0.1.0"}}'
   HADOOP_DATANODE_VERSION: '{{.HADOOP_DATANODE_VERSION | default "0.1.0"}}'
   HADOOP_NAMENODE_VERSION: '{{.HADOOP_NAMENODE_VERSION | default "0.1.0"}}'
   HADOOP_NODEMANAGER_VERSION: '{{.HADOOP_NODEMANAGER_VERSION | default "0.1.0"}}'
@@ -13,7 +14,7 @@ tasks:
   start-all:
     cmds:
     - docker compose up -d --remove-orphans
-  
+
   stop-all:
     cmds:
     - docker compose down
@@ -25,6 +26,12 @@ tasks:
   stop-hdfs:
     cmds:
     - docker compose down --profile=hdfs
+
+  build-base:
+    dir: ./common
+    cmds:
+    - docker build --tag sondn1/hadoop-base:{{ .HADOOP_BASE_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
+    # - docker push sondn1/hadoop-base:$HADOOP_BASE_VERSION-hadoop_$HADOOP_VERSION
 
   build-namenode:
     dir: ./components/namenode

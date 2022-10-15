@@ -8,21 +8,26 @@ services:
       - hive-metastore
     ports:
       - 10000:10000
+    environment:
+      HADOOP_OPTIONAL_TOOLS: hadoop-aws
+    volumes:
+      - ./configurations/hadoop/:/opt/hadoop/hadoop-3.3.1/etc/hadoop/
     networks:
-      - local_common_network
+      - local
 
   hive-metastore:
     image: sondn1/hive:0.1.0
     command: hive --service metastore --verbose --hiveconf hive.root.logger=INFO,console
     depends_on:
-      - namenode
-      - datanode
-      - postgresql
       - init_metastore_db
     ports:
       - 9083:9083
+    environment:
+      HADOOP_OPTIONAL_TOOLS: hadoop-aws
+    volumes:
+      - ./configurations/hadoop/:/opt/hadoop/hadoop-3.3.1/etc/hadoop/
     networks:
-      - local_common_network
+      - local
 
   init_metastore_db:
     image: sondn1/hive:0.1.0
@@ -35,8 +40,8 @@ services:
     depends_on:
       - postgresql
     networks:
-      - local_common_network
+      - local
 
 networks:
-  local_common_network:
+  local:
     external: true

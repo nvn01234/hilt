@@ -13,12 +13,12 @@ services:
     volumes:
       - minio_data:/data
     networks:
-      - local_common_network
+      - local
 
 volumes:
   minio_data:
 
 networks:
-  local_common_network:
+  local:
     external: true
 

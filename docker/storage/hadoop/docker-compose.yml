@@ -14,7 +14,7 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - local_common_network
+      - local
 
   datanode:
     image: sondn1/hadoop-datanode:0.1.0-hadoop_3.3.1
@@ -30,7 +30,7 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - local_common_network
+      - local
 
   resourcemanager:
     image: sondn1/hadoop-resourcemanager:0.1.0-hadoop_3.3.1
@@ -47,7 +47,7 @@ services:
     healthcheck:
       disable: true
     networks:
-      - local_common_network
+      - local
 
   nodemanager:
     image: sondn1/hadoop-nodemanager:0.1.0-hadoop_3.3.1
@@ -62,7 +62,7 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - local_common_network
+      - local
 
   historyserver:
     image: sondn1/hadoop-historyserver:0.1.0-hadoop_3.3.1
@@ -78,7 +78,7 @@ services:
       mode: replicated
       replicas: 1
     networks:
-      - local_common_network
+      - local
 
 volumes:
   datanode:
@@ -86,5 +86,5 @@ volumes:
   historyserver:
 
 networks:
-  local_common_network:
+  local:
     external: true

@@ -18,11 +18,11 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     networks:
-      - local_common_network
+      - local
 
 volumes:
   grafana_data:
 
 networks:
-  local_common_network:
+  local:
     external: true

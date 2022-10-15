@@ -14,11 +14,11 @@ services:
       - ./catalogs/kafka.properties:/etc/trino/catalog/kafka.properties
       - trino_data:/data
     networks:
-      - local_common_network
+      - local
 
 volumes:
   trino_data:
 
 networks:
-  local_common_network:
+  local:
     external: true

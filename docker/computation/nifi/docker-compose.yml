@@ -20,7 +20,7 @@ services:
       - ./configurations/zookeeper.properties:/opt/nifi/nifi-1.16.3/config/zookeeper.properties
       - ./custom/generator/nifi-custom-nar/target/nifi-custom-nar-0.1.0.nar:/opt/nifi/nifi-current/lib/nifi-custom-nar-0.1.0.nar
     networks:
-      - local_common_network
+      - local
 
 volumes:
   database_repository:
@@ -30,5 +30,5 @@ volumes:
   state:
 
 networks:
-  local_common_network:
+  local:
     external: true

@@ -22,11 +22,11 @@ services:
       - ./sample/sakila-db:/docker-entrypoint-initdb.d/
       - mysql_data:/var/lib/mysql
     networks:
-      - local_common_network
+      - local
 
 volumes:
   mysql_data:
 
 networks:
-  local_common_network:
+  local:
     external: true

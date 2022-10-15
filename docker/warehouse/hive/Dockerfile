@@ -22,7 +22,7 @@ RUN rm $HIVE_HOME/lib/postgresql-*.jre7.jar \
     && curl -fSL https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.6/postgresql-42.3.6.jar -o $HIVE_HOME/lib/postgresql-42.3.6.jar
 
 #Custom configuration goes here
-COPY configurations/* $HIVE_HOME/conf/
+COPY configurations/hive/* $HIVE_HOME/conf/
 
 COPY startup.sh /usr/local/bin/
 RUN chmod u+x /usr/local/bin/startup.sh

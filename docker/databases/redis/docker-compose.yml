@@ -12,11 +12,11 @@ services:
     volumes:
       - redis_data:/bitnami/redis/data
     networks:
-      - local_common_network
+      - local
 
 volumes:
   redis_data:
-  
+
 networks:
-  local_common_network:
+  local:
     external: true

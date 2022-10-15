@@ -20,11 +20,11 @@ services:
       - 8083:8083
       - 9012:9012
     networks:
-      - local_common_network
+      - local
     volumes:
       - ./etc/config.yml:/kafka/etc/config.yml
       - ./jars/jmx_prometheus_javaagent.jar:/kafka/etc/jmx_prometheus_javaagent.jar
 
 networks:
-  local_common_network:
+  local:
     external: true

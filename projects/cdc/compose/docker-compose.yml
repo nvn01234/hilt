@@ -6,57 +6,139 @@ services:
     extends:
       file: ../../../docker/storage/zookeeper/docker-compose.yml
       service: zookeeper
+    networks:
+      local:
+        ipv4_address: 10.5.0.2
 
   kafka:
     extends:
       file: ../../../docker/storage/kafka/docker-compose.yml
       service: kafka
+    networks:
+      local:
+        ipv4_address: 10.5.0.3
 
   schema-registry:
     extends:
       file: ../../../docker/storage/kafka/docker-compose-sr.yml
       service: schema-registry
+    networks:
+      local:
+        ipv4_address: 10.5.0.4
 
-  akhq:
+  console:
     extends:
-      file: ../../../docker/storage/kafka/docker-compose-akhq.yml
-      service: akhq
+      file: ../../../docker/storage/kafka/docker-compose.yml
+      service: console
     environment:
-      AKHQ_CONFIGURATION: |
-        akhq:
-          connections:
-            kafka-local:
-              properties:
-                bootstrap.servers: kafka:9092
-              schema-registry:
-                url: "http://schema-registry:8085"
-              connect:
-                - name: debezium
-                  url: http://debezium:8083
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://schema-registry:8085"]
+        connect:
+          enabled: true
+          clusters:
+            - name: debezium
+              url: http://debezium:8083
+    networks:
+      local:
+        ipv4_address: 10.5.0.5
+
+  # akhq:
+  #   extends:
+  #     file: ../../../docker/storage/kafka/docker-compose.yml
+  #     service: akhq
+  #   environment:
+  #     AKHQ_CONFIGURATION: |
+  #       akhq:
+  #         connections:
+  #           kafka-local:
+  #             properties:
+  #               bootstrap.servers: kafka:9092
+  #             schema-registry:
+  #               url: "http://schema-registry:8085"
+  #             connect:
+  #               - name: debezium
+  #                 url: http://debezium:8083
 
   debezium:
     extends:
       file: ../../../docker/computation/debezium/docker-compose.yml
       service: debezium
-    environment:
-      LOG_LEVEL: TRACE
+    networks:
+      local:
+        ipv4_address: 10.5.0.6
 
   mysql:
     extends:
       file: ../../../docker/databases/mysql/docker-compose.yml
       service: mysql
+    networks:
+      local:
+        ipv4_address: 10.5.0.7
 
   postgresql:
     extends:
       file: ../../../docker/databases/postgresql/docker-compose.yml
       service: postgresql
+    networks:
+      local:
+        ipv4_address: 10.5.0.8
+
+  hive-server:
+    extends:
+      file: ../../../docker/warehouse/hive/docker-compose.yml
+      service: hive-server
+    networks:
+      local:
+        ipv4_address: 10.5.0.9
+
+  hive-metastore:
+    extends:
+      file: ../../../docker/warehouse/hive/docker-compose.yml
+      service: hive-metastore
+    networks:
+      local:
+        ipv4_address: 10.5.0.10
+
+  init_metastore_db:
+    extends:
+      file: ../../../docker/warehouse/hive/docker-compose.yml
+      service: init_metastore_db
+    networks:
+      local:
+        ipv4_address: 10.5.0.13
+
+  minio:
+    extends:
+      file: ../../../docker/storage/minio/docker-compose.yml
+      service: minio
+    networks:
+      local:
+        ipv4_address: 10.5.0.11
+
+
+  stream:
+    extends:
+      file: ../../../docker/computation/alluvial/docker-compose.yml
+      service: alluvial-stream
+    networks:
+      local:
+        ipv4_address: 10.5.0.12
 
 networks:
-  local_common_network:
+  local:
+    name: local
     external: true
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
 
 volumes:
   kafka_data:
   zookeeper_data:
   mysql_data:
   postgres_data:
+  minio_data:

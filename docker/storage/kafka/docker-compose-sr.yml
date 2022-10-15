@@ -15,8 +15,8 @@ services:
       SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8085'
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: 'INFO'
     networks:
-      - local_common_network
+      - local
 
 networks:
-  local_common_network:
+  local:
     external: true

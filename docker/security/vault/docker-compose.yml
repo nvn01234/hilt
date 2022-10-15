@@ -9,8 +9,8 @@ services:
       VAULT_ADDR: "http://0.0.0.0:8200"
       VAULT_DEV_ROOT_TOKEN_ID: "SuperTok3n"
     networks:
-      - local_common_network
+      - local
 
 networks:
-  local_common_network:
+  local:
     external: true

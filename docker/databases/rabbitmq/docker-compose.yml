@@ -17,11 +17,11 @@ services:
     volumes:
       - rabbitmq_data:/bitnami/rabbitmq/mnesia
     networks:
-      - local_common_network
+      - local
 
 volumes:
   rabbitmq_data:
 
 networks:
-  local_common_network:
+  local:
     external: true

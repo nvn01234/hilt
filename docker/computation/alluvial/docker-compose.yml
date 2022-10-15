@@ -1,0 +1,39 @@
+version: "2.5"
+
+services:
+
+  alluvial-stream:
+    image: hub.teko.vn/dataops/alluvial:v0.10.2
+    environment:
+      AWS_REGION: aws-global
+    command:
+      - alluvial
+      - stream
+      - /etc/alluvial/config.yaml
+    # restart: unless-stopped
+    ports:
+      - 9090:9090
+    networks:
+      - local
+    volumes:
+      - ./configuration:/etc/alluvial
+
+  alluvial-manager:
+    image: hub.teko.vn/dataops/alluvial:v0.10.2
+    environment:
+      AWS_REGION: aws-global
+    command:
+      - alluvial
+      - manage
+      - /etc/alluvial/config.yaml
+    # restart: unless-stopped
+    ports:
+      - 9090:9090
+    networks:
+      - local
+    volumes:
+      - ./configuration/config.yml:/etc/alluvial/config.yaml
+
+networks:
+  local:
+    external: true

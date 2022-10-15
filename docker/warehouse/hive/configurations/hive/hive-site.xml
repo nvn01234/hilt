@@ -30,7 +30,7 @@
 
   <property>
     <name>hive.metastore.warehouse.dir</name>
-    <value>hdfs:///user/hive/warehouse</value>
+    <value>/tmp/warehouse</value>
   </property>
 
   <property>

@@ -20,7 +20,7 @@ x-airflow-common:
     - airflow_logs:/opt/airflow/logs
     - airflow_plugins:/opt/airflow/plugins
   networks:
-    - local_common_network
+    - local
 
 x-airflow-depends-common:
   &airflow-depends-common
@@ -164,5 +164,5 @@ volumes:
   airflow_plugins:
 
 networks:
-  local_common_network:
+  local:
     external: true

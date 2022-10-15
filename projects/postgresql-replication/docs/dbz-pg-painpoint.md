@@ -39,7 +39,7 @@ services:
       - POSTGRESQL_DATABASE=postgres
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
-      - local_common_network
+      - local
 
   slave:
     image: docker.io/bitnami/postgresql:14
@@ -58,10 +58,10 @@ services:
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
       - ALLOW_EMPTY_PASSWORD=yes
     networks:
-      - local_common_network
+      - local
 
 networks:
-  local_common_network:
+  local:
     external: true
 
 ```
@@ -96,7 +96,7 @@ services:
       - ./slave_data/data/pg_wal:/bitnami/postgresql/archive
 
 networks:
-  local_common_network:
+  local:
     external: true
 ```
 <i>Note:</i> We can't mount the secondary's wal folder to slave wal folder directly because postgresql requires it's configured folders (data, wal, ...) to be empty during start up, else, it wouldn't start. 
