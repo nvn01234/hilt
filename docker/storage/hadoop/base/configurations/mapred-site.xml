@@ -51,14 +51,14 @@
   </property>
   <property>
     <name>yarn_app_mapreduce_am_env</name>
-    <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+    <value>HADOOP_MAPRED_HOME=/opt/hadoop/</value>
   </property>
   <property>
     <name>mapreduce_map_env</name>
-    <value>HADOOP_MAPRED_HOME~/opt/hadoop-3.2.1/</value>
+    <value>HADOOP_MAPRED_HOME~/opt/hadoop/</value>
   </property>
   <property>
     <name>mapreduce_reduce_env</name>
-    <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+    <value>HADOOP_MAPRED_HOME=/opt/hadoop/</value>
   </property>
 </configuration>

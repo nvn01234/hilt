@@ -9,6 +9,7 @@ services:
       - 9870:9870
     profiles:
       - hdfs
+      - hadoop
     deploy:
       mode: global
       restart_policy:
@@ -24,6 +25,7 @@ services:
       - namenode
     profiles:
       - hdfs
+      - hadoop
     deploy:
       mode: replicated
       replicas: 5
@@ -39,6 +41,7 @@ services:
       - datanode
     profiles:
       - mapreduce
+      - hadoop
     deploy:
       mode: replicated
       replicas: 1
@@ -57,6 +60,7 @@ services:
       - resourcemanager
     profiles:
       - mapreduce
+      - hadoop
     deploy:
       mode: global
       restart_policy:
@@ -74,6 +78,7 @@ services:
       - resourcemanager
     profiles:
       - mapreduce
+      - hadoop
     deploy:
       mode: replicated
       replicas: 1

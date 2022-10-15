@@ -11,7 +11,7 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./configurations/hadoop/:/opt/hadoop/hadoop-3.3.1/etc/hadoop/
+      - ./configurations/hadoop/:/opt/hadoop/etc/hadoop/
     networks:
       - local
 
@@ -25,7 +25,7 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./configurations/hadoop/:/opt/hadoop/hadoop-3.3.1/etc/hadoop/
+      - ./configurations/hadoop/:/opt/hadoop/etc/hadoop/
     networks:
       - local
 

@@ -1,0 +1,19 @@
+version: '3'
+
+vars:
+  BASE_VERSION: '{{.BASE_VERSION | default "0.1.0"}}'
+
+tasks:
+
+  build:
+    cmds:
+    - docker build -t sondn1/base:{{ .BASE_VERSION }} .
+
+  publish:
+    cmds:
+    - task: build
+    - docker push sondn1/base:{{ .BASE_VERSION }}
+
+  push:
+    cmds:
+    - docker push sondn1/base:{{ .BASE_VERSION }}

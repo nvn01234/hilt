@@ -1,0 +1,20 @@
+version: '3'
+
+env:
+  HADOOP_VERSION: '{{.HADOOP_VERSION | default "3.3.1"}}'
+  HADOOP_BASE_VERSION: '{{.HADOOP_BASE_VERSION | default "0.1.0"}}'
+
+tasks:
+
+  build:
+    cmds:
+    - docker build --tag sondn1/hadoop-base:{{ .HADOOP_BASE_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
+
+  publish:
+    cmds:
+    - task: build
+    - docker push sondn1/hadoop-base:$HADOOP_BASE_VERSION-hadoop_$HADOOP_VERSION
+
+  push:
+    cmds:
+    - docker push sondn1/hadoop-base:$HADOOP_BASE_VERSION-hadoop_$HADOOP_VERSION

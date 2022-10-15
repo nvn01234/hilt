@@ -1,64 +1,72 @@
 version: '3'
 
-vars:
-  DEFAULT_NETWORK: '{{.DEFAULT_NETWORK | default "local_net"}}'
-  HADOOP_VERSION: '{{.HADOOP_VERSION | default "3.3.1"}}'
-  HADOOP_BASE_VERSION: '{{.HADOOP_BASE_VERSION | default "0.1.0"}}'
-  HADOOP_DATANODE_VERSION: '{{.HADOOP_DATANODE_VERSION | default "0.1.0"}}'
-  HADOOP_NAMENODE_VERSION: '{{.HADOOP_NAMENODE_VERSION | default "0.1.0"}}'
-  HADOOP_NODEMANAGER_VERSION: '{{.HADOOP_NODEMANAGER_VERSION | default "0.1.0"}}'
-  HADOOP_RESOURCEMANAGER_VERSION: '{{.HADOOP_RESOURCEMANAGER_VERSION | default "0.1.0"}}'
+includes:
+
+  base:
+    taskfile: ./base/Taskfile.yml
+    dir: ./base
+
+  namenode:
+    taskfile: ./components/namenode/Taskfile.yml
+    dir: ./components/namenode
+
+  datanode:
+    taskfile: ./components/datanode/Taskfile.yml
+    dir: ./components/datanode
+
+  resourcemanager:
+    taskfile: ./components/resourcemanager/Taskfile.yml
+    dir: ./components/resourcemanager
+
+  nodemanager:
+    taskfile: ./components/nodemanager/Taskfile.yml
+    dir: ./components/nodemanager
+
+  historyserver:
+    taskfile: ./components/historyserver/Taskfile.yml
+    dir: ./components/historyserver
 
 tasks:
 
   start-all:
     cmds:
-    - docker compose up -d --remove-orphans
+    - docker compose --profile=hadoop up -d --remove-orphans
 
   stop-all:
     cmds:
-    - docker compose down
+    - docker compose --profile=hadoop down
 
   start-hdfs:
     cmds:
-    - docker compose up -d --remove-orphans --profile=hdfs
+    - docker compose --profile=hdfs up -d --remove-orphans
 
   stop-hdfs:
     cmds:
-    - docker compose down --profile=hdfs
+    - docker compose --profile=hdfs down
 
-  build-base:
-    dir: ./common
+  build:
     cmds:
-    - docker build --tag sondn1/hadoop-base:{{ .HADOOP_BASE_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-base:$HADOOP_BASE_VERSION-hadoop_$HADOOP_VERSION
+    - task: base:build
+    - task: namenode:build
+    - task: datanode:build
+    - task: resourcemanager:build
+    - task: nodemanager:build
+    - task: historyserver:build
 
-  build-namenode:
-    dir: ./components/namenode
+  publish:
     cmds:
-    - docker build --tag sondn1/hadoop-namenode:{{ .HADOOP_NAMENODE_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-datanode:{{ .HADOOP_NAMENODE_VERSION }}-hadoop_{{ .HADOOP_VERSION }}
+    - task: base:publish
+    - task: namenode:publish
+    - task: datanode:publish
+    - task: resourcemanager:publish
+    - task: nodemanager:publish
+    - task: historyserver:publish
 
-  build-datanode:
-    dir: ./components/datanode
+  push:
     cmds:
-    - docker build --tag sondn1/hadoop-datanode:{{ .HADOOP_DATANODE_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-datanode:{{ .HADOOP_DATANODE_VERSION }}-hadoop_{{ .HADOOP_VERSION }}
-
-  build-historyserver:
-    dir: ./components/historyserver
-    cmds:
-    - docker build --tag sondn1/hadoop-historyserver:{{ .HADOOP_HISTORYSERVER_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-datanode:{{ .HADOOP_DATANODE_VERSION }}-hadoop_{{ .HADOOP_VERSION }}
-
-  build-nodemanager:
-    dir: ./components/nodemanager
-    cmds:
-    - docker build --tag sondn1/hadoop-nodemanager:{{ .HADOOP_NODEMANAGER_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-datanode:{{ .HADOOP_NODEMANAGER_VERSION }}-hadoop_{{ .HADOOP_VERSION }}
-
-  build-resourcemanager:
-    dir: ./components/resourcemanager
-    cmds:
-    - docker build --tag sondn1/hadoop-resourcemanager:{{ .HADOOP_RESOURCEMANAGER_VERSION }}-hadoop_{{ .HADOOP_VERSION }} .
-    # - docker push sondn1/hadoop-datanode:{{ .HADOOP_RESOURCEMANAGER_VERSION }}-hadoop_{{ .HADOOP_VERSION }}
+    - task: base:push
+    - task: namenode:push
+    - task: datanode:push
+    - task: resourcemanager:push
+    - task: nodemanager:push
+    - task: historyserver:push

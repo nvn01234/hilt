@@ -2,6 +2,11 @@ version: '3'
 
 includes:
 
+  # Base
+  base:
+    taskfile: ./base/Taskfile.yml
+    dir: ./base
+
   # Computation
   airflow:
     taskfile: ./computation/airflow/Taskfile.yml
@@ -71,17 +76,7 @@ includes:
     taskfile: ./warehouse/hive/Taskfile.yml
     dir: ./warehouse/hive
 
-vars:
-  BASE_VERSION: '{{.BASE_VERSION | default "0.1.0"}}'
-  DEFAULT_NETWORK: '{{.DEFAULT_NETWORK | default "local_net"}}'
-
 tasks:
-
-  build-base:
-    dir: ./base
-    cmds:
-    - docker build -t sondn1/base:{{ .BASE_VERSION }} .
-    # - docker push sondn1/base:{{ .BASE_VERSION }}
 
   stop-containers:
     cmds:
@@ -91,15 +86,21 @@ tasks:
     cmds:
     - docker rm $(docker ps -aq)
 
-  force-rm-containers:
+  rm-containers:
     cmds:
     - task: stop-containers
     - docker rm $(docker ps -aq)
 
   create-local-network:
+    env:
+      DEFAULT_NETWORK: '{{.DEFAULT_NETWORK | default "local"}}'
     cmds:
-    - docker network create {{ .DEFAULT_NETWORK }}
+    - docker network create $DEFAULT_NETWORK
 
   clear-volumes:
     cmds:
     - docker volume rm $(docker volume ls -q)
+
+  prune:
+    cmds:
+    - docker system prune -af
