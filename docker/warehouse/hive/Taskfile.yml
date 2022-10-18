@@ -16,4 +16,12 @@ tasks:
   build:
     cmds:
     - docker build --tag sondn1/hive:{{ .HIVE_VERSION }} .
-    # - docker push sondn1/hive:{{ .HIVE_VERSION }}
+
+  push:
+    cmds:
+    - docker push sondn1/hive:{{ .HIVE_VERSION }}
+
+  publish:
+    cmds:
+    - task: build
+    - task: push

@@ -11,8 +11,8 @@ services:
       - stream
       - /etc/alluvial/config.yaml
     # restart: unless-stopped
-    ports:
-      - 9090:9090
+    # ports:
+      # - 9090:9090
     networks:
       - local
     volumes:
