@@ -7,24 +7,21 @@ services:
       file: ../../../docker/storage/zookeeper/docker-compose.yml
       service: zookeeper
     networks:
-      local:
-        ipv4_address: 10.5.0.2
+      - local
 
   kafka:
     extends:
       file: ../../../docker/storage/kafka/docker-compose.yml
       service: kafka
     networks:
-      local:
-        ipv4_address: 10.5.0.3
+      - local
 
   schema-registry:
     extends:
       file: ../../../docker/storage/kafka/docker-compose-sr.yml
       service: schema-registry
     networks:
-      local:
-        ipv4_address: 10.5.0.4
+      - local
 
   console:
     extends:
@@ -43,8 +40,7 @@ services:
             - name: debezium
               url: http://debezium:8083
     networks:
-      local:
-        ipv4_address: 10.5.0.5
+      - local
 
   # akhq:
   #   extends:
@@ -68,73 +64,82 @@ services:
       file: ../../../docker/computation/debezium/docker-compose.yml
       service: debezium
     networks:
-      local:
-        ipv4_address: 10.5.0.6
+      - local
 
   mysql:
     extends:
       file: ../../../docker/databases/mysql/docker-compose.yml
       service: mysql
     networks:
-      local:
-        ipv4_address: 10.5.0.7
+      - local
 
   postgresql:
     extends:
       file: ../../../docker/databases/postgresql/docker-compose.yml
       service: postgresql
     networks:
-      local:
-        ipv4_address: 10.5.0.8
+      - local
 
   hive-server:
     extends:
       file: ../../../docker/warehouse/hive/docker-compose.yml
       service: hive-server
     networks:
-      local:
-        ipv4_address: 10.5.0.9
+      - local
 
   hive-metastore:
     extends:
       file: ../../../docker/warehouse/hive/docker-compose.yml
       service: hive-metastore
     networks:
-      local:
-        ipv4_address: 10.5.0.10
+      - local
 
   init_metastore_db:
     extends:
       file: ../../../docker/warehouse/hive/docker-compose.yml
       service: init_metastore_db
     networks:
-      local:
-        ipv4_address: 10.5.0.13
+      - local
 
   minio:
     extends:
       file: ../../../docker/storage/minio/docker-compose.yml
       service: minio
     networks:
-      local:
-        ipv4_address: 10.5.0.11
+      - local
 
-
-  stream:
+  stream-mysql:
     extends:
       file: ../../../docker/computation/alluvial/docker-compose.yml
       service: alluvial-stream
+    command:
+      - alluvial
+      - stream
+      - /etc/alluvial/ingestor-mysql.yaml
+    volumes:
+      - ./ingestors:/etc/alluvial
     networks:
-      local:
-        ipv4_address: 10.5.0.12
+      - local
+
+  stream-postgresql:
+    extends:
+      file: ../../../docker/computation/alluvial/docker-compose.yml
+      service: alluvial-stream
+    command:
+      - alluvial
+      - stream
+      - /etc/alluvial/ingestor-postgresql.yaml
+    volumes:
+      - ./ingestors:/etc/alluvial
+    networks:
+      - local
 
 networks:
   local:
-    name: local
     external: true
-    ipam:
-      config:
-        - subnet: 10.5.0.0/16
+    # ipam:
+    #   config:
+    #     - subnet: 10.5.0.0/16
 
 volumes:
   kafka_data:
