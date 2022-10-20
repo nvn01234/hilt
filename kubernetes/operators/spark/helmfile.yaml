@@ -1,0 +1,8 @@
+releases:
+- name: spark-operator
+  namespace: spark
+  chart: spark-operator/spark-operator
+  version: 1.1.25
+  values:
+  - ./spark-operator.yaml
+  - fullnameOverride: spark-operator

@@ -7,6 +7,8 @@ repositories:
   url:  https://prometheus-community.github.io/helm-charts
 - name: strimzi
   url:  https://strimzi.io/charts/
+- name: spark-operator
+  url:  https://googlecloudplatform.github.io/spark-on-k8s-operator
 
 helmDefaults:
   wait: true
@@ -27,6 +29,7 @@ helmfiles:
 # - path: databases/redis/helmfile.yaml
 
 # - path: operators/strimzi/helmfile.yaml
+- path: operators/spark/helmfile.yaml
 
 # - path: monitoring/prometheus/helmfile.yaml
 # - path: monitoring/grafana/helmfile.yaml
