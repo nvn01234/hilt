@@ -1,0 +1,52 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/googlecloudplatform/spark-operator
+  tag: "v1beta2-1.3.7-3.1.1"
+
+rbac:
+  create: true
+  createRole: true
+  createClusterRole: true
+
+serviceAccounts:
+  spark:
+    create: true
+    # -- Optional name for the spark service account
+    name: spark
+  sparkoperator:
+    create: true
+
+sparkJobNamespace: spark
+
+uiService:
+  enable: true
+
+logLevel: 2
+
+webhook:
+  enable: false
+  port: 8080
+
+metrics:
+  enable: false
+  port: 10254
+  portName: metrics
+  endpoint: /metrics
+
+podMonitor:
+  enable: false
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 300Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 300Mi
+
+batchScheduler:
+  enable: false
+
+resourceQuotaEnforcement:
+  enable: false

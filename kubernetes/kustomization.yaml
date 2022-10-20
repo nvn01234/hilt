@@ -9,3 +9,5 @@ resources:
 # - ./computation/debezium/metrics-svc.yaml
 
 # - ./computation/trino/trino-certificate.yaml
+
+- ./operators/spark/apps/examples/spark-pi.yaml
