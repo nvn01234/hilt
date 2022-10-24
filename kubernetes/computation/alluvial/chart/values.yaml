@@ -1,0 +1,44 @@
+nameOverride: ""
+fullnameOverride: ""
+
+separator: "-"
+
+image:
+  repository: hub.teko.vn/dataops/alluvial
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+configs: {}
+logging:
+  ROOT: INFO
+  org.apache.hadoop: WARN
+
+commons:
+  env: []
+
+  labels: {}
+  podLabels: {}
+  annotations: {}
+  podAnnotations: {}
+
+  resources: {}
+  securityContext: {}
+  podSecurityContext: {}
+
+  schedulerName: null
+  runtimeClassName: null
+  priorityClassName: null
+
+  affinity: {}
+  tolerations: []
+  nodeSelector: {}
+
+streamController: {}
+tableManager:
+  enabled: true

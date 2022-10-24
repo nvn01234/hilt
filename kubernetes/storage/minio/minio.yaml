@@ -7,14 +7,14 @@ clientImage:
   registry: docker.io
   repository: bitnami/minio-client
   tag: 2022.7.29-debian-11-r2
-  
+
 mode: standalone
 
 auth:
   rootUser: admin
   rootPassword: SuperSecr3t
   forcePassword: false
-  
+
 defaultBuckets: develop
 
 containerPorts:
@@ -24,7 +24,7 @@ containerPorts:
 resources:
   limits:
     cpu: 250m
-    memory: 256Mi
+    memory: 1Gi
   requests:
     cpu: 250m
     memory: 256Mi

@@ -1,0 +1,104 @@
+separator: .
+
+image:
+  repository: hub.teko.vn/dataops/alluvial
+  tag: v0.10.2
+
+commons:
+  env:
+    - name: AWS_ACCESS_KEY_ID
+      value: admin
+    - nameviolin: AWS_SECRET_ACCESS_KEY
+      value: SuperSecr3t
+    - name: AWS_REGION
+      value: aws-global
+    - name: JAVA_OPTS
+      value: >-
+        -XX:MaxRAMPercentage=100.0
+        -XX:+UseStringDeduplication
+
+  resources: {}
+    # requests:
+    #   cpu: 100m
+    #   memory: 256Mi
+    # limits:
+    #   cpu: 4000m
+    #   memory: 48Gi
+
+configs:
+  source:
+    kind: kafka
+    topicPrefix: debezium.mysql.sakila
+    config:
+      bootstrap.servers: kafka:9092
+      group.id: debezium.mysql.sakila
+      key.converter: io.confluent.connect.avro.AvroConverter
+      value.converter: io.confluent.connect.avro.AvroConverter
+      key.converter.schema.registry.url: http://schema-registry:8085
+      value.converter.schema.registry.url: http://schema-registry:8085
+      poll.timeout.ms: 1000
+      max.poll.records: 10000
+    namingAdjusters:
+      - class: dev.alluvial.source.kafka.naming.ChangingCaseNamingAdjuster
+        case: lower
+      - class: dev.alluvial.source.kafka.naming.MappingSchemaNamingAdjuster
+        map:
+          sakila: dvdrental
+
+  sink:
+    kind: iceberg
+    catalog:
+      catalog-impl: org.apache.iceberg.hive.HiveCatalog
+      warehouse: s3a://my-datalake/alluvial/.warehouse/
+      uri: thrift://hive-metastore.hive.svc:9083
+      io-impl: org.apache.iceberg.aws.s3.S3FileIO
+      s3.endpoint: http://minio.minio.svc:9000
+      s3.path-style-access: true
+    tableCreation:
+      baseLocation: s3a://my-datalake/cdc/mysql/alluvial/
+      properties:
+        write.format.default: PARQUET
+        write.target-file-size-bytes: 134217728  # 128MiB
+        engine.hive.enabled: true
+        write.orc.compression-codec: snappy
+        write.avro.compression-codec: snappy
+        write.parquet.compression-codec: snappy
+        write.delete.orc.compression-codec: snappy
+        write.delete.avro.compression-codec: snappy
+        write.delete.parquet.compression-codec: snappy
+        write.metadata.compression-codec: gzip
+        write.metadata.delete-after-commit.enabled: true
+        write.metadata.previous-versions-max: 20
+      partitionSpec:
+        actor:
+          - column: actor_id
+            transform: truncate[50]
+            name: actor_id_truncated
+        film:
+          - column: last_update
+            transform: month
+            name: lum
+
+  stream:
+    kind: debezium
+    examineInterval: 3m
+    idleTimeout: 30m
+    commitBatchSize: 500000
+    commitTimespan: 15m
+    rotateByDateInTz: "+7"
+
+  manager:
+    namespace: [dvdrental]
+    compactSnapshots:
+      tz: "+7"
+    expireOrphanSnapshots:
+      enabled: false
+
+  metrics:
+    exporters:
+      - kind: prometheus
+        properties:
+          prometheus.bind: 0.0.0.0:9090
+          prometheus.daemon: true
+    commonTags:
+      service: datalake.dvdrental
