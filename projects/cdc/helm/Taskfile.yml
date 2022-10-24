@@ -12,14 +12,26 @@ tasks:
     - helmfile destroy
     - kubectl -n kafka delete -k ./
 
-  create-connector:
+  load-images:
     cmds:
-    - kubectl -n kafka apply -f ./connectors/connector-{{ .CLI_ARGS }}.yaml
+    # - minikube image load bitnami/schema-registry:7.1.3-debian-11-r11
+    # - minikube image load hub.teko.vn/dataops/hive:3.1.3
+    # - minikube image load hub.teko.vn/dataops/alluvial:v0.10.2
+    - minikube image load hub.teko.vn/dataops/kafka/debezium:1.9.1-kafka-2.8.1
+
+  create-ingestors:
+    dir: ./ingestors
+    cmds:
+    - helmfile apply
+
+  create-connectors:
+    dir: ./connectors
+    cmds:
+    - kubectl -n kafka apply -k ./
 
   delete-connector:
     cmds:
-    - curl -i -X DELETE localhost:8083/connectors/{{ .CLI_ARGS }}
-              -H "Accept:application/json"
+    - kubectl -n kafka delete KafkaConnector {{ .CLI_ARGS }}
 
   list-connectors:
     cmds:

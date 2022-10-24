@@ -5,10 +5,7 @@ image:
 hiveConfig:
   hive-site.xml:
     hive.metastore.event.db.notification.api.auth: false
-    # https://prestosql.io/docs/current/connector/hive.html#metastore-configuration-for-avro
     metastore.storage.schema.reader.impl: org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader
-    # Enable cleaner threads to support Hive transactions
-    # https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706483#HiveTransactions-Configuration
     hive.compactor.initiator.on: true
     hive.compactor.worker.threads: 1
 
@@ -16,7 +13,7 @@ metastore:
   replicas: 1
 
 warehouse:
-  dir: s3a://develop/vnshop-datalake/alluvial/.warehouse/
+  dir: s3a://my-datalake/alluvial/.warehouse/
 
 metrics:
   enabled: false
@@ -27,17 +24,22 @@ metrics:
 filesystem:
   s3a:
     enabled: true
-    endpoint:  http://minio.minio.svc.cluster.local:9000/
+    endpoint:  http://minio.minio.svc:9000/
     accessKey: admin
     secretKey: SuperSecr3t
+
+    buckets:
+      my-datalake:
+        accessKey: admin
+        secretKey: SuperSecr3t
 
 postgresql:
   enabled: false
 
 externalDatabase:
   type: postgres
-  host: postgresql.postgresql.svc.cluster.local
+  host: postgresql.postgresql.svc
   port: 5432
-  database: hive-metastore-vnshop-datalake
-  username: admin
+  database: metastore
+  username: postgres
   password: SuperSecr3t

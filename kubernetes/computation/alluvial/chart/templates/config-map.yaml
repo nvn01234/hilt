@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "alluvial.fullname" . }}
+  labels:
+    {{- include "alluvial.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    {{- toYaml .Values.configs | nindent 4 }}
+
+  logback.xml: |
+    <configuration>
+      <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+          <pattern>
+            %date{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC} %highlight(%-5level) [%boldGreen(%mdc{name:-*})] %logger{25} - %message%n
+          </pattern>
+        </encoder>
+      </appender>
+
+      <root level="{{ .Values.logging.ROOT }}">
+        <appender-ref ref="console"/>
+      </root>
+
+      {{- range $key, $value := omit .Values.logging "ROOT" }}
+      <logger name="{{ $key }}" level="{{ $value }}"/>
+      {{- end }}
+    </configuration>

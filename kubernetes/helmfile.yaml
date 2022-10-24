@@ -29,7 +29,7 @@ helmfiles:
 # - path: databases/redis/helmfile.yaml
 
 # - path: operators/strimzi/helmfile.yaml
-- path: operators/spark/helmfile.yaml
+# - path: operators/spark/helmfile.yaml
 
 # - path: monitoring/prometheus/helmfile.yaml
 # - path: monitoring/grafana/helmfile.yaml

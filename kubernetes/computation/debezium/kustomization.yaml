@@ -4,3 +4,4 @@ resources:
 - ./metrics-config.yaml
 - ./debezium.yaml
 - ./metrics-svc.yaml
+# - ./savior.yaml

@@ -16,9 +16,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperSecr3t
     volumes:
-      - ./sample/app-init:/docker-entrypoint-initdb.d/
-      - ./sample/dvdrental-db/dvdrental.sh:/docker-entrypoint-initdb.d/dvdrental.sh
-      - ./sample/dvdrental-db/dvdrental.tar:/docker-entrypoint-initdb.d/dvdrental.tar
+      - ./sample/app-init.sql:/docker-entrypoint-initdb.d/app-init.sql
+      - ./sample/dvdrental:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
     networks:
       - local

@@ -19,6 +19,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
+      - ./sample/app-init.sql:/docker-entrypoint-initdb.d/app-init.sql
       - ./sample/sakila-db:/docker-entrypoint-initdb.d/
       - mysql_data:/var/lib/mysql
     networks:

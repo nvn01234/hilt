@@ -4,5 +4,5 @@ releases:
   chart: bitnami/postgresql
   version: 11.6.19
   values:
-  - ./postgresql.yaml
+  - ./postgresql.yaml.gotmpl
   - fullnameOverride: postgresql
