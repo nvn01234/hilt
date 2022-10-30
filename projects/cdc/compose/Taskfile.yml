@@ -1,5 +1,8 @@
 version: '3'
 
+env:
+  DB_TYPE: '{{.DB_TYPE | default "mysql"}}'
+
 tasks:
 
   start:
@@ -19,7 +22,7 @@ tasks:
     - curl -i -X POST http://localhost:8083/connectors/
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./connectors/connector-{{ .CLI_ARGS }}.json
+              -d @./connectors/connector-${DB_TYPE}.json
 
   delete-connector:
     cmds:
@@ -46,6 +49,6 @@ tasks:
     - curl -i -X PUT http://localhost:8083/connectors/{{ .CLI_ARGS }}/config
               -H "Accept:application/json"
               -H "Content-Type:application/json"
-              -d @./connectors/connector-postgresql.json
+              -d @./connectors/connector-${DB_TYPE}-update.json
 
 

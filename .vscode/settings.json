@@ -23,5 +23,36 @@
     "helmfile.yaml": "helm",
     "Taskfile.yml": "webpack",
     "control-panel.yaml": "settings"
+  },
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "tag",
+    "foreground": "black",
+    "background": "white",
+    "opacity": 100,
+    "iconColour": "blue"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "tasklist",
+      "foreground": "red",
+      "background": "yellow",
+      "iconColour": "yellow",
+      "gutterIcon": true
+    },
+    "FIXME": {
+      "icon": "alert",
+      "foreground": "yellow",
+      "background": "red",
+      "iconColour": "red",
+      "gutterIcon": true
+    },
+    "IMPROVE": {
+      "icon": "arrow-up",
+      "foreground": "white",
+      "background": "violet",
+      "iconColour": "violet",
+      "gutterIcon": true
+    }
   }
 }

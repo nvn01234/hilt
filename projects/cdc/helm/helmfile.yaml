@@ -20,6 +20,7 @@ helmfiles:
 - path: ../../../kubernetes/databases/mysql/helmfile.yaml
 - path: ../../../kubernetes/databases/postgresql/helmfile.yaml
 - path: ../../../kubernetes/operators/strimzi/helmfile.yaml
+- path: ../../../kubernetes/operators/spark/helmfile.yaml
 - path: ../../../kubernetes/storage/zookeeper/helmfile.yaml
 - path: ../../../kubernetes/storage/kafka/helmfile.yaml
 - path: ../../../kubernetes/storage/minio/helmfile.yaml
