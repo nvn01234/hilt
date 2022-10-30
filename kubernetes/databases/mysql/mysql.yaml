@@ -17,11 +17,11 @@ auth:
 initdbScripts:
   sakila.sh: |
     #!/bin/bash
-    SCHEMA_DOWNLOAD_LINK=https://raw.githubusercontent.com/sondn98/hilt/cdc-k8s/kubernetes/databases/mysql/sample/sakila/1-sakila-schema.sql
+    SCHEMA_DOWNLOAD_LINK=https://raw.githubusercontent.com/sondn98/hilt/master/kubernetes/databases/mysql/sample/sakila/1-sakila-schema.sql
     curl $SCHEMA_DOWNLOAD_LINK -o /tmp/1-sakila-schema.sql
     mysql -uroot -pSuperSecr3t < /tmp/1-sakila-schema.sql > /tmp/1.log
 
-    DATA_DOWNLOAD_LINK=https://raw.githubusercontent.com/sondn98/hilt/cdc-k8s/kubernetes/databases/mysql/sample/sakila/2-sakila-data.sql
+    DATA_DOWNLOAD_LINK=https://raw.githubusercontent.com/sondn98/hilt/master/kubernetes/databases/mysql/sample/sakila/2-sakila-data.sql
     curl $DATA_DOWNLOAD_LINK -o /tmp/2-sakila-data.sql
     mysql -uroot -pSuperSecr3t < /tmp/2-sakila-data.sql > /tmp/2.log
 
