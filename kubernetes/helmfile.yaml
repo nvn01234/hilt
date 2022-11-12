@@ -19,7 +19,7 @@ helmDefaults:
 
 helmfiles:
 
-- path: addons/cert-manager/helmfile.yaml
+# - path: addons/cert-manager/helmfile.yaml
 
 # - path: computation/airflow/helmfile.yaml
 # - path: computation/trino/helmfile.yaml
