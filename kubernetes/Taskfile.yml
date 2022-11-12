@@ -46,8 +46,8 @@ tasks:
 
   deploy-all:
     cmds:
-    - task: deploy-kustomize
     - helmfile apply
+    - task: deploy-kustomize
 
   destroy-all:
     cmds:

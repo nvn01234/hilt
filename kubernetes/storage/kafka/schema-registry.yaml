@@ -24,7 +24,7 @@ kafka:
 
 externalKafka:
   brokers:
-    - PLAINTEXT://kafka.kafka.svc.cluster.local:9092
+    - PLAINTEXT://databus-kafka-bootstrap.kafka.svc:9092
   auth:
     protocol: plaintext
     jaas:

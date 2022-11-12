@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-# - ./addons/cert-manager/ca-demo.yaml
-# - ./addons/cert-manager/issuer-ca.yaml
+- ./addons/cert-manager/ca-demo.yaml
+- ./addons/cert-manager/issuer-ca.yaml
 
 # - ./computation/debezium/metrics-config.yaml
 # - ./computation/debezium/debezium.yaml
@@ -10,4 +10,5 @@ resources:
 
 # - ./computation/trino/trino-certificate.yaml
 
-- ./operators/spark/apps/examples/spark-pi.yaml
+# - ./operators/spark/apps/examples/spark-pi.yaml
+# - ./operators/strimzi/kafka.yaml

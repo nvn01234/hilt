@@ -1,0 +1,95 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: databus
+  namespace: kafka
+spec:
+  kafka:
+    version: 3.3.1
+    replicas: 3
+    listeners:
+    - name: plain
+      port: 9092
+      type: internal
+      tls: false
+    - name: tls
+      port: 9093
+      type: internal
+      tls: true
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      message.max.bytes: 33554432 # 32Mi
+      compression.type: snappy
+      num.partitions: 12
+      default.replication.factor: 3
+
+      log.retention.hours: 1080 # 45d
+      num.replica.fetchers: 8
+      replica.fetch.max.bytes: 33554432 # 32Mi
+      replica.fetch.response.max.bytes: 33554432 # 32Mi
+      replica.socket.receive.buffer.bytes: 1048576 # 1Mi
+      num.recovery.threads.per.data.dir: 8 # = nCore
+    # TODO: Kafka storage configuration need to be changed to fit the production environment
+    storage:
+      type: ephemeral
+      sizeLimit: 5Gi
+    # TODO: Kafka resource configurations need to be changed to fit the production environment
+    resources: {}
+      # requests:
+      #   cpu: "2"
+      #   memory: 8Gi
+      # limits:
+      #   cpu: "8"
+      #   memory: 16Gi
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: WARN
+    # TODO: Turn on metricsConfig on production
+    # metricsConfig:
+    #   type: jmxPrometheusExporter
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: kafka-metrics
+    #       key: kafka-broker-metrics.yaml
+  zookeeper:
+    replicas: 3
+    # TODO: Zookeeper storage configurations need to be changed to fit the production environment
+    storage:
+      type: persistent-claim
+      class: topolvm-serving-hdd
+      size: 32Gi
+      deleteClaim: false
+    # TODO: Zookeeper resource configurations need to be changed to fit the production environment
+    resources:
+      requests:
+        cpu: "2"
+        memory: 4Gi
+      limits:
+        cpu: "2"
+        memory: 8Gi
+    logging:
+      type: inline
+      loggers:
+        zookeeper.root.logger: WARN
+    # TODO: Turn on metricsConfig on production
+    # metricsConfig:
+    #   type: jmxPrometheusExporter
+    #   valueFrom:
+    #     configMapKeyRef:
+    #       name: kafka-metrics
+    #       key: zookeeper-metrics.yaml
+  entityOperator:
+    userOperator: {}
+  # cruiseControl:
+  #   metricsConfig:
+  #     type: jmxPrometheusExporter
+  #     valueFrom:
+  #       configMapKeyRef:
+  #         name: kafka-metrics
+  #         key: cruise-control-metrics.yaml
+  kafkaExporter:
+    topicRegex: .*
+    groupRegex: .*

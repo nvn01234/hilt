@@ -1,2 +1,4 @@
 watchAnyNamespace: true
 generateNetworkPolicy: true
+
+featureGates: "+UseKRaft,+UseStrimziPodSets"
