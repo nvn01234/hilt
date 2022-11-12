@@ -10,4 +10,5 @@ resources:
 
 # - ./computation/trino/trino-certificate.yaml
 
-- ./operators/spark/apps/examples/spark-pi.yaml
+# - ./operators/spark/apps/examples/spark-pi.yaml
+# - ./operators/strimzi/kafka.yaml

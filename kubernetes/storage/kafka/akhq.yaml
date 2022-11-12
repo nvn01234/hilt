@@ -7,7 +7,7 @@ secrets:
     connections:
       mini-kafka:
         properties:
-          bootstrap.servers: "kafka:9092"
+          bootstrap.servers: "databus-kafka-bootstrap.kafka.svc:9092"
         schema-registry:
           url: "http://schema-registry.kafka.svc.cluster.local:8081"
           type: "confluent"
