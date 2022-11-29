@@ -1,0 +1,71 @@
+x-environment: &superset-environment
+  GUNICORN_CONFIG_PATH: /etc/superset/configs/gunicorn.conf.py
+  CELERY_CONFIG_PATH:   /etc/superset/configs/celeryconfig.py
+  SUPERSET_CONFIG_PATH: /etc/superset/configs/superset_config.py
+  SUPERSET_CONFIG_HASH: ${SUPERSET_CONFIG_HASH:-SuperSecr3t}
+  SECRET_KEY: ${SECRET_KEY:-SuperSecr3t}
+  POSTGRES_USERNAME: ${POSTGRES_USERNAME:-superset}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-SuperSecr3t}
+
+x-volumes: &superset-volumes
+  - ./configs:/etc/superset/configs
+
+version: '3.7'
+
+services:
+
+  superset-webserver:
+    image: hub.teko.vn/dataops/superset:1.5
+    command: [webserver]
+    restart: unless-stopped
+    environment:
+      <<: *superset-environment
+      HTTP_PROXY:  http://artifact.data.vnpay.local:8083
+      HTTPS_PROXY: http://artifact.data.vnpay.local:8083
+      http_proxy:  http://artifact.data.vnpay.local:8083
+      https_proxy: http://artifact.data.vnpay.local:8083
+      no_proxy: superset-webserver:8088
+      NO_PROXY: superset-webserver:8088
+    ports:
+    - 8088:8088
+    volumes: *superset-volumes
+    networks:
+      - local
+
+  superset-worker:
+    image: hub.teko.vn/dataops/superset:1.5
+    command: [worker]
+    restart: unless-stopped
+    hostname: superset-worker
+    environment:
+      <<: *superset-environment
+      CELERY_CMD_ARGS: --autoscale=9,3
+    volumes: *superset-volumes
+    networks:
+      - local
+
+  superset-beat:
+    image: hub.teko.vn/dataops/superset:1.5
+    command: [beat]
+    restart: unless-stopped
+    environment:
+      <<: *superset-environment
+      CELERY_CMD_ARGS: --pidfile=
+    volumes: *superset-volumes
+    networks:
+      - local
+
+  superset-flower:
+    image: hub.teko.vn/dataops/superset:1.5
+    command: [flower]
+    restart: unless-stopped
+    environment: *superset-environment
+    ports:
+    - 5555:5555
+    volumes: *superset-volumes
+    networks:
+      - local
+
+networks:
+  local:
+    external: true

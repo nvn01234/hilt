@@ -305,5 +305,5 @@ projects/postgresql-replication/slave_data
 # Misc
 **/drafts/
 **/*.jar
-
+.images
 

@@ -17,7 +17,8 @@
     "warehouse": "webpack",
     "storage": "queue",
     "operators": "context",
-    "setup": "controller"
+    "setup": "controller",
+    "bi": "content"
   },
   "material-icon-theme.files.associations": {
     "helmfile.yaml": "helm",
