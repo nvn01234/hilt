@@ -6,3 +6,6 @@ CREATE DATABASE airflow OWNER airflow;
 
 CREATE USER keycloak WITH PASSWORD 'SuperSecr3t' CREATEDB;
 CREATE DATABASE keycloak OWNER keycloak;
+
+CREATE USER superset WITH PASSWORD 'SuperSecr3t' CREATEDB;
+CREATE DATABASE superset OWNER superset;

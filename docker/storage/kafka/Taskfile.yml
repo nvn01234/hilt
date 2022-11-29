@@ -52,6 +52,6 @@ tasks:
     - |
       if $STOP_WITH_ESSENTIAL_SERVICE; then
         if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose up -d --remove-orphans --wait
+          docker compose down --remove-orphans
         fi
       fi

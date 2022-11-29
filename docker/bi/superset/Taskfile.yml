@@ -16,9 +16,19 @@ tasks:
       vars:
         SERVICE_DIR: ../../databases/redis
         SERVICE_NAME: redis
-    - sleep 10
-    - source env.sh
     - docker compose up -d --remove-orphans
+
+  stop:
+    cmds:
+    - docker compose down --volumes
+    - task: stop-essential-service
+      vars:
+        SERVICE_DIR: ../../databases/postgresql
+        SERVICE_NAME: postgresql
+    - task: stop-essential-service
+      vars:
+        SERVICE_DIR: ../../databases/redis
+        SERVICE_NAME: redis
 
   start-essential-service:
     internal: true
@@ -31,18 +41,6 @@ tasks:
         fi
       fi
 
-  stop:
-    cmds:
-    - docker compose down
-    - task: stop-essential-service
-      vars:
-        SERVICE_DIR: ../../databases/postgresql
-        SERVICE_NAME: postgresql
-    - task: stop-essential-service
-      vars:
-        SERVICE_DIR: ../../databases/redis
-        SERVICE_NAME: redis
-
   stop-essential-service:
     internal: true
     dir: "{{ .SERVICE_DIR }}"
@@ -50,6 +48,6 @@ tasks:
     - |
       if $STOP_WITH_ESSENTIAL_SERVICE; then
         if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose down --remove-orphans
+          docker compose down --volumes
         fi
       fi
