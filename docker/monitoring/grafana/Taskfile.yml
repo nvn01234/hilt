@@ -44,7 +44,7 @@ tasks:
     cmds:
     - |
       if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose up -d --remove-orphans --wait
+        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
+          docker compose down --volumes
         fi
       fi

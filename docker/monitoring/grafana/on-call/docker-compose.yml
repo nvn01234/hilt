@@ -10,15 +10,6 @@ services:
     command: sh -c "uwsgi --ini uwsgi.ini"
     env_file:
       - ./oncall-env.sh
-    # depends_on:
-      # mysql:
-      #   condition: service_healthy
-      # oncall_db_migration:
-      #   condition: service_completed_successfully
-      # rabbitmq:
-      #   condition: service_started
-      # redis:
-      #   condition: service_started
     networks:
       - local
 
@@ -50,11 +41,6 @@ services:
     command: python manage.py migrate --noinput
     env_file:
       - ./oncall-env.sh
-    depends_on:
-      # mysql:
-      #   condition: service_healthy
-      rabbitmq:
-        condition: service_started
     networks:
       - local
 

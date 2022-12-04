@@ -54,6 +54,19 @@
       "background": "violet",
       "iconColour": "violet",
       "gutterIcon": true
+    },
+    "NOTE": {
+      "icon": "note",
+      "foreground": "white",
+      "background": "blue",
+      "iconColour": "blue",
+      "gutterIcon": true
     }
-  }
+  },
+  "todo-tree.general.tags": [
+    "TODO",
+    "FIXME",
+    "IMPROVE",
+    "NOTE"
+  ]
 }

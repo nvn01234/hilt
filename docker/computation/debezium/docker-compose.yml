@@ -3,7 +3,7 @@ version: "2.5"
 services:
 
   debezium:
-    image: quay.io/debezium/connect:1.9.3.Final
+    image: quay.io/debezium/connect:2.0.0.Final
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: dbz-1
@@ -14,7 +14,8 @@ services:
       VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      KAFKA_OPTS: -javaagent:/kafka/etc/jmx_prometheus_javaagent.jar=8080:/kafka/etc/config.yml
+      # NOTE: Enable javaagent to expose debezium's metrics
+      # KAFKA_OPTS: -javaagent:/kafka/etc/jmx_prometheus_javaagent.jar=8080:/kafka/etc/config.yml
     restart: unless-stopped
     ports:
       - 8083:8083
@@ -23,7 +24,8 @@ services:
       - local
     volumes:
       - ./etc/config.yml:/kafka/etc/config.yml
-      - ./jars/jmx_prometheus_javaagent.jar:/kafka/etc/jmx_prometheus_javaagent.jar
+      # NOTE: Download jar file from https://mvnrepository.com/artifact/io.prometheus.jmx/jmx_prometheus_javaagent
+      # - ./jars/jmx_prometheus_javaagent.jar:/kafka/etc/jmx_prometheus_javaagent.jar
 
 networks:
   local:
