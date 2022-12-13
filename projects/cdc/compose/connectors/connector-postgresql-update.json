@@ -1,0 +1,18 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "name": "demo.debezium.postgresql.dvdrental",
+  "tasks.max": "1",
+  "topic.prefix": "debezium.postgresql.dvdrental",
+  "database.hostname": "postgresql",
+  "database.port": "5432",
+  "database.user": "dvdrental",
+  "database.password": "SuperSecr3t",
+  "database.server.name": "debezium.postgresql.dvdrental",
+  "database.dbname": "dvdrental",
+  "plugin.name": "pgoutput",
+  "schema.include.list": "public",
+  "snapshot.mode": "initial",
+  "slot.name": "dbz_dvdrental",
+  "publication.name": "dbz_dvdrental",
+  "skipped.operations": "none"
+}

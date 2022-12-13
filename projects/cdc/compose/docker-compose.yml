@@ -73,66 +73,66 @@ services:
     networks:
       - local
 
-  postgresql:
-    extends:
-      file: ../../../docker/databases/postgresql/docker-compose.yml
-      service: postgresql
-    networks:
-      - local
+  # postgresql:
+  #   extends:
+  #     file: ../../../docker/databases/postgresql/docker-compose.yml
+  #     service: postgresql
+  #   networks:
+  #     - local
 
-  hive-server:
-    extends:
-      file: ../../../docker/warehouse/hive/docker-compose.yml
-      service: hive-server
-    networks:
-      - local
+  # hive-server:
+  #   extends:
+  #     file: ../../../docker/warehouse/hive/docker-compose.yml
+  #     service: hive-server
+  #   networks:
+  #     - local
 
-  hive-metastore:
-    extends:
-      file: ../../../docker/warehouse/hive/docker-compose.yml
-      service: hive-metastore
-    networks:
-      - local
+  # hive-metastore:
+  #   extends:
+  #     file: ../../../docker/warehouse/hive/docker-compose.yml
+  #     service: hive-metastore
+  #   networks:
+  #     - local
 
-  init_metastore_db:
-    extends:
-      file: ../../../docker/warehouse/hive/docker-compose.yml
-      service: init_metastore_db
-    networks:
-      - local
+  # init_metastore_db:
+  #   extends:
+  #     file: ../../../docker/warehouse/hive/docker-compose.yml
+  #     service: init_metastore_db
+  #   networks:
+  #     - local
 
-  minio:
-    extends:
-      file: ../../../docker/storage/minio/docker-compose.yml
-      service: minio
-    networks:
-      - local
+  # minio:
+  #   extends:
+  #     file: ../../../docker/storage/minio/docker-compose.yml
+  #     service: minio
+  #   networks:
+  #     - local
 
-  stream-mysql:
-    extends:
-      file: ../../../docker/computation/alluvial/docker-compose.yml
-      service: alluvial-stream
-    command:
-      - alluvial
-      - stream
-      - /etc/alluvial/ingestor-mysql.yaml
-    volumes:
-      - ./ingestors:/etc/alluvial
-    networks:
-      - local
+  # stream-mysql:
+  #   extends:
+  #     file: ../../../docker/computation/alluvial/docker-compose.yml
+  #     service: alluvial-stream
+  #   command:
+  #     - alluvial
+  #     - stream
+  #     - /etc/alluvial/ingestor-mysql.yaml
+  #   volumes:
+  #     - ./ingestors:/etc/alluvial
+  #   networks:
+  #     - local
 
-  stream-postgresql:
-    extends:
-      file: ../../../docker/computation/alluvial/docker-compose.yml
-      service: alluvial-stream
-    command:
-      - alluvial
-      - stream
-      - /etc/alluvial/ingestor-postgresql.yaml
-    volumes:
-      - ./ingestors:/etc/alluvial
-    networks:
-      - local
+  # stream-postgresql:
+  #   extends:
+  #     file: ../../../docker/computation/alluvial/docker-compose.yml
+  #     service: alluvial-stream
+  #   command:
+  #     - alluvial
+  #     - stream
+  #     - /etc/alluvial/ingestor-postgresql.yaml
+  #   volumes:
+  #     - ./ingestors:/etc/alluvial
+  #   networks:
+  #     - local
 
 networks:
   local:

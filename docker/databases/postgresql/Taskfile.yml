@@ -12,4 +12,4 @@ tasks:
 
   shell:
     cmds:
-    - echo SuperSecr3t | docker compose exec -it postgresql psql -U postgres -W -d postgres
+    - docker compose exec -it postgresql psql postgresql://postgres:SuperSecr3t@postgresql:5432/postgres
