@@ -1,6 +1,6 @@
 image:
   repository: trinodb/trino
-  tag: 391
+  tag: 403
 
 trino:
   ### JVM on Container
@@ -45,7 +45,7 @@ trino:
   group.txt: |
     {{ tpl (readFile "configs/groups.txt") . | nindent 4 | trim }}
 
-commons:
+commons: {}
   # resources:
   #   requests:
   #     cpu: "1"
@@ -53,14 +53,6 @@ commons:
   #   limits:
   #     cpu: "2"       # x4 request
   #     memory: "2Gi" # x4 request
-  extraVolumeMounts:
-  - name: certificate
-    mountPath: /etc/pki/k8s/
-    readOnly: true
-  extraVolumes:
-  - name: certificate
-    secret:
-      secretName: trino.demo.com-tls
 
 worker:
   replicas: 3
@@ -68,12 +60,74 @@ worker:
 cache:
   enabled: false
 
-  persistence:
+faultTolerant:
+  enabled: true
+  # The retry-policy configuration. Allowed: QUERY or TASK
+  policy: QUERY
+
+  config:
+    # QUERY:
+    query-retry-attempts: 2
+    retry-initial-delay: 2
+    retry-max-delay: 2
+    retry-delay-scale-factor: 2
+
+    # TASK:
+    # task-retry-attempts-overall:
+    # task-retry-attempts-per-task:
+    # retry-initial-delay:
+    # retry-max-delay:
+    # retry-delay-scale-factor:
+    # fault-tolerant-execution-target-task-input-size:
+    # fault-tolerant-execution-target-task-split-count:
+    # fault-tolerant-execution-min-task-split-count:
+    # fault-tolerant-execution-max-task-split-count:
+    # fault-tolerant-execution-task-memory:
+    # fault-tolerant-execution-task-descriptor-storage-max-memory:
+    # fault-tolerant-execution-partition-count:
+    # max-tasks-waiting-for-node-per-stage:
+
+  exchangeManager:
     enabled: true
     accessModes:
     - ReadWriteOnce
     storageClass: topolvm-hdd
     size: 300Gi
+    compress: true
+    # s3, aws, azure, gcs, local
+
+    config:
+
+      exchange-manager.name: filesystem
+
+      # Tunning exchange-manager
+      # exchange.sink-buffer-pool-min-size: 123
+      # exchange.sink-buffers-per-partition: 123
+      # exchange.sink-max-file-size: 123
+      # exchange.source-concurrent-reader: 123
+
+      # s3:
+      exchange.base-directories: s3://develop/trino/exchange-manager/spool
+      exchange.s3.aws-access-key: admin
+      exchange.s3.aws-secret-key: SuperSecr3t
+      exchange.s3.region: aws-global
+      exchange.s3.max-error-retries: 3
+      exchange.s3.path-style-access: true
+
+      # azure:
+      # exchange.base-directories: abfs://container_name@account_name.dfs.core.windows.net
+      # exchange.azure.connection-string: connection-string
+
+      # gcs:
+      # exchange.base-directories: gs://exchange-spooling-bucket/path/to/spool-dir
+      # exchange.s3.region: my-region
+      # exchange.s3.aws-access-key: access-key
+      # exchange.s3.aws-secret-key: secret-key
+      # exchange.s3.endpoint: https://storage.googleapis.com
+      # exchange.gcs.json-key-file-path: /path/to/gcs_keyfile.json
+
+      # local:
+      # exchange.base-directories: /tmp/trino-exchange-manager
 
 httpServer:
   http:
@@ -101,17 +155,6 @@ service:
   annotations:
     projectcontour.io/upstream-protocol.tls: "8443"
 
-
-cache:
-  enabled: false
-
-  persistence:
-    enabled: false
-    accessModes:
-    - ReadWriteOnce
-    storageClass: "-"
-    size: 10Gi
-
 metrics:
   enabled: false
   port: 9090
@@ -126,18 +169,6 @@ ingress:
   hosts:
   - host: trino.demo.com
     paths: [/]
-  tls:
-  - secretName: trino.demo.com-tls
-    hosts:
-    - trino.demo.com
 
 authen:
-  enabled: true
-  type: OAUTH2
-  sharedSecret: SuperSecr3t
-
-  oauth2:
-    issuer:   https://keycloak.demo.com/realms/master
-    client-id: trino
-    client-secret: kiFmrbQoQZ0QxaxWZt16tevxIJXW8eh2
-    principal-field: preferred_username
+  enabled: false
