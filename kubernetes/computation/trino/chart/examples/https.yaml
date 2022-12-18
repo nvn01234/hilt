@@ -5,11 +5,9 @@ httpServer:
 
 ingress:
   enabled: true
-  ingressClassName: contour
   hosts:
     - host: trino.local
-      paths:
-      - path: /
+      paths: [/]
 
   tls:
   - secretName: trino.local-tls

@@ -32,6 +32,10 @@ trino:
     query.max-total-memory:   1GB
     query.max-memory-per-node:       500MB
     memory.heap-headroom-per-node:   500MB
+    task.low-memory-killer.policy: total-reservation-on-blocked-nodes
+    query.low-memory-killer.delay: 0
+    query.remote-task.max-error-duration: 1m
+
   rules.json: |
     {{ tpl (readFile "configs/rules.json") . | nindent 4 | trim }}
   access-control.properties: |
@@ -45,7 +49,7 @@ trino:
   group.txt: |
     {{ tpl (readFile "configs/groups.txt") . | nindent 4 | trim }}
 
-commons: {}
+commons:
   # resources:
   #   requests:
   #     cpu: "1"
@@ -53,6 +57,14 @@ commons: {}
   #   limits:
   #     cpu: "2"       # x4 request
   #     memory: "2Gi" # x4 request
+  extraVolumeMounts:
+  - name: certificate
+    mountPath: /etc/pki/k8s/
+    readOnly: true
+  extraVolumes:
+  - name: certificate
+    secret:
+      secretName: trino.demo.com-tls
 
 worker:
   replicas: 3
@@ -61,44 +73,32 @@ cache:
   enabled: false
 
 faultTolerant:
-  enabled: true
+  enabled: false
   # The retry-policy configuration. Allowed: QUERY or TASK
   policy: QUERY
 
   config:
     # QUERY:
-    query-retry-attempts: 2
-    retry-initial-delay: 2
-    retry-max-delay: 2
-    retry-delay-scale-factor: 2
+    # query-retry-attempts: 2
+    # retry-initial-delay: 2
+    # retry-max-delay: 2
+    # retry-delay-scale-factor: 2
 
     # TASK:
-    # task-retry-attempts-overall:
-    # task-retry-attempts-per-task:
-    # retry-initial-delay:
-    # retry-max-delay:
-    # retry-delay-scale-factor:
-    # fault-tolerant-execution-target-task-input-size:
-    # fault-tolerant-execution-target-task-split-count:
-    # fault-tolerant-execution-min-task-split-count:
-    # fault-tolerant-execution-max-task-split-count:
-    # fault-tolerant-execution-task-memory:
-    # fault-tolerant-execution-task-descriptor-storage-max-memory:
-    # fault-tolerant-execution-partition-count:
-    # max-tasks-waiting-for-node-per-stage:
+    # task-retry-attempts-overall: null
+    # task-retry-attempts-per-task: 3
+    # retry-initial-delay: 5s
+    # retry-max-delay: 1m
+    # retry-delay-scale-factor: 2.0
 
   exchangeManager:
-    enabled: true
-    accessModes:
-    - ReadWriteOnce
-    storageClass: topolvm-hdd
-    size: 300Gi
-    compress: true
+    enabled: false
+    compress: false
     # s3, aws, azure, gcs, local
 
     config:
 
-      exchange-manager.name: filesystem
+      # exchange-manager.name: filesystem
 
       # Tunning exchange-manager
       # exchange.sink-buffer-pool-min-size: 123
@@ -107,12 +107,13 @@ faultTolerant:
       # exchange.source-concurrent-reader: 123
 
       # s3:
-      exchange.base-directories: s3://develop/trino/exchange-manager/spool
-      exchange.s3.aws-access-key: admin
-      exchange.s3.aws-secret-key: SuperSecr3t
-      exchange.s3.region: aws-global
-      exchange.s3.max-error-retries: 3
-      exchange.s3.path-style-access: true
+      # exchange.base-directories: s3://develop/trino/exchange-manager/spool
+      # exchange.s3.endpoint: http://minio.minio.svc:9000
+      # exchange.s3.aws-access-key: admin
+      # exchange.s3.aws-secret-key: SuperSecr3t
+      # exchange.s3.region: aws-global
+      # exchange.s3.max-error-retries: 3
+      # exchange.s3.path-style-access: true
 
       # azure:
       # exchange.base-directories: abfs://container_name@account_name.dfs.core.windows.net
@@ -163,8 +164,8 @@ metrics:
 
 ingress:
   enabled: true
-  annotations:
-    ingress.kubernetes.io/force-ssl-redirect: "true"
+  annotations: {}
+    # ingress.kubernetes.io/force-ssl-redirect: "true"
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
   hosts:
   - host: trino.demo.com
