@@ -1,6 +1,8 @@
 {{- $trino := .Values.trino }}
 {{- $config := index $trino "config.properties" | default dict }}
 {{- $authen := .Values.authen }}
+{{- $faultTolerant := .Values.faultTolerant }}
+
 
 {{- $_ := unset $config "coordinator" }}
 {{- $_ := unset $config "node-scheduler.include-coordinator" }}
@@ -19,13 +21,20 @@
   {{- $_ := set $config "http-server.https.truststore.key"  $httpServer.truststore.key  }}
 {{- end }}
 
+{{- if $faultTolerant.enabled }}
+  {{- $_ := set $config "retry-policy" $faultTolerant.policy }}
+  {{- if .Values.faultTolerant.exchangeManager.compress }}
+  {{- $_ := set $config "exchange.compression-enabled" true }}
+  {{- end }}
+  {{- $config := mergeOverwrite $faultTolerant.config (deepCopy $config) -}}
+{{- end }}
+
 {{- $coordinatorConfig := deepCopy $config }}
 {{- $workerConfig := deepCopy $config }}
 
 {{- if $authen.enabled }}
   {{- $_ := set $coordinatorConfig "http-server.authentication.type" $authen.type }}
-  {{- $_ := set $coordinatorConfig "internal-communication.https.required" true }}
-  {{- $_ := set $workerConfig "internal-communication.https.required" true }}
+  {{- $_ := set $coordinatorConfig "internal-communication.https.required" false }}
   {{- $sharedSecret := required "sharedSecret is required when authentication is enabled" $authen.sharedSecret }}
   {{- $_ := set $coordinatorConfig "internal-communication.shared-secret" $sharedSecret }}
   {{- $_ := set $workerConfig "internal-communication.shared-secret" $sharedSecret }}
@@ -63,7 +72,6 @@ data:
   coordinator-config.properties: |
     coordinator=true
     node-scheduler.include-coordinator=false
-    discovery-server.enabled=true
     discovery.uri=http://localhost:8080
     {{- range $key, $value := $coordinatorConfig }}
     {{ $key }}={{ $value }}
@@ -75,3 +83,10 @@ data:
     {{- range $key, $value := $workerConfig }}
     {{ $key }}={{ $value }}
     {{- end }}
+
+  {{ if (and  $faultTolerant.enabled $faultTolerant.exchangeManager.enabled ) -}}
+  exchange-manager.properties: |
+    {{- range $key, $value := $faultTolerant.exchangeManager.config }}
+    {{ $key }}={{ $value }}
+    {{- end }}
+  {{- end }}

@@ -12,7 +12,7 @@ tasks:
 
   minikube-up:
     cmds:
-    - minikube start --driver=virtualbox
+    - minikube start --driver=docker
                      --mount
                      --mount-string="/data1/minikube:{{ .CLUSTER_MOUNTPATH }}"
                      --memory {{ .CLUSTER_MEMORY }}

@@ -37,20 +37,8 @@ spec:
             backend:
               service:
                 name: {{ $fullName }}
-                port: 
+                port:
                   number: {{ $svcPort }}
         {{- end }}
   {{- end }}
-  # rules:
-  # {{- range .Values.ingress.hosts }}
-  #   - host: {{ .host | quote }}
-  #     http:
-  #       paths:
-  #       {{- range .paths }}
-  #         - path: {{ . }}
-  #           backend:
-  #             serviceName: {{ $fullName }}
-  #             servicePort: {{ $svcPort }}
-  #       {{- end }}
-  # {{- end }}
 {{- end }}
