@@ -34,6 +34,7 @@ trino:
     # task.low-memory-killer.policy
     # query.low-memory-killer.delay
     # query.remote-task.max-error-duration
+
 catalog: {}
   # memory.properties: |
   #   connector.name=memory
@@ -152,73 +153,30 @@ cache:
     size: 10Gi
 
 faultTolerant:
-  enabled: false
-  # The retry-policy configuration. Allowed: QUERY or TASK
-  policy: QUERY
-
-  config: {}
-    # exchange.deduplication-buffer-size:
-    # exchange.compression-enabled:
-
-    # QUERY:
-    # query-retry-attempts:
-    # retry-initial-delay:
-    # retry-max-delay:
-    # retry-delay-scale-factor:
-
-    # TASK:
-    # task-retry-attempts-overall:
-    # task-retry-attempts-per-task:
-    # retry-initial-delay:
-    # retry-max-delay:
-    # retry-delay-scale-factor:
-    # fault-tolerant-execution-target-task-input-size:
-    # fault-tolerant-execution-target-task-split-count:
-    # fault-tolerant-execution-min-task-split-count:
-    # fault-tolerant-execution-max-task-split-count:
-    # fault-tolerant-execution-task-memory:
-    # fault-tolerant-execution-task-descriptor-storage-max-memory:
-    # fault-tolerant-execution-partition-count:
-    # max-tasks-waiting-for-node-per-stage:
+  policy: TASK # null | QUERY, TASK
 
   exchangeManager:
-    enable: false
+    type: s3 # null | s3, azure, gcs
+    baseDirectories: ""
     compress: false
-    # s3, aws, azure, gcs, local
 
-    config: {}
+    tunning: {}
+      # sink-buffer-pool-min-size:
+      # sink-buffers-per-partition:
+      # sink-max-file-size:
+      # source-concurrent-reader:
 
-      # exchange-manager.name: filesystem
-
-      # Tunning exchange-manager
-      # exchange.sink-buffer-pool-min-size:
-      # exchange.sink-buffers-per-partition:
-      # exchange.sink-max-file-size:
-      # exchange.source-concurrent-reader:
-
-      # s3:
-      # exchange.base-directories: s3://exchange-spooling-bucket/path/to/spool-dir
-      # exchange.s3.region: my-region
-      # exchange.s3.aws-access-key: access-key
-      # exchange.s3.aws-secret-key: secret-key
-      # exchange.s3.max-error-retries: 3
-      # exchange.s3.path-style-access: true
-      # exchange.s3.upload.part-size:
-
-      # azure:
-      # exchange.base-directories: abfs://container_name@account_name.dfs.core.windows.net
-      # exchange.azure.connection-string: connection-string
-
-      # gcs:
-      # exchange.base-directories: gs://exchange-spooling-bucket/path/to/spool-dir
-      # exchange.s3.region: my-region
-      # exchange.s3.aws-access-key: access-key
-      # exchange.s3.aws-secret-key: secret-key
-      # exchange.s3.endpoint: https://storage.googleapis.com
-      # exchange.gcs.json-key-file-path: /path/to/gcs_keyfile.json
-
-      # local:
-      # exchange.base-directories: /tmp/trino-exchange-manager
+    s3:
+      region: my-region
+      aws-access-key: access-key
+      aws-secret-key: secret-key
+      max-error-retries: 3
+      path-style-access: true
+      upload.part-size:
+    azure: {}
+      # connection-string: connection-string
+    gcs: {}
+      # json-key-file-path: /path/to/gcs_keyfile.json
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -243,6 +201,7 @@ service:
 
 ingress:
   enabled: false
+  ingressClassName:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"

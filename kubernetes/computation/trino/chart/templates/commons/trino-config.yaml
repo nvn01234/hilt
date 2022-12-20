@@ -3,7 +3,6 @@
 {{- $authen := .Values.authen }}
 {{- $faultTolerant := .Values.faultTolerant }}
 
-
 {{- $_ := unset $config "coordinator" }}
 {{- $_ := unset $config "node-scheduler.include-coordinator" }}
 {{- $_ := unset $config "discovery-server.enabled" }}
@@ -21,12 +20,11 @@
   {{- $_ := set $config "http-server.https.truststore.key"  $httpServer.truststore.key  }}
 {{- end }}
 
-{{- if $faultTolerant.enabled }}
+{{- if $faultTolerant.policy }}
   {{- $_ := set $config "retry-policy" $faultTolerant.policy }}
-  {{- if .Values.faultTolerant.exchangeManager.compress }}
+  {{- if $faultTolerant.exchangeManager.compress }}
   {{- $_ := set $config "exchange.compression-enabled" true }}
   {{- end }}
-  {{- $config := mergeOverwrite $faultTolerant.config (deepCopy $config) -}}
 {{- end }}
 
 {{- $coordinatorConfig := deepCopy $config }}
@@ -84,9 +82,28 @@ data:
     {{ $key }}={{ $value }}
     {{- end }}
 
-  {{ if (and  $faultTolerant.enabled $faultTolerant.exchangeManager.enabled ) -}}
+  {{ if (and  $faultTolerant.policy $faultTolerant.exchangeManager.type ) -}}
   exchange-manager.properties: |
-    {{- range $key, $value := $faultTolerant.exchangeManager.config }}
+    exchange-manager.name: filesystem
+    {{- $exchangeManager := $faultTolerant.exchangeManager }}
+    {{- $exchangeStorageType := lower $exchangeManager.type }}
+    {{- if eq $exchangeStorageType "s3" }}
+    {{- range $key, $value := $exchangeManager.s3 }}
+    exchange.s3.{{ $key }}={{ $value }}
+    {{- end }}
+    {{- else if eq $exchangeStorageType "gcs" }}
+    {{- range $key, $value := $exchangeManager.gcs }}
+    exchange.gcs.{{ $key }}={{ $value }}
+    {{- end }}
+    {{- range $key, $value := $exchangeManager.s3 }}
+    exchange.s3.{{ $key }}={{ $value }}
+    {{- end }}
+    {{- else if eq $exchangeStorageType "azure" }}
+    {{- range $key, $value := $exchangeManager.azure }}
+    exchange.azure.{{ $key }}={{ $value }}
+    {{- end }}
+    {{- end }}
+    {{- range $key, $value := $exchangeManager.tunning }}
     {{ $key }}={{ $value }}
     {{- end }}
   {{- end }}
