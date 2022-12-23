@@ -8,50 +8,36 @@ tasks:
 
   start:
     cmds:
-    - task: start-kafka
-    - docker compose -f docker-compose-sr.yml
-                     up -d --remove-orphans
-
-  stop:
-    cmds:
-    - docker compose -f docker-compose-sr.yml
-                     down --volumes
-    - task: stop-kafka
-
-  start-kafka:
-    cmds:
     - task: start-essential-service
       vars:
-        SERVICE_DIR: ../../storage/zookeeper
         SERVICE_NAME: zookeeper
     - docker compose up -d --remove-orphans
 
-  start-essential-service:
-    internal: true
-    dir: "{{ .SERVICE_DIR }}"
-    cmds:
-    - |
-      if $START_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose up -d --remove-orphans --wait
-        fi
-      fi
-
-  stop-kafka:
+  stop:
     cmds:
     - docker compose down --volumes
     - task: stop-essential-service
       vars:
-        SERVICE_DIR: ../../storage/zookeeper
         SERVICE_NAME: zookeeper
+
+  start-essential-service:
+    internal: true
+    dir: ../../
+    cmds:
+    - |
+      if $START_WITH_ESSENTIAL_SERVICE; then
+        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
+          task {{ .SERVICE_NAME }}:start
+        fi
+      fi
 
   stop-essential-service:
     internal: true
-    dir: "{{ .SERVICE_DIR }}"
+    dir: ../../
     cmds:
     - |
       if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose down --remove-orphans
+        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
+          task {{ .SERVICE_NAME }}:stop
         fi
       fi

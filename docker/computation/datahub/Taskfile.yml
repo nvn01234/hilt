@@ -5,16 +5,24 @@ env:
   STOP_WITH_ESSENTIAL_SERVICE: '{{ .STOP_WITH_ESSENTIAL_SERVICE | default false }}'
 
 tasks:
+
   start:
     cmds:
     - task: start-essential-service
       vars:
-        SERVICE_NAME: postgresql
+        SERVICE_NAME: kafka
     - task: start-essential-service
       vars:
-        SERVICE_NAME: redis
-    - sleep 10
-    - source env.sh
+        SERVICE_NAME: elasticsearch
+    - task: start-essential-service
+      vars:
+        SERVICE_NAME: neo4j
+    - task: start-essential-service
+      vars:
+        SERVICE_NAME: mysql
+    - sleep 5
+    - docker compose -f preparing.yml up -d --remove-orphans
+    - sleep 5
     - docker compose up -d --remove-orphans
 
   start-essential-service:
@@ -30,13 +38,23 @@ tasks:
 
   stop:
     cmds:
-    - docker compose down
+    - docker compose down --volumes
     - task: stop-essential-service
       vars:
-        SERVICE_NAME: postgresql
+        SERVICE_NAME: zookeeper
     - task: stop-essential-service
       vars:
-        SERVICE_NAME: redis
+        SERVICE_NAME: kafka
+    - task: stop-essential-service
+      vars:
+        SERVICE_NAME: elasticsearch
+    - task: stop-essential-service
+      vars:
+        SERVICE_NAME: neo4j
+    - task: stop-essential-service
+      vars:
+        SERVICE_DIR: ../../databases/mysql
+        SERVICE_NAME: mysql
 
   stop-essential-service:
     internal: true

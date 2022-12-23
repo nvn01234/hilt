@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+
+  neo4j:
+    image: neo4j:4.4.9-community
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      NEO4J_AUTH: neo4j/datahub
+      NEO4J_dbms_default__database: graph.db
+      NEO4J_dbms_allow__upgrade: true
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - local
+
+volumes:
+  neo4j_data:
+
+networks:
+  local:
+    external: true

@@ -10,25 +10,41 @@ services:
     volumes:
       - kafka_data:/bitnami
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
     networks:
       - local
 
-  akhq:
-    image: tchiotludo/akhq
+  schema-registry:
+    image: confluentinc/cp-schema-registry
     restart: unless-stopped
+    depends_on:
+      - kafka
     ports:
-      - 8080:8080
+      - 8085:8085
     environment:
-      AKHQ_CONFIGURATION: |
-        akhq:
-          connections:
-            kafka-local:
-              properties:
-                bootstrap.servers: kafka:9092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'PLAINTEXT://kafka:9092'
+      SCHEMA_REGISTRY_HOST_NAME: 'schema-registry'
+      SCHEMA_REGISTRY_LISTENERS: 'http://0.0.0.0:8085'
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: 'INFO'
     networks:
       - local
+
+  # akhq:
+  #   image: tchiotludo/akhq
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8080:8080
+  #   environment:
+  #     AKHQ_CONFIGURATION: |
+  #       akhq:
+  #         connections:
+  #           kafka-local:
+  #             properties:
+  #               bootstrap.servers: kafka:9092
+  #   networks:
+  #     - local
 
   console:
     image: docker.redpanda.com/vectorized/console:master-173596f

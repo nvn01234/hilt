@@ -16,6 +16,9 @@ includes:
   airflow:
     taskfile: ./computation/airflow/Taskfile.yml
     dir: ./computation/airflow
+  datahub:
+    taskfile: ./computation/datahub/Taskfile.yml
+    dir: ./computation/datahub
   debezium:
     taskfile: ./computation/debezium/Taskfile.yml
     dir: ./computation/debezium
@@ -36,6 +39,9 @@ includes:
   mysql:
     taskfile: ./databases/mysql/Taskfile.yml
     dir: ./databases/mysql
+  neo4j:
+    taskfile: ./databases/neo4j/Taskfile.yml
+    dir: ./databases/neo4j
   postgresql:
     taskfile: ./databases/postgresql/Taskfile.yml
     dir: ./databases/postgresql
@@ -63,6 +69,9 @@ includes:
     dir: ./security/vault
 
   # Storage
+  elasticsearch:
+    taskfile: ./storage/elasticsearch/Taskfile.yml
+    dir: ./storage/elasticsearch
   hadoop:
     taskfile: ./storage/hadoop/Taskfile.yml
     dir: ./storage/hadoop
