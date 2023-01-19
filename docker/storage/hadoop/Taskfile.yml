@@ -28,6 +28,14 @@ includes:
 
 tasks:
 
+  start:
+    cmds:
+    - docker compose --profile=hdfs up -d --remove-orphans
+
+  stop:
+    cmds:
+    - docker compose --profile=hdfs down
+
   start-all:
     cmds:
     - docker compose --profile=hadoop up -d --remove-orphans
@@ -35,14 +43,6 @@ tasks:
   stop-all:
     cmds:
     - docker compose --profile=hadoop down
-
-  start-hdfs:
-    cmds:
-    - docker compose --profile=hdfs up -d --remove-orphans
-
-  stop-hdfs:
-    cmds:
-    - docker compose --profile=hdfs down
 
   build:
     cmds:
@@ -53,15 +53,6 @@ tasks:
     - task: nodemanager:build
     - task: historyserver:build
 
-  publish:
-    cmds:
-    - task: base:publish
-    - task: namenode:publish
-    - task: datanode:publish
-    - task: resourcemanager:publish
-    - task: nodemanager:publish
-    - task: historyserver:publish
-
   push:
     cmds:
     - task: base:push
@@ -70,3 +61,8 @@ tasks:
     - task: resourcemanager:push
     - task: nodemanager:push
     - task: historyserver:push
+
+  publish:
+    cmds:
+    - task: build
+    - task: publish

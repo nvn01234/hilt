@@ -1,7 +1,19 @@
 version: '3'
 
-includes:
+# Services:
+# - BI: superset
+# - Computation: airflow datahub debezium nifi spark trino
+# - Databases: mongo mysql neo4j postgresql rabbitmq redis
+# - Monitoring: grafana prometheus
+# - Security: keycloak vault
+# - Storage: elasticsearch hadoop kafka minio zookeeper
+# - Warehouse: hive
 
+env:
+  SERVICES: |
+    
+
+includes:
   # Base
   base:
     taskfile: ./base/Taskfile.yml
@@ -92,18 +104,20 @@ includes:
 
 tasks:
 
-  stop-containers:
+  start-services:
     cmds:
-    - docker stop $(docker ps -aq)
+    - |
+      for SERVICE in ${SERVICES[@]}; do
+        # task $SERVICE:start
+        echo $SERVICE
+      done
 
-  rm-stopped-containers:
+  stop-services:
     cmds:
-    - docker rm $(docker ps -aq)
-
-  rm-containers:
-    cmds:
-    - task: stop-containers
-    - docker rm $(docker ps -aq)
+    - |
+      for SERVICE in ${SERVICES[@]}; do
+        task $SERVICE:stop
+      done
 
   create-local-network:
     env:
@@ -111,7 +125,11 @@ tasks:
     cmds:
     - docker network create $DEFAULT_NETWORK
 
-  clear-volumes:
+  rm-containers:
+    cmds:
+    - docker rm --force $(docker ps -aq)
+
+  rm-volumes:
     cmds:
     - docker volume rm $(docker volume ls -q)
 

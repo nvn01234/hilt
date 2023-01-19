@@ -13,38 +13,8 @@ tasks:
 
   start:
     cmds:
-    - task: start-essential-service
-      vars:
-        SERVICE_DIR: ../../databases/postgresql
-        SERVICE_NAME: postgresql
     - docker compose up -d --remove-orphans
-
-  start-essential-service:
-    internal: true
-    dir: "{{ .SERVICE_DIR }}"
-    cmds:
-    - |
-      if $START_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose up -d --remove-orphans --wait
-        fi
-      fi
 
   stop:
     cmds:
     - docker compose down --volumes
-    - task: stop-essential-service
-      vars:
-        SERVICE_DIR: ../../databases/postgresql
-        SERVICE_NAME: postgresql
-
-  stop-essential-service:
-    internal: true
-    dir: "{{ .SERVICE_DIR }}"
-    cmds:
-    - |
-      if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          docker compose down --volumes
-        fi
-      fi

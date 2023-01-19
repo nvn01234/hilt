@@ -3,16 +3,14 @@ version: "2.5"
 services:
 
   debezium:
-    image: quay.io/debezium/connect:2.0.0.Final
+    image: debezium/connect:2.1.1.Final
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
-      GROUP_ID: dbz-1
+      GROUP_ID: debezium-local
       CONFIG_STORAGE_TOPIC: debezium.configs
       OFFSET_STORAGE_TOPIC: debezium.offsets
       STATUS_STORAGE_TOPIC: debezium.statuses
       LOG_LEVEL: INFO
-      # NOTE: Enable javaagent to expose debezium's metrics
-      # KAFKA_OPTS: -javaagent:/kafka/etc/jmx_prometheus_javaagent.jar=8080:/kafka/etc/config.yml
     restart: unless-stopped
     ports:
       - 8083:8083
@@ -21,8 +19,6 @@ services:
       - local
     volumes:
       - ./etc/config.yml:/kafka/etc/config.yml
-      # NOTE: Download jar file from https://mvnrepository.com/artifact/io.prometheus.jmx/jmx_prometheus_javaagent
-      # - ./jars/jmx_prometheus_javaagent.jar:/kafka/etc/jmx_prometheus_javaagent.jar
 
 networks:
   local:
