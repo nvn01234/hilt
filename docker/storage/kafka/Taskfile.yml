@@ -1,43 +1,11 @@
 version: '3'
 
-env:
-  START_WITH_ESSENTIAL_SERVICE: '{{ .START_WITH_ESSENTIAL_SERVICE | default true }}'
-  STOP_WITH_ESSENTIAL_SERVICE: '{{ .STOP_WITH_ESSENTIAL_SERVICE | default false }}'
-
 tasks:
 
   start:
     cmds:
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: zookeeper
     - docker compose up -d --remove-orphans
 
   stop:
     cmds:
     - docker compose down --volumes
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: zookeeper
-
-  start-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $START_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:start
-        fi
-      fi
-
-  stop-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:stop
-        fi
-      fi

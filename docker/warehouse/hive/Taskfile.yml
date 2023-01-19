@@ -11,7 +11,7 @@ tasks:
 
   stop:
     cmds:
-    - docker compose down
+    - docker compose down --volumes
 
   build:
     cmds:

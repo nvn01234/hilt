@@ -1,50 +1,17 @@
 version: '3'
 
-env:
-  START_WITH_ESSENTIAL_SERVICE: '{{ .START_WITH_ESSENTIAL_SERVICE | default true }}'
-  STOP_WITH_ESSENTIAL_SERVICE: '{{ .STOP_WITH_ESSENTIAL_SERVICE | default false }}'
-
 tasks:
   start:
+    env:
+      _AIRFLOW_WWW_USER_USERNAME: airflow
+      _AIRFLOW_WWW_USER_PASSWORD: SuperSecr3t
+      _PIP_ADDITIONAL_REQUIREMENTS:
+      AIRFLOW_IMAGE_NAME: apache/airflow:2.3.2
+      AIRFLOW_UID: 1000
     cmds:
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: postgresql
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: redis
-    - sleep 10
     - source env.sh
     - docker compose up -d --remove-orphans
 
-  start-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $START_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:start
-        fi
-      fi
-
   stop:
     cmds:
-    - docker compose down
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: postgresql
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: redis
-
-  stop-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:stop
-        fi
-      fi
+    - docker compose down --volumes

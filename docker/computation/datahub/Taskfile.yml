@@ -8,61 +8,10 @@ tasks:
 
   start:
     cmds:
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: kafka
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: elasticsearch
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: neo4j
-    - task: start-essential-service
-      vars:
-        SERVICE_NAME: mysql
-    - sleep 5
     - docker compose -f preparing.yml up -d --remove-orphans
     - sleep 5
     - docker compose up -d --remove-orphans
 
-  start-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $START_WITH_ESSENTIAL_SERVICE; then
-        if [ -z `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:start
-        fi
-      fi
-
   stop:
     cmds:
     - docker compose down --volumes
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: zookeeper
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: kafka
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: elasticsearch
-    - task: stop-essential-service
-      vars:
-        SERVICE_NAME: neo4j
-    - task: stop-essential-service
-      vars:
-        SERVICE_DIR: ../../databases/mysql
-        SERVICE_NAME: mysql
-
-  stop-essential-service:
-    internal: true
-    dir: ../../
-    cmds:
-    - |
-      if $STOP_WITH_ESSENTIAL_SERVICE; then
-        if [ -n `docker compose ps --services --status running | grep {{ .SERVICE_NAME }}` ]; then
-          task {{ .SERVICE_NAME }}:stop
-        fi
-      fi
