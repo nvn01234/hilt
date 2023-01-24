@@ -11,7 +11,7 @@ version: '3'
 
 env:
   SERVICES: |
-    
+
 
 includes:
   # Base
@@ -101,6 +101,11 @@ includes:
   hive:
     taskfile: ./warehouse/hive/Taskfile.yml
     dir: ./warehouse/hive
+
+  # Other
+  postgrest:
+    taskfile: ./other/postgrest/Taskfile.yml
+    dir: ./other/postgrest
 
 tasks:
 

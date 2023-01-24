@@ -9,3 +9,6 @@ CREATE DATABASE keycloak OWNER keycloak;
 
 CREATE USER superset WITH PASSWORD 'SuperSecr3t' CREATEDB;
 CREATE DATABASE superset OWNER superset;
+
+CREATE USER postgrest WITH PASSWORD 'SuperSecr3t' CREATEDB;
+CREATE DATABASE postgrest OWNER postgrest;
