@@ -2,13 +2,13 @@ version: '3.1'
 
 services:
 
-  server:
+  postgrest:
     image: postgrest/postgrest:v10.1.1
     ports:
       - 3000:3000
     environment:
       PGRST_DB_URI: postgres://postgrest:SuperSecr3t@postgresql:5432/postgrest
-      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+      # PGRST_OPENAPI_SERVER_PROXY_URI: http://postgrest:3000
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: postgrest
     networks:

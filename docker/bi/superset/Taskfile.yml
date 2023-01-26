@@ -18,6 +18,17 @@ tasks:
         SERVICE_NAME: redis
     - docker compose up -d --remove-orphans
 
+  init:
+    cmds:
+    - docker compose exec -it superset-webserver
+              superset fab create-admin
+              --username=admin
+              --firstname=Ad
+              --lastname=Min
+              --email=ad.min@gmail.com
+              --password=SuperSecr3t
+    - docker compose exec -it superset-webserver superset init
+
   stop:
     cmds:
     - docker compose down --volumes

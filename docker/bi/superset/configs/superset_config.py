@@ -3,6 +3,7 @@ from cachelib.redis import RedisCache
 from celery.schedules import crontab
 from flask_appbuilder.security.manager import AUTH_OAUTH
 import os
+import json
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)-5s] %(name)-15s:%(lineno)d: %(message)s')
 
@@ -154,3 +155,30 @@ CUSTOM_SECURITY_MANAGER = SimpleSecurityManager
 # ==== Upload Data Folder ===
 UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
+
+# ==== Event loging ===
+from superset.utils.log import DBEventLogger
+import requests
+
+EVENT_REST_URL = 'http://postgrest:3000/logs'
+class RestEventLogger(DBEventLogger):
+    def log(self, user_id, action, *args, **kwargs):
+        records = kwargs.get('records', list())
+        dashboard_id = kwargs.get('dashboard_id')
+        slice_id = kwargs.get('slice_id')
+        duration_ms = kwargs.get('duration_ms')
+        referrer = kwargs.get('referrer')
+
+        for record in records:
+            event = dict(
+                action=action,
+                json=record,
+                dashboard_id=dashboard_id,
+                slice_id=slice_id,
+                duration_ms=duration_ms,
+                referrer=referrer,
+                user_id=user_id
+            )
+            requests.post(EVENT_REST_URL, json = event)
+
+EVENT_LOGGER = RestEventLogger()
