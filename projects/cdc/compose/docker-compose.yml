@@ -2,13 +2,6 @@ version: "2.5"
 
 services:
 
-  zookeeper:
-    extends:
-      file: ../../../docker/storage/zookeeper/docker-compose.yml
-      service: zookeeper
-    networks:
-      - local
-
   kafka:
     extends:
       file: ../../../docker/storage/kafka/docker-compose.yml
@@ -18,7 +11,7 @@ services:
 
   schema-registry:
     extends:
-      file: ../../../docker/storage/kafka/docker-compose-sr.yml
+      file: ../../../docker/storage/kafka/docker-compose.yml
       service: schema-registry
     networks:
       - local

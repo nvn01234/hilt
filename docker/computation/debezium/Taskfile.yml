@@ -1,5 +1,9 @@
 version: '3'
 
+env:
+  DEBEZIUM_IMAGE: sondn1/debezium
+  DEBEZIUM_VERSION: 2.1.1
+
 tasks:
 
   start:
@@ -9,3 +13,7 @@ tasks:
   stop:
     cmds:
     - docker compose down --volumes
+
+  build:
+    cmds:
+    - docker build --tag $DEBEZIUM_IMAGE:$DEBEZIUM_VERSION ./image

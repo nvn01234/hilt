@@ -3,22 +3,31 @@ version: "2.5"
 services:
 
   debezium:
-    image: debezium/connect:2.1.1.Final
+    image: sondn1/debezium:2.1.1
+    command:
+    - /opt/kafka/kafka_connect_run.sh
     environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      GROUP_ID: debezium-local
-      CONFIG_STORAGE_TOPIC: debezium.configs
-      OFFSET_STORAGE_TOPIC: debezium.offsets
-      STATUS_STORAGE_TOPIC: debezium.statuses
-      LOG_LEVEL: INFO
+      KAFKA_CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_CONNECT_METRICS_ENABLED: false
+      KAFKA_CONNECT_CONFIGURATION: |
+        group.id=debezium-local
+        status.storage.topic=_debezium.status
+        status.storage.replication.factor=1
+        offset.storage.topic=debezium.offsets
+        offset.storage.replication.factor=1
+        config.storage.topic=_debezium.configs
+        config.storage.replication.factor=1
+        key.converter=io.confluent.connect.avro.AvroConverter
+        value.converter=io.confluent.connect.avro.AvroConverter
+        key.converter.schema.registry.url=http://schema-registry:8085
+        value.converter.schema.registry.url=http://schema-registry:8085
     restart: unless-stopped
     ports:
       - 8083:8083
-      - 9012:9012
+    volumes:
+      - ./etc/log4j.properties:/opt/kafka/custom-config/log4j.properties
     networks:
       - local
-    volumes:
-      - ./etc/config.yml:/kafka/etc/config.yml
 
 networks:
   local:
