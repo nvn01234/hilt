@@ -13,7 +13,7 @@ services:
         group.id=debezium-local
         status.storage.topic=_debezium.status
         status.storage.replication.factor=1
-        offset.storage.topic=debezium.offsets
+        offset.storage.topic=_debezium.offsets
         offset.storage.replication.factor=1
         config.storage.topic=_debezium.configs
         config.storage.replication.factor=1
