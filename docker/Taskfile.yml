@@ -106,6 +106,9 @@ includes:
   postgrest:
     taskfile: ./other/postgrest/Taskfile.yml
     dir: ./other/postgrest
+  strapi:
+    taskfile: ./other/strapi/Taskfile.yml
+    dir: ./other/strapi
 
 tasks:
 

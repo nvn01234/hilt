@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+
+  strapi:
+    image: strapi/strapi:3.6.8
+    restart: unless-stopped
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgresql
+      DATABASE_PORT: 5432
+      DATABASE_NAME: postgrest
+      DATABASE_USERNAME: postgrest
+      DATABASE_PASSWORD: SuperSecr3t
+    volumes:
+      - ./app:/srv/app
+    ports:
+      - 1337:1337
+    networks:
+      - local
+
+networks:
+  local:
+    external: true
