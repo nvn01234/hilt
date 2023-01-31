@@ -1,5 +1,15 @@
 version: '3'
 
+includes:
+
+  docker:
+    taskfile: ./docker/Taskfile.yml
+    dir: ./docker
+
+  kubernetes:
+    taskfile: ./kubernetes/Taskfile.yml
+    dir: ./kubernetes
+
 tasks:
   clean:
     cmds:

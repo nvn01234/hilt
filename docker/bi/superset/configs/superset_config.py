@@ -152,9 +152,9 @@ class SimpleSecurityManager(SupersetSecurityManager):
 
 CUSTOM_SECURITY_MANAGER = SimpleSecurityManager
 
-# ==== Upload Data Folder ===
-UPLOAD_FOLDER = '/opt/superset/static/uploads/'
-IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
+# # ==== Upload Data Folder ===
+# UPLOAD_FOLDER = '/opt/superset/static/uploads/'
+# IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 
 # # ==== Event loging ===
 # from superset.utils.log import DBEventLogger
@@ -162,13 +162,21 @@ IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 # from sqlalchemy import create_engine
 # from sqlalchemy.orm import sessionmaker
 # from time import time
+# import json
 # from typing import Any, Dict
 # import requests
 
-# EVENT_REST_URL = 'http://postgrest:3000/logs'
+
 # class RestEventLogger(DBEventLogger):
 
 #     last_user_reloading_tsms = 0
+#     event_index = 'logs'
+#     event_request_url = 'http://opensearch:9200/_bulk'
+#     ## Once TLS enabled
+#     # event_auth_username = 'admin'
+#     # event_auth_password = 'admin'
+#     # event_request_url = 'https://opensearch:9200/_bulk'
+#     # event_request_headers = {"Content-Type": "application/x-ndjson;charset=utf-8"}
 #     users: Dict[int, Dict[str, Any]] = {}
 
 #     def load_users_if_need(self, soft_interval=3600):
@@ -195,10 +203,20 @@ IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 #         duration_ms = kwargs.get('duration_ms')
 #         referrer = kwargs.get('referrer')
 #         user = self.users.get(int(user_id))
-#         print(user)
+#         first_name = user.get('first_name')
+#         last_name = user.get('last_name')
+#         username = user.get('username')
+#         email = user.get('email')
+#         last_login = user.get('last_login')
 
+#         action_and_metadata = json.dumps(dict(
+#             create=dict(
+#                 _index='logs'
+#             )
+#         ))
+#         event_data = ''
 #         for record in records:
-#             event = dict(
+#             event = json.dumps(dict(
 #                 action=action,
 #                 json=record,
 #                 dashboard_id=dashboard_id,
@@ -206,12 +224,21 @@ IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 #                 duration_ms=duration_ms,
 #                 referrer=referrer,
 #                 user_id=user_id,
-#                 first_name=user.get('first_name'),
-#                 last_name=user.get('last_name'),
-#                 username=user.get('username'),
-#                 email=user.get('email'),
-#                 last_login=user.get('last_login')
-#             )
-#             requests.post(EVENT_REST_URL, json = event)
+#                 first_name=first_name,
+#                 last_name=last_name,
+#                 username=username,
+#                 email=email,
+#                 last_login=last_login
+#             ))
+#             event_data = f'{event_data}{action_and_metadata}\n{event}\n'
+#         print(event_data)
+#         requests.post(self.event_request_url,
+#                         data=event_data)
+#         ## Once TLS enabled
+#         # requests.post(self.event_request_url,
+#         #                 headers=self.event_request_headers,
+#         #                 auth=(self.event_auth_username, self.event_auth_password),
+#         #                 verify=False,
+#         #                 data=event_data)
 
 # EVENT_LOGGER = RestEventLogger()
