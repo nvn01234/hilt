@@ -156,29 +156,62 @@ CUSTOM_SECURITY_MANAGER = SimpleSecurityManager
 UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 
-# ==== Event loging ===
-from superset.utils.log import DBEventLogger
-import requests
+# # ==== Event loging ===
+# from superset.utils.log import DBEventLogger
+# from flask_appbuilder.security.sqla.models import User
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
+# from time import time
+# from typing import Any, Dict
+# import requests
 
-EVENT_REST_URL = 'http://postgrest:3000/logs'
-class RestEventLogger(DBEventLogger):
-    def log(self, user_id, action, *args, **kwargs):
-        records = kwargs.get('records', list())
-        dashboard_id = kwargs.get('dashboard_id')
-        slice_id = kwargs.get('slice_id')
-        duration_ms = kwargs.get('duration_ms')
-        referrer = kwargs.get('referrer')
+# EVENT_REST_URL = 'http://postgrest:3000/logs'
+# class RestEventLogger(DBEventLogger):
 
-        for record in records:
-            event = dict(
-                action=action,
-                json=record,
-                dashboard_id=dashboard_id,
-                slice_id=slice_id,
-                duration_ms=duration_ms,
-                referrer=referrer,
-                user_id=user_id
-            )
-            requests.post(EVENT_REST_URL, json = event)
+#     last_user_reloading_tsms = 0
+#     users: Dict[int, Dict[str, Any]] = {}
 
-EVENT_LOGGER = RestEventLogger()
+#     def load_users_if_need(self, soft_interval=3600):
+#         now = time()
+#         if now - self.last_user_reloading_tsms > soft_interval:
+#             engine = create_engine(SQLALCHEMY_DATABASE_URI)
+#             with engine.connect() as connection:
+#                 session_class = sessionmaker(autoflush=False)
+#                 session = session_class(bind=connection)
+#                 self.users = {user.id: {
+#                     'first_name': user.first_name,
+#                     'last_name': user.last_name,
+#                     'username': user.username,
+#                     'email': user.email,
+#                     'last_login': user.last_login
+#                 } for user in session.query(User).all()}
+#             self.last_user_reloading_tsms = now
+
+#     def log(self, user_id, action, *args, **kwargs):
+#         self.load_users_if_need()
+#         records = kwargs.get('records', list())
+#         dashboard_id = kwargs.get('dashboard_id')
+#         slice_id = kwargs.get('slice_id')
+#         duration_ms = kwargs.get('duration_ms')
+#         referrer = kwargs.get('referrer')
+#         user = self.users.get(int(user_id))
+#         print(user)
+
+#         for record in records:
+#             event = dict(
+#                 action=action,
+#                 json=record,
+#                 dashboard_id=dashboard_id,
+#                 slice_id=slice_id,
+#                 duration_ms=duration_ms,
+#                 referrer=referrer,
+#                 user_id=user_id,
+#                 first_name=user.get('first_name'),
+#                 last_name=user.get('last_name'),
+#                 username=user.get('username'),
+#                 email=user.get('email'),
+#                 last_login=user.get('last_login')
+#             )
+#             requests.post(EVENT_REST_URL, json = event)
+
+# EVENT_LOGGER = RestEventLogger()

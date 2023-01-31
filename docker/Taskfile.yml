@@ -93,6 +93,9 @@ includes:
   minio:
     taskfile: ./storage/minio/Taskfile.yml
     dir: ./storage/minio
+  opensearch:
+    taskfile: ./storage/opensearch/Taskfile.yml
+    dir: ./storage/opensearch
   zookeeper:
     taskfile: ./storage/zookeeper/Taskfile.yml
     dir: ./storage/zookeeper
