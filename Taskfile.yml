@@ -13,5 +13,5 @@ includes:
 tasks:
   clean:
     cmds:
-    - git clean -dfX
+    - sudo git clean -dfX
     - mkdir -p bookshelf/drafts
