@@ -1,0 +1,11 @@
+{{- if .Values.security.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "opensearch.uname" . }}-security
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+data:
+  config.yml: |
+    {{- tpl (.Files.Get "files/opensearch/security/config.yml") . | nindent 4 }}
+{{- end }}

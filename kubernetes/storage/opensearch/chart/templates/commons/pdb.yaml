@@ -1,0 +1,13 @@
+{{- if .Values.maxUnavailable }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "{{ template "opensearch.uname" . }}-pdb"
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ .Values.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "opensearch.selectorLabels" . | nindent 6 }}
+{{- end }}

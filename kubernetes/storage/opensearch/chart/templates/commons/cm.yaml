@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "opensearch.uname" . }}-config
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+data:
+  opensearch.yml: |
+    {{- tpl (.Files.Get "files/opensearch/opensearch.yml") . | nindent 4 }}
+  opensearch_dashboards.yml: |
+    {{- tpl (.Files.Get "files/dashboards/opensearch_dashboards.yml") . | nindent 4 }}

@@ -1,0 +1,32 @@
+{{- $service := .Values.dashboards.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.serviceName" . }}-dashboard
+  labels:
+    {{- include "dashboards.labels" . | nindent 4 }}
+{{- if $service.annotations }}
+  annotations:
+    {{- range $key, $value := $service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+{{- end }}
+spec:
+  type: {{ $service.type }}
+{{- if $service.loadBalancerIP }}
+  loadBalancerIP: {{ $service.loadBalancerIP }}
+{{- end }}
+{{- with $service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  ports:
+  - port: {{ $service.port }}
+{{- if $service.nodePort }}
+    nodePort: {{ $service.nodePort }}
+{{- end }}
+    protocol: TCP
+    name: {{ $service.httpPortName | default "http" }}
+    targetPort: {{ $service.port }}
+  selector:
+    {{- include "dashboards.selectorLabels" . | nindent 4 }}

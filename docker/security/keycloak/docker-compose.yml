@@ -12,11 +12,11 @@ services:
       KEYCLOAK_DATABASE_USER: keycloak
       KEYCLOAK_DATABASE_PASSWORD: SuperSecr3t
       KEYCLOAK_ADMIN_USER: admin
-      KEYCLOAK_ADMIN_PASSWORD: SuperSecr3t
+      KEYCLOAK_ADMIN_PASSWORD: admin
       KEYCLOAK_MANAGEMENT_USER: manager
       KEYCLOAK_MANAGEMENT_PASSWORD: SuperSecr3t
     ports:
-      - 8081:8080
+      - 8080:8080
     networks:
       - local
 

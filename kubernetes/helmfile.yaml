@@ -19,13 +19,14 @@ helmDefaults:
 
 helmfiles:
 
-# - path: addons/cert-manager/helmfile.yaml
+- path: addons/cert-manager/helmfile.yaml
+# - path: addons/metrics-server/helmfile.yaml
 
 # - path: computation/airflow/helmfile.yaml
 # - path: computation/trino/helmfile.yaml
 
 # - path: databases/mysql/helmfile.yaml
-# - path: databases/postgresql/helmfile.yaml
+- path: databases/postgresql/helmfile.yaml
 # - path: databases/redis/helmfile.yaml
 
 # - path: operators/strimzi/helmfile.yaml
@@ -34,10 +35,11 @@ helmfiles:
 # - path: monitoring/prometheus/helmfile.yaml
 # - path: monitoring/grafana/helmfile.yaml
 
-# - path: security/keycloak/helmfile.yaml
+- path: security/keycloak/helmfile.yaml
 
 # - path: storage/kafka/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
+- path: storage/opensearch/helmfile.yaml
 # - path: storage/zookeeper/helmfile.yaml
 
 # - path: warehouse/hive/helmfile.yaml

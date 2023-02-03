@@ -9,3 +9,17 @@ tasks:
   stop:
     cmds:
     - docker compose down --volumes
+
+  gen-cert:
+    dir: config/opensearch
+    cmds:
+    - sh self-signed.sh
+
+  start-multinodes:
+    cmds:
+    - docker compose -f multi-nodes.yml up -d --remove-orphans
+
+  stop-multinodes:
+    cmds:
+    - docker compose -f multi-nodes.yml down --volumes
+
