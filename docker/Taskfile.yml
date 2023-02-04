@@ -45,6 +45,9 @@ includes:
     dir: ./computation/trino
 
   # Databases
+  clickhouse:
+    taskfile: ./databases/clickhouse/Taskfile.yml
+    dir: ./databases/clickhouse
   mongo:
     taskfile: ./databases/mongo/Taskfile.yml
     dir: ./databases/mongo

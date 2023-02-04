@@ -20,10 +20,6 @@ services:
     restart: unless-stopped
     environment:
       <<: *superset-environment
-      # HTTP_PROXY:  http://artifact.data.vnpay.local:8083
-      # HTTPS_PROXY: http://artifact.data.vnpay.local:8083
-      # http_proxy:  http://artifact.data.vnpay.local:8083
-      # https_proxy: http://artifact.data.vnpay.local:8083
       no_proxy: superset-webserver:8088
       NO_PROXY: superset-webserver:8088
     ports:
