@@ -28,7 +28,6 @@ plugins:
     allow_unsafe_democertificates: true
     allow_default_init_securityindex: true
     authcz.admin_dn:
-      - CN=opensearch-node,OU=Demo,O=Demo,L=HN,C=VN
       - CN=opensearch,OU=Demo,O=Demo,L=HN,C=VN
 
     audit.type: internal_opensearch

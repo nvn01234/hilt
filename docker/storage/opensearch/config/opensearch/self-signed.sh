@@ -9,8 +9,8 @@ openssl req -new -x509 -sha256 -key root-ca-key.pem -subj "/C=VN/ST=Hanoi/L=HN/O
 # --- Generate node certificate ---
 openssl genrsa -out node-key-temp.pem 2048
 openssl pkcs8 -inform PEM -outform PEM -in node-key-temp.pem -topk8 -nocrypt -v1 PBE-SHA1-3DES -out node-key.pem
-openssl req -new -key node-key.pem -subj "/C=VN/ST=Hanoi/L=HN/O=Demo/OU=Demo/CN=opensearch-node" -out node.csr
-echo 'subjectAltName=DNS:opensearch-node' > node.ext
+openssl req -new -key node-key.pem -subj "/C=VN/ST=Hanoi/L=HN/O=Demo/OU=Demo/CN=opensearch" -out node.csr
+echo 'subjectAltName=DNS:opensearch' > node.ext
 openssl x509 -req -in node.csr -CA root-ca.pem -CAkey root-ca-key.pem -CAcreateserial -sha256 -out node.pem -days 730 -extfile node.ext
 # ---
 
