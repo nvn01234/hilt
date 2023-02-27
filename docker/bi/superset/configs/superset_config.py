@@ -157,88 +157,75 @@ CUSTOM_SECURITY_MANAGER = SimpleSecurityManager
 # IMG_UPLOAD_FOLDER = '/opt/superset/static/uploads/'
 
 # # ==== Event loging ===
-# from superset.utils.log import DBEventLogger
-# from flask_appbuilder.security.sqla.models import User
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from time import time
-# import json
-# from typing import Any, Dict
-# import requests
+from superset.utils.log import DBEventLogger
+from flask_appbuilder.security.sqla.models import User
+from superset import db
+from time import time
+import json
+from typing import Any, Dict
+import requests
 
 
-# class RestEventLogger(DBEventLogger):
+class RestEventLogger(DBEventLogger):
 
-#     last_user_reloading_tsms = 0
-#     event_index = 'logs'
-#     event_request_url = 'http://opensearch:9200/_bulk'
-#     ## Once TLS enabled
-#     # event_auth_username = 'admin'
-#     # event_auth_password = 'admin'
-#     # event_request_url = 'https://opensearch:9200/_bulk'
-#     # event_request_headers = {"Content-Type": "application/x-ndjson;charset=utf-8"}
-#     users: Dict[int, Dict[str, Any]] = {}
+    last_user_reloading_tsms = 0
+    event_index = 'logs'
+    event_request_url = 'http://opensearch:9200/_bulk'
+    ## Once TLS enabled
+    # event_auth_username = 'admin'
+    # event_auth_password = 'admin'
+    # event_request_url = 'https://opensearch:9200/_bulk'
+    # event_request_headers = {"Content-Type": "application/x-ndjson;charset=utf-8"}
+    users: Dict[int, Dict[str, Any]] = {}
 
-#     def load_users_if_need(self, soft_interval=3600):
-#         now = time()
-#         if now - self.last_user_reloading_tsms > soft_interval:
-#             engine = create_engine(SQLALCHEMY_DATABASE_URI)
-#             with engine.connect() as connection:
-#                 session_class = sessionmaker(autoflush=False)
-#                 session = session_class(bind=connection)
-#                 self.users = {user.id: {
-#                     'first_name': user.first_name,
-#                     'last_name': user.last_name,
-#                     'username': user.username,
-#                     'email': user.email,
-#                     'last_login': user.last_login
-#                 } for user in session.query(User).all()}
-#             self.last_user_reloading_tsms = now
+    def load_users_if_need(self, soft_interval=3600):
+        now = time()
+        if now - self.last_user_reloading_tsms > soft_interval:
+            session = db.session
+            self.users = {user.id: {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'username': user.username,
+                'email': user.email,
+                'last_login': user.last_login
+            } for user in session.query(User).all()}
+            self.last_user_reloading_tsms = now
 
-#     def log(self, user_id, action, *args, **kwargs):
-#         self.load_users_if_need()
-#         records = kwargs.get('records', list())
-#         dashboard_id = kwargs.get('dashboard_id')
-#         slice_id = kwargs.get('slice_id')
-#         duration_ms = kwargs.get('duration_ms')
-#         referrer = kwargs.get('referrer')
-#         user = self.users.get(int(user_id))
-#         first_name = user.get('first_name')
-#         last_name = user.get('last_name')
-#         username = user.get('username')
-#         email = user.get('email')
-#         last_login = user.get('last_login')
+    def log(self, user_id, action, *args, **kwargs):
+        self.load_users_if_need()
+        user = self.users.get(int(user_id)) if user_id else {}
+        records = kwargs.get('records', list())
 
-#         action_and_metadata = json.dumps(dict(
-#             create=dict(
-#                 _index='logs'
-#             )
-#         ))
-#         event_data = ''
-#         for record in records:
-#             event = json.dumps(dict(
-#                 action=action,
-#                 json=record,
-#                 dashboard_id=dashboard_id,
-#                 slice_id=slice_id,
-#                 duration_ms=duration_ms,
-#                 referrer=referrer,
-#                 user_id=user_id,
-#                 first_name=first_name,
-#                 last_name=last_name,
-#                 username=username,
-#                 email=email,
-#                 last_login=last_login
-#             ))
-#             event_data = f'{event_data}{action_and_metadata}\n{event}\n'
-#         print(event_data)
-#         requests.post(self.event_request_url,
-#                         data=event_data)
-#         ## Once TLS enabled
-#         # requests.post(self.event_request_url,
-#         #                 headers=self.event_request_headers,
-#         #                 auth=(self.event_auth_username, self.event_auth_password),
-#         #                 verify=False,
-#         #                 data=event_data)
+        action_and_metadata = json.dumps(dict(
+            create=dict(
+                _index='logs'
+            )
+        ))
+        event_data = ''
+        for record in records:
+            event = json.dumps(dict(
+                action=action,
+                json=record,
+                dashboard_id=kwargs.get('dashboard_id'),
+                slice_id=kwargs.get('slice_id'),
+                duration_ms=kwargs.get('duration_ms'),
+                referrer=kwargs.get('referrer'),
+                user_id=user_id,
+                first_name=user.get('first_name'),
+                last_name=user.get('last_name'),
+                username=user.get('username'),
+                email=user.get('email'),
+                last_login=str(user.get('last_login'))
+            ))
+            event_data = f'{event_data}{action_and_metadata}\n{event}\n'
+        print(event_data)
+        requests.post(self.event_request_url,
+                        data=event_data)
+        ## Once TLS enabled
+        # requests.post(self.event_request_url,
+        #                 headers=self.event_request_headers,
+        #                 auth=(self.event_auth_username, self.event_auth_password),
+        #                 verify=False,
+        #                 data=event_data)
 
-# EVENT_LOGGER = RestEventLogger()
+EVENT_LOGGER = RestEventLogger()

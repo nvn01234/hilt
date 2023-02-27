@@ -1,0 +1,9 @@
+apiVersion: v2
+name: opensearch
+description: A Helm chart for OpenSearch and OpenSearch Dashboard
+type: application
+version: 0.0.1
+appVersion: "2.5.0"
+
+maintainers:
+  - name: dongocson.work@gmail.com

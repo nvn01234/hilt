@@ -18,7 +18,6 @@ tasks:
                      --memory {{ .CLUSTER_MEMORY }}
                      --cpus {{ .CLUSTER_CPUS }}
                      --nodes 1
-    - minikube addons enable ingress
 
   minikube-down:
     cmds:
@@ -27,6 +26,10 @@ tasks:
   minikube-delete:
     cmds:
     - minikube delete
+
+  minikube-dashboard:
+    cmds:
+    - minikube dashboard
 
   deploy:
     cmds:

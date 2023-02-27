@@ -1,0 +1,9 @@
+releases:
+- name: opensearch
+  namespace: opensearch
+  chart: ./chart
+  version: 0.0.1
+  values:
+  - ./opensearch-prod.yaml.gotmpl
+  # - ./opensearch.yaml.gotmpl
+  - fullnameOverride: opensearch

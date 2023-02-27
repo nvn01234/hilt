@@ -1,0 +1,101 @@
+cluster.name: {{ template "opensearch.uname" . }}-cluster
+
+# Bind to all interfaces because we don't know what IP address Docker will assign to us.
+network.host: 0.0.0.0
+
+# # minimum_master_nodes need to be explicitly set when bound on a public IP
+# # set to 1 to allow single node clusters
+# discovery.zen.minimum_master_nodes: 1
+{{- $replicas := int .Values.replicas }}
+{{- if (and (has "master" .Values.roles) (ne $replicas 1)) }}
+cluster.initial_master_nodes:
+{{- $uname := (include "opensearch.uname" .) }}
+  {{- range $i, $e := untilStep 0 $replicas 1 }}
+  - {{ $uname }}-{{ $i }}
+  {{- end }}
+{{- end }}
+
+discovery.seed_hosts:
+  - {{ template "opensearch.masterService" . }}-headless
+node.roles:
+{{- range .Values.roles }}
+  - {{ . }}
+{{- end }}
+
+{{- if eq (int .Values.replicas) 1 }}
+discovery.type: single-node
+{{- end }}
+
+######## Start OpenSearch Security Configuration ########
+{{- if .Values.security.enabled }}
+{{- $tls := .Values.security.tls }}
+plugins:
+  security:
+    {{- if $tls.useDemoCert }}
+    ssl:
+      transport:
+        pemkey_filepath: esnode-key.pem
+        pemcert_filepath: esnode.pem
+        pemtrustedcas_filepath: root-ca.pem
+        enforce_hostname_verification: false
+      http:
+        enabled: true
+        pemkey_filepath: esnode-key.pem
+        pemcert_filepath: esnode.pem
+        pemtrustedcas_filepath: root-ca.pem
+    {{- else }}
+    ssl:
+      transport:
+        keystore_type: PKCS12
+        keystore_filepath: keystore.p12
+        keystore_password: {{ $tls.keystore }}
+        truststore_type: PKCS12
+        truststore_filepath: truststore.p12
+        truststore_password: {{ $tls.keystore }}
+        enforce_hostname_verification: false
+      http:
+        enabled: true
+        keystore_type: PKCS12
+        keystore_filepath: keystore.p12
+        keystore_password: {{ $tls.keystore }}
+        truststore_type: PKCS12
+        truststore_filepath: truststore.p12
+        truststore_password: {{ $tls.keystore }}
+    {{- end }}
+
+    allow_unsafe_democertificates: true
+    allow_default_init_securityindex: true
+    authcz:
+      admin_dn:
+        - CN={{ $tls.commonName }},OU={{ $tls.organizationalUnits }},O={{ $tls.organizations }},L={{ $tls.localities }},C={{ $tls.countries }}
+    nodes_dn:
+      - CN={{ $tls.commonName }},OU={{ $tls.organizationalUnits }},O={{ $tls.organizations }},L={{ $tls.localities }},C={{ $tls.countries }}
+
+    audit:
+      type: internal_opensearch
+    enable_snapshot_restore_privilege: true
+    check_snapshot_restore_write_privileges: true
+    restapi:
+      roles_enabled:
+        - "all_access"
+        - "security_rest_api_access"
+    system_indices:
+      enabled: true
+      indices:
+        - ".plugins-ml-model"
+        - ".plugins-ml-task"
+        - ".opendistro-alerting-config"
+        - ".opendistro-alerting-alert*"
+        - ".opendistro-anomaly-results*"
+        - ".opendistro-anomaly-detector*"
+        - ".opendistro-anomaly-checkpoints"
+        - ".opendistro-anomaly-detection-state"
+        - ".opendistro-reports-*"
+        - ".opensearch-notifications-*"
+        - ".opensearch-notebooks"
+        - ".opensearch-observability"
+        - ".opendistro-asynchronous-search-response*"
+        - ".replication-metadata-store"
+{{- else }}
+plugins.security.disabled: true
+{{- end }}

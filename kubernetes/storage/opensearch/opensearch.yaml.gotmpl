@@ -1,0 +1,70 @@
+clusterName: "opensearch-cluster"
+nodeGroup: "master"
+
+image:
+  repository: "opensearchproject/opensearch"
+
+replicas: 3
+
+masterService: "opensearch-cluster-master"
+
+roles:
+  - master
+  - ingest
+  - data
+  - remote_cluster_client
+
+resources: {}
+
+rbac:
+  create: true
+
+persistence:
+  enabled: true
+  enableInitChown: true
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+
+protocol: https
+httpPort: 9200
+transportPort: 9300
+
+sysctlVmMaxMapCount: 262144
+
+sysctlInit:
+  enabled: true
+
+security:
+  tls:
+    clusterIssuerName: ca-issuer
+    keystore: RCZJJ6951CrhdvZJiGgBWuq3wtGgTzXD1pHnMk/n5K5RXaHu4UkbuAHwtgdFTjAH
+    commonName: opensearch.demo.com
+
+  authn:
+    type: oidc  # password, oidc
+
+    oidc:
+      connect_url: http://keycloak.keycloak.svc:8080/realms/master/.well-known/openid-configuration
+      client_id: opensearch-dashboards
+      client_secret: 12E209vxjMhBMCfjTvCMIMlvxZkaZTWL
+      principal_field: preferred_username
+      base_redirect_url: http://localhost:5601
+
+dashboards:
+
+  replicaCount: 1
+
+  image:
+    repository: "opensearchproject/opensearch-dashboards"
+
+  service:
+    type: ClusterIP
+    port: 5601
+    httpPortName: http
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80

@@ -1,18 +1,14 @@
 version: '3.7'
 
 services:
+
   trino:
     image: trinodb/trino:406
     ports:
       - 18080:8080
     volumes:
       - ./configurations:/etc/trino
-      - ./catalogs/jmx.properties:/etc/trino/catalog/jmx.properties
-      - ./catalogs/opensearch.properties:/etc/trino/catalog/opensearch.properties
-      # - ./catalogs/memory.properties:/etc/trino/catalog/memory.properties
-      - ./catalogs/tpcds.properties:/etc/trino/catalog/tpcds.properties
-      - ./catalogs/tpch.properties:/etc/trino/catalog/tpch.properties
-      # - ./catalogs/kafka.properties:/etc/trino/catalog/kafka.properties
+      - ./etc:/etc/misc
       - trino_data:/data
     networks:
       - local

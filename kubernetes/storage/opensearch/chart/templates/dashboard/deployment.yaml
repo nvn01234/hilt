@@ -1,0 +1,168 @@
+{{- $dashboards := .Values.dashboards }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "opensearch.fullname" . }}-dashboard
+  labels: {{- include "dashboards.labels" . | nindent 4 }}
+spec:
+  replicas: {{ $dashboards.replicaCount }}
+  strategy:
+    type: {{ toYaml .Values.updateStrategy | indent 4 }}
+  selector:
+    matchLabels:
+{{- include "dashboards.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+{{- include "dashboards.selectorLabels" . | nindent 8 }}
+        {{- range $key, $value := $dashboards.labels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- range $key, $value := .Values.podAnnotations }}
+      annotations:
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- if $dashboards.config }}
+{{- include "opensearch.checksum" . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      securityContext:
+{{ toYaml .Values.podSecurityContext | indent 8 }}
+      serviceAccountName: {{ template "opensearch.serviceAccountName" . }}
+      volumes:
+        {{- range $dashboards.secretMounts }}
+        - name: {{ .name }}
+          secret:
+            secretName: {{ .secretName }}
+        {{- end }}
+        - name: dashboards-config
+          configMap:
+            name: {{ template "opensearch.uname" . }}-config
+            items:
+            - key: opensearch_dashboards.yml
+              path: opensearch_dashboards.yml
+            defaultMode: 0755
+        {{- if $dashboards.extraVolumes }}
+        # Currently some extra blocks accept strings
+        # to continue with backwards compatibility this is being kept
+        # whilst also allowing for yaml to be specified too.
+        {{- if eq "string" (printf "%T" $dashboards.extraVolumes) }}
+{{ tpl $dashboards.extraVolumes . | indent 8 }}
+        {{- else }}
+{{ toYaml $dashboards.extraVolumes | indent 8 }}
+        {{- end }}
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+    {{- end }}
+      {{- if $dashboards.extraInitContainers }}
+      # Currently some extra blocks accept strings
+      # to continue with backwards compatibility this is being kept
+      # whilst also allowing for yaml to be specified too.
+      initContainers:
+      {{- if eq "string" (printf "%T" $dashboards.extraInitContainers) }}
+{{ tpl $dashboards.extraInitContainers . | indent 6 }}
+      {{- else }}
+{{ toYaml $dashboards.extraInitContainers | indent 6 }}
+      {{- end }}
+      {{- end }}
+      containers:
+      - name: dashboards
+        securityContext:
+{{ toYaml .Values.securityContext | indent 10 }}
+        image: "{{ $dashboards.image.repository }}:{{ $dashboards.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: "{{ $dashboards.image.pullPolicy }}"
+        {{- if .Values.probe.readinessProbe }}
+        readinessProbe:
+{{ toYaml .Values.probe.readiness | indent 10 }}
+          tcpSocket:
+              port: 5601
+        {{- end }}
+        {{- if .Values.probe.livenessProbe }}
+        livenessProbe:
+{{ toYaml .Values.probe.liveness | indent 10 }}
+          tcpSocket:
+              port: 5601
+        {{- end }}
+        {{- if .Values.probe.startup }}
+        startupProbe:
+{{ toYaml .Values.probe.startup | indent 10 }}
+          tcpSocket:
+              port: 5601
+        {{- end }}
+{{- if $dashboards.extraEnvs }}
+{{ toYaml $dashboards.extraEnvs | indent 8 }}
+{{- end }}
+{{- if $dashboards.envFrom }}
+        envFrom:
+{{ toYaml $dashboards.envFrom | indent 10 }}
+{{- end }}
+        ports:
+        - containerPort: {{ $dashboards.service.port }}
+          name: {{ $dashboards.service.httpPortName | default "http" }}
+          protocol: TCP
+{{- if $dashboards.plugins.enabled }}
+        command:
+          - sh
+          - -c
+          - |
+            #!/usr/bin/bash
+            set -e
+            {{- range $plugin := $dashboards.plugins.installList }}
+            ./bin/opensearch-dashboards-plugin install {{ $plugin }}
+            {{- end }}
+            bash opensearch-dashboards-docker-entrypoint.sh opensearch-dashboards
+{{- end }}
+{{- if .Values.lifecycle }}
+        lifecycle:
+{{ toYaml .Values.lifecycle | indent 10 }}
+{{- end }}
+        resources:
+{{ toYaml $dashboards.resources | indent 10 }}
+        volumeMounts:
+          {{- range $dashboards.secretMounts }}
+          - name: {{ .name }}
+            mountPath: {{ .path }}
+            {{- if .subPath }}
+            subPath: {{ .subPath }}
+            {{- end }}
+          {{- end }}
+          - name: dashboards-config
+            mountPath: /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+            subPath: opensearch_dashboards.yml
+          {{- if $dashboards.extraVolumeMounts }}
+          # Currently some extra blocks accept strings
+          # to continue with backwards compatibility this is being kept
+          # whilst also allowing for yaml to be specified too.
+          {{- if eq "string" (printf "%T" $dashboards.extraVolumeMounts) }}
+{{ tpl $dashboards.extraVolumeMounts . | indent 10 }}
+         {{- else }}
+{{ toYaml $dashboards.extraVolumeMounts | indent 10 }}
+          {{- end }}
+          {{- end }}
+      {{- if $dashboards.extraContainers }}
+      # Currently some extra blocks accept strings
+      # to continue with backwards compatibility this is being kept
+      # whilst also allowing for yaml to be specified too.
+      {{- if eq "string" (printf "%T" $dashboards.extraContainers) }}
+{{ tpl $dashboards.extraContainers . | indent 6 }}
+      {{- else }}
+{{ toYaml $dashboards.extraContainers | indent 6 }}
+      {{- end }}
+      {{- end }}

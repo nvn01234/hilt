@@ -23,6 +23,8 @@ pdb:
 
 service:
   type: ClusterIP
+  ports:
+    http: 8080
 
 ingress:
   ingressClassName: nginx
@@ -36,9 +38,9 @@ postgresql:
   enabled: false
 
 externalDatabase:
-  host: postgresql.postgresql.svc.cluster.local
+  host: postgresql.postgresql.svc
   port: 5432
-  user:     admin
+  user:     keycloak
   password: SuperSecr3t
   database: postgres
 
