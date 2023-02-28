@@ -3,6 +3,7 @@ nodeGroup: "master"
 
 image:
   repository: "opensearchproject/opensearch"
+  tag: 2.5.0
 
 replicas: 3
 
@@ -14,7 +15,13 @@ roles:
   - data
   - remote_cluster_client
 
-resources: {}
+resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+  limits:
+    cpu: 4000m
+    memory: 8Gi
 
 rbac:
   create: true
@@ -22,9 +29,10 @@ rbac:
 persistence:
   enabled: true
   enableInitChown: true
+  storageClass: ceph-rbd-ssd
   accessModes:
     - ReadWriteOnce
-  size: 8Gi
+  size: 512Gi
 
 protocol: https
 httpPort: 9200
@@ -45,11 +53,11 @@ security:
     type: oidc  # password, oidc
 
     oidc:
-      connect_url: http://keycloak.keycloak.svc:8080/realms/master/.well-known/openid-configuration
+      connect_url: https://keycloak.tekodata.com/realms/data/.well-known/openid-configuration
       client_id: opensearch
-      client_secret: OI5A5qITTXzdLHjfcwsb6JCcXWRWxfU8
+      client_secret: dbSKHfVHvjAWAbADbe2tvwc9xvotqH7y
       principal_field: preferred_username
-      base_redirect_url: http://localhost:5601
+      base_redirect_url: https://opensearch.tekodata.com
 
 dashboards:
 
@@ -57,6 +65,7 @@ dashboards:
 
   image:
     repository: "opensearchproject/opensearch-dashboards"
+    tag: 2.5.0
 
   service:
     type: ClusterIP

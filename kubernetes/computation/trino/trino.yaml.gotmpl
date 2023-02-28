@@ -73,7 +73,7 @@ cache:
   enabled: false
 
 faultTolerant:
-  policy: TASK
+  policy: null
 
   exchangeManager:
     type: azure # s3, azure, gcs
@@ -120,25 +120,14 @@ catalog:
     {{ tpl (readFile "catalogs/postgresql.properties") . | nindent 4 | trim }}
   mysql.properties: |
     {{ tpl (readFile "catalogs/mysql.properties") . | nindent 4 | trim }}
-
-service:
-  annotations:
-    projectcontour.io/upstream-protocol.tls: "8443"
+  opensearch.properties: |
+    {{ tpl (readFile "catalogs/opensearch.properties") . | nindent 4 | trim }}
 
 metrics:
   enabled: false
-  port: 9090
-  podMonitor:
-    enabled: true
 
 ingress:
-  enabled: true
-  annotations: {}
-    # ingress.kubernetes.io/force-ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-  hosts:
-  - host: trino.demo.com
-    paths: [/]
+  enabled: false
 
 authen:
   enabled: false

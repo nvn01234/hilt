@@ -4,6 +4,6 @@ releases:
   chart: ./chart
   version: 0.0.1
   values:
-  - ./opensearch-prod.yaml.gotmpl
+  - ./prod.yaml
   # - ./opensearch.yaml.gotmpl
   - fullnameOverride: opensearch
