@@ -18,7 +18,7 @@ server.host: "0.0.0.0"
 opensearch_security.auth.type: "openid"
 opensearch_security.openid.connect_url: "http://keycloak:8080/realms/master/.well-known/openid-configuration"
 opensearch_security.openid.client_id: "opensearch"
-opensearch_security.openid.client_secret: "f0kphO0tkyMsAEW6XOU3T7XCS6JTt7IQ"
+opensearch_security.openid.client_secret: "DCedxDhehbpYfvlQoqS89AOEugXRhG4V"
 opensearch_security.openid.base_redirect_url: http://172.17.0.1:5601
 opensearch.ssl.verificationMode: none
 opensearch.requestHeadersAllowlist:

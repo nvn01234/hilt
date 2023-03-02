@@ -13,6 +13,15 @@ services:
     networks:
       - local
 
+  events-handler:
+    image: jazzdd/alpine-flask:python3
+    ports:
+      - 18081:80
+    volumes:
+      - ./etc/events-handler.py:/app/app.py
+    networks:
+      - local
+
 volumes:
   trino_data:
 

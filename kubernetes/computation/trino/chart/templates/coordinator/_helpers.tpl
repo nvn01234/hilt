@@ -29,7 +29,7 @@ Coordinator volumes
         items:
         - key:  coordinator-config.properties
           path: config.properties
-        {{- if (and .Values.faultTolerant.enabled .Values.faultTolerant.exchangeManager.enabled ) }}
+        {{- if (and .Values.faultTolerant.policy .Values.faultTolerant.exchangeManager.type ) }}
         - key:  exchange-manager.properties
           path: exchange-manager.properties
         {{- end }}
@@ -42,6 +42,10 @@ Coordinator volumes
 - name: trino-metrics
   configMap:
     name: {{ include "trino.fullname" . }}-metrics
+{{- end }}
+{{- if .Values.spill.enabled }}
+- name: trino-spill
+  emptyDir: {}
 {{- end }}
 {{- with $coordinator.extraVolumes }}
 {{ toYaml . }}
@@ -60,6 +64,10 @@ Coordinator volumeMounts
   mountPath: /etc/trino/catalog
 {{- if .Values.metrics.enabled }}
 {{ include "trino.jmxMounts" . }}
+{{- end }}
+{{- if .Values.spill.enabled }}
+- name: trino-spill
+  mountPath: {{ .Values.spill.path }}
 {{- end }}
 {{- with $coordinator.extraVolumeMounts }}
 {{ toYaml . }}
