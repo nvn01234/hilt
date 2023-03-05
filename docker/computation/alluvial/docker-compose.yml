@@ -16,7 +16,7 @@ services:
     networks:
       - local
     volumes:
-      - ./configuration:/etc/alluvial
+      - ./config:/etc/alluvial
 
   alluvial-manager:
     image: hub.teko.vn/dataops/alluvial:v0.10.2
@@ -32,7 +32,7 @@ services:
     networks:
       - local
     volumes:
-      - ./configuration/config.yml:/etc/alluvial/config.yaml
+      - ./config/config.yml:/etc/alluvial/config.yaml
 
 networks:
   local:

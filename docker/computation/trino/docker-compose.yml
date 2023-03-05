@@ -7,7 +7,7 @@ services:
     ports:
       - 18080:8080
     volumes:
-      - ./configurations:/etc/trino
+      - ./config:/etc/trino
       - ./etc:/etc/misc
       - trino_data:/data
     networks:

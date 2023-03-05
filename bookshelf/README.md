@@ -2,9 +2,6 @@
 Just like your bookshelf
 ## Cheat sheets
 Commands, terminologies/definitions,... evething helpful for your work & study
-## Libs
-Library testing. Here I have:
-- [quartz-scheduler](http://www.quartz-scheduler.org/)
 ## Logo
 Logo self-designed from https://app.logo.com/
 ## Setup

@@ -9,3 +9,7 @@ tasks:
   stop:
     cmds:
     - docker compose down --volumes
+
+  shell:
+    cmds:
+    - docker-compose exec -it spark spark-shell --packages org.apache.iceberg:iceberg-spark-runtime-3.2_2.12:$ICEBERG_VERSION
