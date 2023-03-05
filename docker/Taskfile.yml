@@ -19,10 +19,13 @@ includes:
     taskfile: ./base/Taskfile.yml
     dir: ./base
 
-  # BI
+  # Data mining
+  jupyter:
+    taskfile: ./data-mining/jupyter/Taskfile.yml
+    dir: ./data-mining/jupyter
   superset:
-    taskfile: ./bi/superset/Taskfile.yml
-    dir: ./bi/superset
+    taskfile: ./data-mining/superset/Taskfile.yml
+    dir: ./data-mining/superset
 
   # Computation
   airflow:
