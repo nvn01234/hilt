@@ -2,6 +2,8 @@
 {{- $config := index $trino "config.properties" | default dict }}
 {{- $authen := .Values.authen }}
 {{- $faultTolerant := .Values.faultTolerant }}
+{{- $eventsListener := .Values.eventsListener }}
+{{- $spill := .Values.spill }}
 
 {{- $_ := unset $config "coordinator" }}
 {{- $_ := unset $config "node-scheduler.include-coordinator" }}
@@ -20,36 +22,66 @@
   {{- $_ := set $config "http-server.https.truststore.key"  $httpServer.truststore.key  }}
 {{- end }}
 
+{{- if $spill.enabled }}
+  {{- $_ := set $config "spill-enabled" "true" }}
+  {{- $_ := set $config "spiller-spill-path" $spill.path }}
+{{- end }}
+
+{{- $exchangeManager := $faultTolerant.exchangeManager }}
+{{- $exchangeConfig := dict -}}
 {{- if $faultTolerant.policy }}
   {{- $_ := set $config "retry-policy" $faultTolerant.policy }}
-  {{- if $faultTolerant.exchangeManager.compress }}
-  {{- $_ := set $config "exchange.compression-enabled" true }}
+  {{- if $exchangeManager.type }}
+    {{- range $key, $value := $exchangeManager.tunning }}
+      {{- $_ := set $exchangeConfig (printf "exchange.%s" $key) $value }}
+    {{- end }}
+    {{- if $exchangeManager.compress }}
+    {{- $_ := set $config "exchange.compression-enabled" true }}
+    {{- end }}
+    {{- $_ := set $exchangeConfig "exchange-manager.name" "filesystem" }}
+    {{- $_ := set $exchangeConfig "exchange.base-directories" $exchangeManager.baseDirectories }}
+    {{- $exchangeStorageType := lower $exchangeManager.type }}
+    {{- if eq $exchangeStorageType "s3" }}
+      {{- range $key, $value := $exchangeManager.s3 }}
+        {{- $_ := set $exchangeConfig (printf "exchange.s3.%s" $key) $value }}
+      {{- end }}
+    {{- else if eq $exchangeStorageType "gcs" }}
+      {{- range $key, $value := $exchangeManager.s3 }}
+        {{- $_ := set $exchangeConfig (printf "exchange.s3.%s" $key) $value }}
+      {{- end }}
+      {{- range $key, $value := $exchangeManager.gcs }}
+        {{- $_ := set $exchangeConfig (printf "exchange.gcs.%s" $key) $value }}
+      {{- end }}
+    {{- else if eq $exchangeStorageType "azure" }}
+      {{- range $key, $value := $exchangeManager.azure }}
+        {{- $_ := set $exchangeConfig (printf "exchange.azure.%s" $key) $value }}
+      {{- end }}
+    {{- end }}
   {{- end }}
 {{- end }}
 
 {{- $coordinatorConfig := deepCopy $config }}
 {{- $workerConfig := deepCopy $config }}
 
-{{- if $authen.enabled }}
-  {{- $_ := set $coordinatorConfig "http-server.authentication.type" $authen.type }}
-  {{- $_ := set $coordinatorConfig "internal-communication.https.required" false }}
+{{- if $authen.type }}
+  {{- $authenType := lower $authen.type }}
+  {{- $_ := set $coordinatorConfig "web-ui.authentication.type" $authenType }}
+  {{- $_ := set $coordinatorConfig "http-server.authentication.type" $authenType }}
   {{- $sharedSecret := required "sharedSecret is required when authentication is enabled" $authen.sharedSecret }}
   {{- $_ := set $coordinatorConfig "internal-communication.shared-secret" $sharedSecret }}
-  {{- $_ := set $workerConfig "internal-communication.shared-secret" $sharedSecret }}
+  {{- $_ := set $workerConfig      "internal-communication.shared-secret" $sharedSecret }}
 
-  {{- if eq $authen.type "OAUTH2" }}
-    {{- $_ := set $coordinatorConfig "web-ui.authentication.type" "oauth2" }}
+  {{- if eq $authenType "oauth2" }}
     {{- range $key, $value := $authen.oauth2 }}
       {{- $_ := set $coordinatorConfig (printf "http-server.authentication.oauth2.%s" $key) $value }}
     {{- end }}
   {{- end }}
 
   ## TODO: Support password authentication
-  # {{- if eq $authen.type "PASSWORD" }}
+  # {{- if eq $authenType "password" }}
   # {{- end }}
 
-  {{- if eq $authen.type "KERBEROS" }}
-    {{- $_ := set $coordinatorConfig "web-ui.authentication.type" "kerberos" }}
+  {{- if eq $authenType "kerberos" }}
     {{- range $key, $value := $authen.kerberos }}
       {{- $_ := set $coordinatorConfig (printf "http-server.authentication.krb5.%s" $key) $value }}
     {{- end }}
@@ -70,40 +102,34 @@ data:
   coordinator-config.properties: |
     coordinator=true
     node-scheduler.include-coordinator=false
-    discovery.uri=http://localhost:8080
+    discovery.uri={{ printf "http://%s-discovery:8080" (include "trino.fullname" .) }}
     {{- range $key, $value := $coordinatorConfig }}
     {{ $key }}={{ $value }}
     {{- end }}
 
   worker-config.properties: |
     coordinator=false
-    discovery.uri={{ printf "http://%s:8080" (include "trino.fullname" .) }}
+    discovery.uri={{ printf "http://%s-discovery:8080" (include "trino.fullname" .) }}
     {{- range $key, $value := $workerConfig }}
     {{ $key }}={{ $value }}
     {{- end }}
 
-  {{ if (and  $faultTolerant.policy $faultTolerant.exchangeManager.type ) -}}
+  {{ if (and  $faultTolerant.policy $exchangeManager.type ) -}}
   exchange-manager.properties: |
-    exchange-manager.name: filesystem
-    {{- $exchangeManager := $faultTolerant.exchangeManager }}
-    {{- $exchangeStorageType := lower $exchangeManager.type }}
-    {{- if eq $exchangeStorageType "s3" }}
-    {{- range $key, $value := $exchangeManager.s3 }}
-    exchange.s3.{{ $key }}={{ $value }}
-    {{- end }}
-    {{- else if eq $exchangeStorageType "gcs" }}
-    {{- range $key, $value := $exchangeManager.gcs }}
-    exchange.gcs.{{ $key }}={{ $value }}
-    {{- end }}
-    {{- range $key, $value := $exchangeManager.s3 }}
-    exchange.s3.{{ $key }}={{ $value }}
-    {{- end }}
-    {{- else if eq $exchangeStorageType "azure" }}
-    {{- range $key, $value := $exchangeManager.azure }}
-    exchange.azure.{{ $key }}={{ $value }}
-    {{- end }}
-    {{- end }}
-    {{- range $key, $value := $exchangeManager.tunning }}
+    {{- range $key, $value := $exchangeConfig }}
     {{ $key }}={{ $value }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $eventsListener.enabled }}
+  http-event-listener.properties: |
+    event-listener.name=http
+    http-event-listener.log-created={{ $eventsListener.logs.created }}
+    http-event-listener.log-completed={{ $eventsListener.logs.completed }}
+    http-event-listener.log-split={{ $eventsListener.logs.split }}
+    http-event-listener.connect-retry-count={{ $eventsListener.retriesOnFailed }}
+    http-event-listener.connect-ingest-uri={{ $eventsListener.endpoint }}
+    {{- if $eventsListener.header}}
+    http-event-listener.connect-http-headers={{ $eventsListener.headers }}
     {{- end }}
   {{- end }}

@@ -30,10 +30,6 @@ trino:
     io.trino: INFO
   # https://trino.io/docs/current/admin/properties.html
   config.properties: {}
-    # These properties are recommended to be tunned once the TASK-type fault-tolerant feature enabled
-    # task.low-memory-killer.policy
-    # query.low-memory-killer.delay
-    # query.remote-task.max-error-duration
 
 catalog: {}
   # memory.properties: |
@@ -57,10 +53,7 @@ httpServer:
     key:
 
 authen:
-  enabled: false
-
-  # Option: CUSTOM | KERBEROS | PASSWORD | OAUTH2
-  type: CUSTOM
+  type: null  # PASSWORD | OAUTH2 | KERBEROS | CERTIFICATE | JWT | HEADER
   sharedSecret:
 
   kerberos: {}
@@ -73,20 +66,19 @@ authen:
 
   ## TODO: Support password authentication
   # password:
-  #   # Option: file | ldap
-  #   type: file
-
+  #   type: file  # file | ldap | salesforce
+  #
   #   ldap:
   #     # url:
   #     # user-base-dn:
   #     # user-bind-pattern:
   #     # group-auth-pattern:
   #     # cache-ttl:
-
+  #
   #     ## Trino server can use dedicated LDAP service user for doing user group membership queries.
   #     # bind-dn:
   #     # bind-password:
-
+  #
   #   file:
   #     # password-file:
   #     # refresh-period:
@@ -153,10 +145,10 @@ cache:
     size: 10Gi
 
 faultTolerant:
-  policy: TASK # null | QUERY, TASK
+  policy: null # null | QUERY, TASK
 
   exchangeManager:
-    type: s3 # null | s3, azure, gcs
+    type: null # null | s3, azure, gcs
     baseDirectories: ""
     compress: false
 
@@ -166,17 +158,28 @@ faultTolerant:
       # sink-max-file-size:
       # source-concurrent-reader:
 
-    s3:
-      region: my-region
-      aws-access-key: access-key
-      aws-secret-key: secret-key
-      max-error-retries: 3
-      path-style-access: true
-      upload.part-size:
+    s3: {}
+      # region: my-region
+      # aws-access-key: access-key
+      # aws-secret-key: secret-key
+      # max-error-retries: 3
+      # path-style-access: true
+      # upload.part-size:
     azure: {}
       # connection-string: connection-string
     gcs: {}
       # json-key-file-path: /path/to/gcs_keyfile.json
+
+eventsListener:
+  enabled: false
+  logs:
+    created: true
+    completed: true
+    split: false
+  retriesOnFailed: 3
+  # Providing headers follows the pattern of key:value pairs separated by commas
+  headers: ""
+  endpoint: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -213,3 +216,11 @@ ingress:
   #  - secretName: trino.local-tls
   #    hosts:
   #      - trino.local
+
+spill:
+  enabled: false
+  path: /opt/trino/spill
+  # accessModes:
+  #   - ReadWriteMany
+  # storageClassName: className
+  # size: 100
