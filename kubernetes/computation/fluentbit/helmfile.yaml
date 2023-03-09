@@ -1,0 +1,8 @@
+releases:
+- name: fluentbit
+  namespace: trino
+  chart: fluent/fluent-bit
+  version: 0.24.0
+  values:
+  - ./fluentbit.yaml
+  - fullnameOverride: fluentbit

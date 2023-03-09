@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+
+  fluentbit:
+    image: fluent/fluent-bit:2.0.9
+    command:
+      - -Z
+      - -c
+      - /fluent-bit/etc/fluent-bit.conf
+    ports:
+      - 2020:2020
+      - 8888:8888
+    volumes:
+      - ./configs/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - local
+
+networks:
+  local:
+    external: true

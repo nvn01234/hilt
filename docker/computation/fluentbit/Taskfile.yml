@@ -9,7 +9,3 @@ tasks:
   stop:
     cmds:
     - docker compose down --volumes
-
-  build:
-    cmds:
-    - docker build -t sondn1/trino:408 ./plugins/opensearch-event-listener

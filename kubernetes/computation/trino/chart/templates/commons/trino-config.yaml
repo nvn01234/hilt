@@ -102,7 +102,10 @@ data:
   coordinator-config.properties: |
     coordinator=true
     node-scheduler.include-coordinator=false
-    discovery.uri={{ printf "http://%s-discovery:8080" (include "trino.fullname" .) }}
+    discovery.uri=http://localhost:8080
+    {{- if $eventsListener.enabled }}
+    event-listener.config-files=/etc/trino/http-event-listener.properties
+    {{- end }}
     {{- range $key, $value := $coordinatorConfig }}
     {{ $key }}={{ $value }}
     {{- end }}

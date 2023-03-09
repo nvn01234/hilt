@@ -3,22 +3,13 @@ version: '3.7'
 services:
 
   trino:
-    image: trinodb/trino:406
+    image: sondn1/trino:408
     ports:
       - 18080:8080
     volumes:
       - ./config:/etc/trino
       - ./etc:/etc/misc
       - trino_data:/data
-    networks:
-      - local
-
-  events-handler:
-    image: jazzdd/alpine-flask:python3
-    ports:
-      - 18081:80
-    volumes:
-      - ./etc/events-handler.py:/app/app.py
     networks:
       - local
 

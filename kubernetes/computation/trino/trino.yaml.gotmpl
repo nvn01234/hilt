@@ -18,8 +18,8 @@ trino:
     -XX:MaxRAMPercentage=96.0
     -XX:-UseCompressedOops
     -Dtrust_all_cert=true
-    -Djavax.net.ssl.trustStore=/etc/pki/k8s/truststore.p12
-    -Djavax.net.ssl.trustStorePassword=jTATy27H2jQquoGHTxar3gGXgdg354GSA
+  # -Djavax.net.ssl.trustStore=/etc/pki/k8s/truststore.p12
+  # -Djavax.net.ssl.trustStorePassword=jTATy27H2jQquoGHTxar3gGXgdg354GSA
   ### Tuning Trino
   # * https://trino.io/docs/current/admin/tuning.html
   # * https://trino.io/docs/current/admin/properties-query-management.html
@@ -33,7 +33,6 @@ trino:
     query.max-memory-per-node:       500MB
     memory.heap-headroom-per-node:   500MB
     task.low-memory-killer.policy: total-reservation-on-blocked-nodes
-    query.low-memory-killer.delay: 0
     query.remote-task.max-error-duration: 1m
 
   rules.json: |
@@ -49,7 +48,7 @@ trino:
   group.txt: |
     {{ tpl (readFile "configs/groups.txt") . | nindent 4 | trim }}
 
-commons:
+commons: {}
   # resources:
   #   requests:
   #     cpu: "1"
@@ -57,14 +56,14 @@ commons:
   #   limits:
   #     cpu: "2"       # x4 request
   #     memory: "2Gi" # x4 request
-  extraVolumeMounts:
-  - name: certificate
-    mountPath: /etc/pki/k8s/
-    readOnly: true
-  extraVolumes:
-  - name: certificate
-    secret:
-      secretName: trino.demo.com-tls
+  # extraVolumeMounts:
+  # - name: certificate
+  #   mountPath: /etc/pki/k8s/
+  #   readOnly: true
+  # extraVolumes:
+  # - name: certificate
+  #   secret:
+  #     secretName: trino.demo.com-tls
 
 worker:
   replicas: 3
@@ -103,15 +102,15 @@ httpServer:
   http:
     enabled: true
     port: 8080
-  https:
-    enabled: true
-    port: 8443
-  keystore:
-    path: /etc/pki/k8s/keystore.p12
-    key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
-  truststore:
-    path: /etc/pki/k8s/truststore.p12
-    key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
+  # https:
+  #   enabled: true
+  #   port: 8443
+  # keystore:
+  #   path: /etc/pki/k8s/keystore.p12
+  #   key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
+  # truststore:
+  #   path: /etc/pki/k8s/truststore.p12
+  #   key: jTATy27H2jQquoGHTxar3gGXgdg354GSA
 
 catalog:
   jmx.properties: |
@@ -120,8 +119,6 @@ catalog:
     {{ tpl (readFile "catalogs/postgresql.properties") . | nindent 4 | trim }}
   mysql.properties: |
     {{ tpl (readFile "catalogs/mysql.properties") . | nindent 4 | trim }}
-  opensearch.properties: |
-    {{ tpl (readFile "catalogs/opensearch.properties") . | nindent 4 | trim }}
 
 metrics:
   enabled: false

@@ -9,6 +9,8 @@ repositories:
   url:  https://strimzi.io/charts/
 - name: spark-operator
   url:  https://googlecloudplatform.github.io/spark-on-k8s-operator
+- name: fluentbit
+  url: https://fluent.github.io/helm-charts
 
 helmDefaults:
   wait: true
@@ -24,6 +26,7 @@ helmfiles:
 
 # - path: computation/airflow/helmfile.yaml
 # - path: computation/trino/helmfile.yaml
+# - path: computation/fluentbit/helmfile.yaml
 
 # - path: databases/mysql/helmfile.yaml
 # - path: databases/postgresql/helmfile.yaml

@@ -5,7 +5,7 @@ vars:
   RELEASE: '{{.RELEASE | default "funny"}}'
   VALUES: '{{.VALUES | default "./values.yaml"}}'
   CLUSTER_MOUNTPATH: '{{.CLUSTER_MOUNTPATH | default "/data1/minikube"}}'
-  CLUSTER_MEMORY: '{{.CLUSTER_MEMORY | default "8192"}}'
+  CLUSTER_MEMORY: '{{.CLUSTER_MEMORY | default "10240"}}'
   CLUSTER_CPUS: '{{.CLUSTER_CPUS | default "4"}}'
 
 tasks:

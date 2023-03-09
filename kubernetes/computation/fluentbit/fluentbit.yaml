@@ -1,0 +1,67 @@
+
+kind: Deployment
+
+replicaCount: 1
+
+image:
+  repository: cr.fluentbit.io/fluent/fluent-bit
+  tag: "2.0.9"
+  pullPolicy: Always
+
+testFramework:
+  enabled: false
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+service:
+  type: ClusterIP
+  port: 2020
+
+resources: {}
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+
+flush: 1
+
+config:
+  inputs: |
+    [INPUT]
+        Name                http
+        Listen              0.0.0.0
+        Port                8889
+        Tag                 trino_audit
+        buffer_max_size     16M
+
+  outputs: |
+    [OUTPUT]
+        Name                opensearch
+        Match               trino_audit
+        Host                opensearch-cluster-master.opensearch.svc
+        Port                9200
+        Index               trino_events
+        Suppress_Type_Name  On
+        HTTP_User           admin
+        HTTP_Passwd         admin
+        Trace_Output        On
+        Trace_Error         On
+        tls                 On
+        tls.verify          Off
+    [OUTPUT]
+        Name                stdout
+        Match               trino_audit
+
+extraPorts:
+  - port: 8889
+    containerPort: 8889
+    protocol: TCP
+    name: tcp
+
+logLevel: trace

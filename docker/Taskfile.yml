@@ -37,6 +37,9 @@ includes:
   debezium:
     taskfile: ./computation/debezium/Taskfile.yml
     dir: ./computation/debezium
+  fluentbit:
+    taskfile: ./computation/fluentbit/Taskfile.yml
+    dir: ./computation/fluentbit
   nifi:
     taskfile: ./computation/nifi/Taskfile.yml
     dir: ./computation/nifi

@@ -37,9 +37,10 @@ sysctlInit:
 
 security:
   tls:
-    clusterIssuerName: ca-issuer
-    keystore: RCZJJ6951CrhdvZJiGgBWuq3wtGgTzXD1pHnMk/n5K5RXaHu4UkbuAHwtgdFTjAH
-    commonName: opensearch-cluster-master.opensearch.svc
+    useDemoCert: true
+    # clusterIssuerName: ca-issuer
+    # keystore: RCZJJ6951CrhdvZJiGgBWuq3wtGgTzXD1pHnMk/n5K5RXaHu4UkbuAHwtgdFTjAH
+    # commonName: opensearch-cluster-master.opensearch.svc
 
   authn:
     type: oidc  # password, oidc
@@ -47,7 +48,7 @@ security:
     oidc:
       connect_url: http://keycloak.keycloak.svc:8080/realms/master/.well-known/openid-configuration
       client_id: opensearch
-      client_secret: OI5A5qITTXzdLHjfcwsb6JCcXWRWxfU8
+      client_secret: lDMqN8mxJOt5YDkwn4SfRFav9z4MB8i3
       principal_field: preferred_username
       base_redirect_url: http://localhost:5601
 
