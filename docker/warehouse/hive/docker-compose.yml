@@ -3,7 +3,7 @@ version: "3"
 services:
 
   hive-server:
-    image: sondn1/hive:0.1.0
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     depends_on:
       - hive-metastore
     ports:
@@ -11,12 +11,12 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./configurations/hadoop/:/opt/hadoop/etc/hadoop/
+      - ./config/hadoop/:/opt/hadoop/etc/hadoop/
     networks:
       - local
 
   hive-metastore:
-    image: sondn1/hive:0.1.0
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     command: hive --service metastore --verbose --hiveconf hive.root.logger=INFO,console
     depends_on:
       - init_metastore_db
@@ -25,20 +25,18 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./configurations/hadoop/:/opt/hadoop/etc/hadoop/
+      - ./config/hadoop/:/opt/hadoop/etc/hadoop/
     networks:
       - local
 
   init_metastore_db:
-    image: sondn1/hive:0.1.0
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     command: >
       schematool -url jdbc:postgresql://postgresql:5432/metastore \
                  -dbType postgres -userName hive -passWord SuperSecr3t \
                  -driver org.postgresql.Driver \
                  -initSchema \
                  --verbose
-    depends_on:
-      - postgresql
     networks:
       - local
 

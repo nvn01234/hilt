@@ -1,0 +1,10 @@
+AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:SuperSecr3t@postgresql:5432/airflow
+AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:SuperSecr3t@postgresql:5432/airflow
+AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:SuperSecr3t@postgresql:5432/airflow
+AIRFLOW__CELERY__BROKER_URL=redis://:@redis:6379/0
+AIRFLOW__CORE__FERNET_KEY=SuperSecr3t
+AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
+AIRFLOW__CORE__LOAD_EXAMPLES=true
+AIRFLOW__API__AUTH_BACKENDS="airflow.api.auth.backend.basic_auth"
+_PIP_ADDITIONAL_REQUIREMENTS=""

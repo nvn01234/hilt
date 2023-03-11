@@ -7,7 +7,7 @@ services:
       - 8200:8200
     environment:
       VAULT_ADDR: "http://0.0.0.0:8200"
-      VAULT_DEV_ROOT_TOKEN_ID: "SuperTok3n"
+      VAULT_DEV_ROOT_TOKEN_ID: "SuperSecr3t"
     networks:
       - local
 

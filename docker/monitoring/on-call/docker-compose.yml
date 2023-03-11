@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+
+  engine:
+    image: grafana/oncall:v1.0.2
+    restart: always
+    ports:
+      - 8080:8080
+    command: sh -c "uwsgi --ini uwsgi.ini"
+    env_file:
+      - ./config/env.sh
+    networks:
+      - local
+
+  celery:
+    image: grafana/oncall:v1.0.2
+    restart: always
+    command: sh -c "./celery_with_exporter.sh"
+    env_file:
+      - ./config/env.sh
+    environment:
+      CELERY_WORKER_CONCURRENCY: 1
+      CELERY_WORKER_MAX_TASKS_PER_CHILD: 100
+      CELERY_WORKER_SHUTDOWN_INTERVAL: 65m
+      CELERY_WORKER_BEAT_ENABLED: "True"
+    depends_on:
+      oncall_db_migration:
+        condition: service_completed_successfully
+    networks:
+      - local
+
+  oncall_db_migration:
+    image: grafana/oncall
+    command: python manage.py migrate --noinput
+    env_file:
+      - ./config/env.sh
+    networks:
+      - local
+
+networks:
+  local:
+    external: true

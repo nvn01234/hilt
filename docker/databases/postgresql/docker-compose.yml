@@ -16,7 +16,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: SuperSecr3t
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - ./sample:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
     networks:
       - local

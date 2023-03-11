@@ -1,0 +1,71 @@
+version: '3'
+
+env:
+  REPOSITORY: '{{ .REPOSITORY }}'
+  IMAGE_NAME: '{{ .IMAGE_NAME | default "sondn1" }}'
+  IMAGE_VERSION: '{{ .IMAGE_VERSION }}'
+  IMAGE_BUILD_CONTEXT: '{{ .IMAGE_BUILD_CONTEXT | default "." }}'
+  INIT_ON_START: '{{ .INIT_ON_START | default true }}'
+  PROFILES: '{{ .START_ON_PROFILES | default "" }}'
+  DEPENDENT_SERVICES: '{{ .DEPENDENT_SERVICES | default "" }}'
+  STOP_DEPENDENT_SERVICES_ON_STOP: '{{ .STOP_DEPENDENT_SERVICES_ON_STOP | default false }}'
+
+tasks:
+
+  build:
+    cmds:
+    - docker build -t {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }} {{ .IMAGE_BUILD_CONTEXT }}
+
+  publish:
+    cmds:
+    - task: build
+    - docker push {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }}
+
+  push:
+    cmds:
+    - docker push {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }}
+
+  start:
+    cmds:
+    - task: start-dependencies
+    - task: init
+    - docker compose up -d --remove-orphans
+
+  start-dependencies:
+    dir: ../../
+    internal: true
+    cmds:
+    - |
+      for SERVICE in ${DEPENDENT_SERVICES[@]}; do
+        task $SERVICE:start
+      done
+
+  init:
+    cmds:
+    - |
+      if $INIT_ON_START && [ -f ./init.sh ]; then
+        bash -c init.sh
+      fi
+
+  stop:
+    cmds:
+    - docker compose down --volumes
+    - task: stop-dependencies
+
+  stop-dependencies:
+    dir: ../../
+    internal: true
+    cmds:
+    - |
+      if $STOP_DEPENDENT_SERVICES_ON_STOP; then
+        DEPENDENCIES=$DEPENDENT_SERVICES
+        # Unset DEPENDENT_SERVICES to avoid infinite recursive looping
+        unset DEPENDENT_SERVICES
+        for SERVICE in ${DEPENDENCIES[@]}; do
+          task $SERVICE:stop
+        done
+      fi
+
+  restart:
+    cmds:
+    - docker compose restart {{.CLI_ARGS}}

@@ -1,143 +1,145 @@
 version: '3'
 
-# Services:
-# - BI: superset
-# - Computation: airflow datahub debezium nifi spark trino
-# - Databases: mongo mysql neo4j postgresql rabbitmq redis
-# - Monitoring: grafana prometheus
-# - Security: keycloak vault
-# - Storage: elasticsearch hadoop kafka minio zookeeper
-# - Warehouse: hive
-
-env:
-  SERVICES: |
-
-
 includes:
-  # Base
-  base:
-    taskfile: ./base/Taskfile.yml
-    dir: ./base
-
-  # Data mining
-  jupyter:
-    taskfile: ./data-mining/jupyter/Taskfile.yml
-    dir: ./data-mining/jupyter
-  superset:
-    taskfile: ./data-mining/superset/Taskfile.yml
-    dir: ./data-mining/superset
 
   # Computation
   airflow:
-    taskfile: ./computation/airflow/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/airflow
+    vars:
+      DEPENDENT_SERVICES: postgresql redis
   datahub:
-    taskfile: ./computation/datahub/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/datahub
+    vars:
+      DEPENDENT_SERVICES: elasticsearch kafka mysql neo4j
   debezium:
-    taskfile: ./computation/debezium/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/debezium
+    vars:
+      REPOSITORY: sondn1
+      IMAGE_NAME: debezium
+      IMAGE_VERSION: 2.1.1
+      IMAGE_BUILD_CONTEXT: image
   fluentbit:
-    taskfile: ./computation/fluentbit/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/fluentbit
   nifi:
-    taskfile: ./computation/nifi/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/nifi
+    vars:
+      DEPENDENT_SERVICES: zookeeper
   spark:
-    taskfile: ./computation/spark/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/spark
   trino:
-    taskfile: ./computation/trino/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./computation/trino
+    vars:
+      REPOSITORY: sondn1
+      IMAGE_NAME: trino
+      IMAGE_VERSION: 408
+      IMAGE_BUILD_CONTEXT: image
+
+  # Data mining
+  jupyter:
+    taskfile: cmds.yml
+    dir: ./data-mining/jupyter
+  superset:
+    taskfile: cmds.yml
+    dir: ./data-mining/superset
+    vars:
+      DEPENDENT_SERVICES: postgresql redis
 
   # Databases
   clickhouse:
-    taskfile: ./databases/clickhouse/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/clickhouse
   mongo:
-    taskfile: ./databases/mongo/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/mongo
   mysql:
-    taskfile: ./databases/mysql/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/mysql
   neo4j:
-    taskfile: ./databases/neo4j/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/neo4j
   postgresql:
-    taskfile: ./databases/postgresql/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/postgresql
   rabbitmq:
-    taskfile: ./databases/rabbitmq/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/rabbitmq
   redis:
-    taskfile: ./databases/redis/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./databases/redis
 
   # Monitoring
   grafana:
-    taskfile: ./monitoring/grafana/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./monitoring/grafana
+    vars:
+      DEPENDENT_SERVICES: postgresql
+  on-call:
+    taskfile: cmds.yml
+    dir: ./monitoring/on-call
+    vars:
+      DEPENDENT_SERVICES: grafana mysql rabbitmq
   prometheus:
-    taskfile: ./monitoring/prometheus/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./monitoring/prometheus
 
   # Security
   keycloak:
-    taskfile: ./security/keycloak/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./security/keycloak
+    vars:
+      DEPENDENT_SERVICES: postgresql
   vault:
-    taskfile: ./security/vault/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./security/vault
 
   # Storage
   elasticsearch:
-    taskfile: ./storage/elasticsearch/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./storage/elasticsearch
-  hadoop:
-    taskfile: ./storage/hadoop/Taskfile.yml
-    dir: ./storage/hadoop
   kafka:
-    taskfile: ./storage/kafka
+    taskfile: cmds.yml
     dir: ./storage/kafka
   minio:
-    taskfile: ./storage/minio/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./storage/minio
   opensearch:
-    taskfile: ./storage/opensearch/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./storage/opensearch
   zookeeper:
-    taskfile: ./storage/zookeeper/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./storage/zookeeper
 
   # Warehouse
   hive:
-    taskfile: ./warehouse/hive/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./warehouse/hive
+    vars:
+      REPOSITORY: sondn1
+      IMAGE_NAME: hive
+      IMAGE_VERSION: 0.1.0
+      IMAGE_BUILD_CONTEXT: image
+      DEPENDENT_SERVICES: postgresql
 
   # Other
   postgrest:
-    taskfile: ./other/postgrest/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./other/postgrest
+    vars:
+      DEPENDENT_SERVICES: postgresql
   strapi:
-    taskfile: ./other/strapi/Taskfile.yml
+    taskfile: cmds.yml
     dir: ./other/strapi
+    vars:
+      DEPENDENT_SERVICES: postgresql
 
 tasks:
-
-  start-services:
-    cmds:
-    - |
-      for SERVICE in ${SERVICES[@]}; do
-        # task $SERVICE:start
-        echo $SERVICE
-      done
-
-  stop-services:
-    cmds:
-    - |
-      for SERVICE in ${SERVICES[@]}; do
-        task $SERVICE:stop
-      done
 
   create-local-network:
     env:
