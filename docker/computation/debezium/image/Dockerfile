@@ -6,7 +6,7 @@ WORKDIR /build/
 RUN set -eux; \
     apt-get update; \
     apt-get install -y curl tar;
-    
+
 COPY ./pom.xml /build/
 RUN mvn dependency:resolve \
         dependency:copy-dependencies -DoutputDirectory=plugins/confluent-schema-registry/;
@@ -15,8 +15,8 @@ ENV DEBEZIUM_VERSION=2.1.1.Final \
     MAVEN_REPO_CENTRAL=https://repo1.maven.org/maven2
 RUN set -eux; \
     DEBEZIUM_CONNECTOR=( \
-        mysql postgres mongodb \
-        sqlserver oracle db2 \
+        mysql postgres \
+        # mongodb sqlserver oracle db2 \
         # cassandra-3 cassandra-4 vitess \
         # spanner \
     ); \

@@ -16,14 +16,14 @@ tasks:
     cmds:
     - docker build -t {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }} {{ .IMAGE_BUILD_CONTEXT }}
 
-  publish:
-    cmds:
-    - task: build
-    - docker push {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }}
-
   push:
     cmds:
     - docker push {{ .REPOSITORY }}/{{ .IMAGE_NAME }}:{{ .IMAGE_VERSION }}
+
+  publish:
+    cmds:
+    - task: build
+    - task: push
 
   start:
     cmds:
@@ -36,7 +36,10 @@ tasks:
     internal: true
     cmds:
     - |
-      for SERVICE in ${DEPENDENT_SERVICES[@]}; do
+      DEPENDENCIES=$DEPENDENT_SERVICES
+      # Unset DEPENDENT_SERVICES to avoid infinite recursive looping
+      unset DEPENDENT_SERVICES
+      for SERVICE in ${DEPENDENCIES[@]}; do
         task $SERVICE:start
       done
 

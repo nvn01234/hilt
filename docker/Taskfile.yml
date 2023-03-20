@@ -8,6 +8,9 @@ includes:
     dir: ./computation/airflow
     vars:
       DEPENDENT_SERVICES: postgresql redis
+  alluvial:
+    taskfile: cmds.yml
+    dir: ./computation/alluvial
   datahub:
     taskfile: cmds.yml
     dir: ./computation/datahub
@@ -158,3 +161,51 @@ tasks:
   prune:
     cmds:
     - docker system prune -af
+
+  services:
+    preconditions:
+      - sh: "[ '{{ .CLI_ARGS }}' == 'start' ] ||
+             [ '{{ .CLI_ARGS }}' == 'stop' ]  ||
+             [ '{{ .CLI_ARGS }}' == 'restart' ]"
+        msg: "Unknown CLI_ARGS. Please input start, top, or restart."
+    cmds:
+      - echo "Starting services"
+      # - task: airflow:{{ .CLI_ARGS }}
+      # - task: alluvial:{{ .CLI_ARGS }}
+      # - task: datahub:{{ .CLI_ARGS }}
+      # - task: debezium:{{ .CLI_ARGS }}
+      # - task: fluentbit:{{ .CLI_ARGS }}
+      # - task: nifi:{{ .CLI_ARGS }}
+      # - task: spark:{{ .CLI_ARGS }}
+      # - task: trino:{{ .CLI_ARGS }}
+
+      # - task: jupyter:{{ .CLI_ARGS }}
+      # - task: superset:{{ .CLI_ARGS }}
+
+      # - task: clickhouse:{{ .CLI_ARGS }}
+      # - task: mongo:{{ .CLI_ARGS }}
+      # - task: mysql:{{ .CLI_ARGS }}
+      # - task: neo4j:{{ .CLI_ARGS }}
+      # - task: postgresql:{{ .CLI_ARGS }}
+      # - task: rabbitmq:{{ .CLI_ARGS }}
+      # - task: redis:{{ .CLI_ARGS }}
+
+      # - task: grafana:{{ .CLI_ARGS }}
+      # - task: on-call:{{ .CLI_ARGS }}
+      # - task: prometheus:{{ .CLI_ARGS }}
+
+      # - task: keycloak:{{ .CLI_ARGS }}
+      # - task: vault:{{ .CLI_ARGS }}
+
+      # - task: elasticsearch:{{ .CLI_ARGS }}
+      # - task: kafka:{{ .CLI_ARGS }}
+      # - task: minio:{{ .CLI_ARGS }}
+      # - task: opensearch:{{ .CLI_ARGS }}
+      # - task: zookeeper:{{ .CLI_ARGS }}
+
+      # - task: hive:{{ .CLI_ARGS }}
+
+      # - task: postgrest:{{ .CLI_ARGS }}
+      # - task: strapi:{{ .CLI_ARGS }}
+
+
