@@ -24,9 +24,6 @@ includes:
       IMAGE_NAME: debezium
       IMAGE_VERSION: 2.1.1
       IMAGE_BUILD_CONTEXT: image
-  fluentbit:
-    taskfile: cmds.yml
-    dir: ./computation/fluentbit
   nifi:
     taskfile: cmds.yml
     dir: ./computation/nifi
@@ -58,6 +55,9 @@ includes:
   clickhouse:
     taskfile: cmds.yml
     dir: ./databases/clickhouse
+  elasticsearch:
+    taskfile: cmds.yml
+    dir: ./databases/elasticsearch
   mongo:
     taskfile: cmds.yml
     dir: ./databases/mongo
@@ -67,6 +67,9 @@ includes:
   neo4j:
     taskfile: cmds.yml
     dir: ./databases/neo4j
+  opensearch:
+    taskfile: cmds.yml
+    dir: ./databases/opensearch
   postgresql:
     taskfile: cmds.yml
     dir: ./databases/postgresql
@@ -91,6 +94,9 @@ includes:
   prometheus:
     taskfile: cmds.yml
     dir: ./monitoring/prometheus
+  fluentbit:
+    taskfile: cmds.yml
+    dir: ./monitoring/fluentbit
 
   # Security
   keycloak:
@@ -103,18 +109,12 @@ includes:
     dir: ./security/vault
 
   # Storage
-  elasticsearch:
-    taskfile: cmds.yml
-    dir: ./storage/elasticsearch
   kafka:
     taskfile: cmds.yml
     dir: ./storage/kafka
   minio:
     taskfile: cmds.yml
     dir: ./storage/minio
-  opensearch:
-    taskfile: cmds.yml
-    dir: ./storage/opensearch
   zookeeper:
     taskfile: cmds.yml
     dir: ./storage/zookeeper

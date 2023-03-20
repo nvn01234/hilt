@@ -3,80 +3,83 @@
 
 This project is mainly for building a local dev environment
 
-## Directory structure
-```
-platforms
-|
-|___+ bookshelf
-|   |___+ cheatsheets
-|   |___+ libs
-|   |___+ setup
-|   |___+ draft
-|
-|___+ compose
-|   |___+ base
-|   |___+ compute
-|   |___+ serving
-|   |___+ storage
-|   |___- README.md
-|   |___- Taskfile.yml
-|
-|___+ helm
-|   |___+ addons
-|   |___+ compute
-|   |___+ operators
-|   |___+ serving
-|   |___+ storage
-|   |___- helmfile.yaml
-|   |___- kustomization.yaml
-|   |___- README.md
-|   |___- Taskfile.yml
-|
-|___- README.md
-
-```
-- bookshelf
-- docker: [Building your environment with docker](./compose/README.md)
-  - base: Building your base image that may be helpfull when you want to build your own images
-  - computation: Your computation engines, e.g., airflow, nifi, ...
-  - databases: Your databases, e.g., mysql, postgresql, ...
-  - monitoring: Monitoring platforms, e.g., prometheus, grafana, ...
-  - security: Security platforms, e.g., keycloak, vault, ...
-  - warehouse: Your warehouse platforms, e.g., hive
-  - storage: Your storage platforms, e.g., hadoop, kafka, ...
-- minikube: [Building your environment with minikube](./helm/README.md)
-  - addons: Minikube addons, e.g., cert-manager
-  - operator: K8S operators, e.g., strimzi operator
-  - computation: Your computation engines, e.g., airflow, trino, ...
-  - databases: Your databases, e.g., mysql, postgresql, ...
-  - monitoring: Monitoring platforms, e.g., prometheus, grafana, ...
-  - security: Security platforms, e.g., keycloak
-  - warehouse: Your warehouse platforms, e.g., hive
-  - storage: Your storage platforms, e.g., hadoop, kafka, ...
-
 ## Features
 1. Local dev/staging environment
-2. Simplify platforms configurations
-3. Comfort lazy devs (like me)
+2. Easy to configure/deploy services
+3. Support to deploy services on docker and kubernetes
+4. Comfort lazy devs (like me)
 
 ## Supported services
-| Idx | Service | Type | Kubernetes | Docker |
-|-----|---------|------|------------|--------|
-| 1 | Apache Airflow | Computation | yes | yes |
-| 2 | Debezium | Computation / CDC | yes | yes |
-| 3 | Apache Nifi | Computation | no | yes |
-| 4 | Trino | Computation | yes | yes |
-| 5 | Mongo DB | Database | no | yes |
-| 6 | Mysql | Database | yes | yes |
-| 7 | Postgresql | Database | yes | yes |
-| 8 | Rabbit MQ | Database / Key-value store | no | yes |
-| 9 | Redis | Database / Key-value store | yes | yes |
-| 10 | Grafana | Monitoring | yes | yes |
-| 11 | Prometheus | Monitoring | yes | yes |
-| 12 | Keycloak | Security | yes | yes |
-| 13 | Vault | Security | no | yes |
-| 14 | Apache Hadoop | Storage | no | yes |
-| 15 | Apache Kafka | Storage | yes | yes |
-| 16 | Minio | Storage | yes | yes |
-| 17 | Apache Zookeeper | Storage / Coordinator | yes | yes |
-| 18 | Apache Hive | Warehouse | yes | yes |
+| Idx | Service              | Kubernetes | Docker | Tags |
+|-----|----------------------|------------|--------|------|
+| 1   | Apache Airflow       | yes        | yes    | #compute #task_runner | 
+| 2   | Datahub              | no         | yes    | #compute #data_lineage #visualize | 
+| 3   | Debezium             | yes        | yes    | #cdc | 
+| 4   | Apache Nifi          | no         | yes    | #compute #task_runner #etl | 
+| 5   | Trino                | yes        | yes    | #compute #sql | 
+| 6   | Spark                | yes        | yes    | #compute | 
+| 7   | Jupyter              | no         | yes    | #bi | 
+| 8   | Superset             | no         | yes    | #bi #visualize | 
+| 9   | Clickhouse           | no         | yes    | #database #sql | 
+| 10  | Mongo DB             | no         | yes    | #database #nosql | 
+| 11  | Mysql                | yes        | yes    | #database #sql | 
+| 12  | Elasticsearch        | yes        | yes    | #database #cdc | 
+| 13  | Opensearch           | yes        | yes    | #database #cdc | 
+| 14  | Neo4j                | no         | yes    | #database #graph | 
+| 15  | Postgresql           | yes        | yes    | #database #sql | 
+| 16  | Rabbit MQ            | no         | yes    | #database #key_value | 
+| 17  | Redis                | yes        | yes    | #database #key_value #inmem | 
+| 18  | Grafana              | yes        | yes    | #monitor #visualize | 
+| 19  | Grafana on-call      | no         | yes    | #monitor #visualize | 
+| 20  | Prometheus           | yes        | yes    | #monitor #metrics | 
+| 21  | Fluentbit            | no         | no     | #monitor #metrics #log #collector | 
+| 22  | Keycloak             | yes        | yes    | #security #auth | 
+| 23  | Vault                | no         | yes    | #security #secret | 
+| 24  | Apache Kafka         | yes        | yes    | #storage #cdc | 
+| 25  | Minio                | yes        | yes    | #storage #fs | 
+| 26  | Apache Zookeeper     | yes        | yes    | #storage #coordinator | 
+| 27  | Apache Hive          | yes        | yes    | #warehouse |
+
+## Usage
+### Deploy on docker
+### Deploy on kubernetes
+
+## Directory structure
+```
+HILT
+|
+|___+ bookshelf                 
+|   |___+ cheatsheets           
+|   |___+ logo                  
+|   |___+ draft                 
+|
+|___+ docker                    
+|   |___+ computation            
+|   |___+ data-mining                 
+|   |___+ databases                 
+|   |___+ monitoring                  
+|   |___+ security                  
+|   |___+ storage                 
+|   |___+ warehouse                 
+|   |___+ other                  
+|   |___- cmds.yml                  
+|   |___- Taskfile.yml               
+|   |___- README.md        
+|
+|___+ kubernetes                 
+|   |___+ addons                  
+|   |___+ computation                 
+|   |___+ databases                 
+|   |___+ monitoring                  
+|   |___+ operators                 
+|   |___+ security                  
+|   |___+ storage                 
+|   |___+ warehouse                 
+|   |___- helmfile.yaml                 
+|   |___- kustomization.yaml        
+|   |___- Taskfile.yml                        
+|   |___- README.md    
+|
+|___- README.md                 
+
+```
