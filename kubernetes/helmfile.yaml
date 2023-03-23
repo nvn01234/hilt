@@ -29,6 +29,7 @@ helmfiles:
 # - path: computation/fluentbit/helmfile.yaml
 
 # - path: databases/mysql/helmfile.yaml
+# - path: databases/opensearch/helmfile.yaml
 # - path: databases/postgresql/helmfile.yaml
 # - path: databases/redis/helmfile.yaml
 
@@ -42,7 +43,6 @@ helmfiles:
 
 # - path: storage/kafka/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
-# - path: storage/opensearch/helmfile.yaml
 # - path: storage/zookeeper/helmfile.yaml
 
 # - path: warehouse/hive/helmfile.yaml

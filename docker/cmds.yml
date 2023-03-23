@@ -71,4 +71,4 @@ tasks:
 
   restart:
     cmds:
-    - docker compose restart {{.CLI_ARGS}}
+    - docker compose restart {{ .CLI_ARGS }}
