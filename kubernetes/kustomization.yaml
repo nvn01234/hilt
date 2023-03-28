@@ -5,10 +5,11 @@ resources:
 # - ./addons/cert-manager/issuer-ca.yaml
 
 # - ./computation/debezium/metrics-config.yaml
-# - ./computation/debezium/debezium.yaml
+- ./computation/debezium/debezium.yaml
 # - ./computation/debezium/metrics-svc.yaml
+- ./computation/debezium/sample/postgresql-connector.yaml
 
 # - ./computation/trino/trino-certificate.yaml
 
 # - ./operators/spark/apps/examples/spark-pi.yaml
-# - ./operators/strimzi/kafka.yaml
+- ./storage/kafka/kafka-strimzi.yaml

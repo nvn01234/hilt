@@ -30,10 +30,10 @@ helmfiles:
 
 # - path: databases/mysql/helmfile.yaml
 # - path: databases/opensearch/helmfile.yaml
-# - path: databases/postgresql/helmfile.yaml
+- path: databases/postgresql/helmfile.yaml
 # - path: databases/redis/helmfile.yaml
 
-# - path: operators/strimzi/helmfile.yaml
+- path: operators/strimzi/helmfile.yaml
 # - path: operators/spark/helmfile.yaml
 
 # - path: monitoring/prometheus/helmfile.yaml
@@ -41,7 +41,7 @@ helmfiles:
 
 # - path: security/keycloak/helmfile.yaml
 
-# - path: storage/kafka/helmfile.yaml
+- path: storage/kafka/helmfile.yaml
 # - path: storage/minio/helmfile.yaml
 # - path: storage/zookeeper/helmfile.yaml
 

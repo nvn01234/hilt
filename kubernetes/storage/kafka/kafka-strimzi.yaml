@@ -5,7 +5,7 @@ metadata:
   namespace: kafka
 spec:
   kafka:
-    version: 3.3.1
+    version: 3.4.0
     replicas: 3
     listeners:
     - name: plain
@@ -17,20 +17,20 @@ spec:
       type: internal
       tls: true
     config:
-      offsets.topic.replication.factor: 3
-      transaction.state.log.replication.factor: 3
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
       transaction.state.log.min.isr: 2
       message.max.bytes: 33554432 # 32Mi
       compression.type: snappy
-      num.partitions: 12
-      default.replication.factor: 3
+      num.partitions: 1
+      default.replication.factor: 1
 
       log.retention.hours: 1080 # 45d
-      num.replica.fetchers: 8
+      num.replica.fetchers: 2
       replica.fetch.max.bytes: 33554432 # 32Mi
       replica.fetch.response.max.bytes: 33554432 # 32Mi
       replica.socket.receive.buffer.bytes: 1048576 # 1Mi
-      num.recovery.threads.per.data.dir: 8 # = nCore
+      num.recovery.threads.per.data.dir: 2 # = nCore
     # TODO: Kafka storage configuration need to be changed to fit the production environment
     storage:
       type: ephemeral
@@ -60,16 +60,10 @@ spec:
     storage:
       type: persistent-claim
       class: topolvm-serving-hdd
-      size: 32Gi
+      size: 1Gi
       deleteClaim: false
     # TODO: Zookeeper resource configurations need to be changed to fit the production environment
-    resources:
-      requests:
-        cpu: "2"
-        memory: 4Gi
-      limits:
-        cpu: "2"
-        memory: 8Gi
+    resources: {}
     logging:
       type: inline
       loggers:
