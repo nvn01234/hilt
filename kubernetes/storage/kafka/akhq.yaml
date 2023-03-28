@@ -1,7 +1,6 @@
 image:
   repository: tchiotludo/akhq
-  tag: "0.21.0"
-
+  tag: 0.23.0
 secrets:
   akhq:
     connections:

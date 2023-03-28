@@ -8,26 +8,15 @@ auth:
   replicationPassword: SuperSecr3t
 
 primary:
+  extendedConfiguration: |-
+    wal_level=logical
 
   initdb:
     user: postgres
     password: SuperSecr3t
     scripts:
-      apps-init.sql: |
-        CREATE USER hive WITH PASSWORD 'SuperSecr3t' CREATEDB;
-        CREATE DATABASE metastore OWNER hive;
-        CREATE USER airflow WITH PASSWORD 'SuperSecr3t' CREATEDB;
-        CREATE DATABASE airflow OWNER airflow;
-        CREATE USER keycloak WITH PASSWORD 'SuperSecr3t' CREATEDB;
-        CREATE DATABASE keycloak OWNER keycloak;
-      # dvdrental.sh: |
-      #   #/bin/bash
-      #   DOWNLOAD_LINK=https://raw.githubusercontent.com/sondn98/hilt/master/kubernetes/databases/postgresql/sample/dvdrental/dvdrental.tar
-      #   curl $DOWNLOAD_LINK -o /tmp/dvdrental.tar
-
-      #   PGPASSWORD='SuperSecr3t' createdb   --username=postgres dvdrental
-      #   PGPASSWORD='SuperSecr3t' pg_restore --username=postgres -d dvdrental /tmp/dvdrental.tar
-      #   rm -rf /tmp/dvdrental.tar
+      app-init.sql: |
+        {{ tpl (readFile "sample/app-init.sql") . | nindent 8 | trim }}
 
 containerPorts:
   postgresql: 5432

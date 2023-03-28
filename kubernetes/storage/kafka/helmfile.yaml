@@ -1,12 +1,12 @@
 releases:
 
-- name: kafka
-  namespace: kafka
-  chart: bitnami/kafka
-  version: 18.0.8
-  values:
-  - ./kafka.yaml
-  - fullnameOverride: kafka
+# - name: kafka
+#   namespace: kafka
+#   chart: bitnami/kafka
+#   version: 18.0.8
+#   values:
+#   - ./kafka.yaml
+#   - fullnameOverride: kafka
 
 - name: schema-registry
   namespace: kafka
@@ -19,7 +19,7 @@ releases:
 - name: akhq
   namespace: kafka
   chart: akhq/akhq
-  version: 0.2.8
+  version: 0.3.1
   values:
   - ./akhq.yaml
   - fullnameOverride: akhq
