@@ -1,5 +1,10 @@
 version: '3'
 
+env:
+  GIT_URL: https://github.com
+  GIT_USER: sondn98
+  GIT_REPO: hilt
+
 includes:
 
   docker:
@@ -11,7 +16,58 @@ includes:
     dir: ./kubernetes
 
 tasks:
+
+  checkout:
+    internal: true
+    cmds:
+    - |
+      read -p "Branch name => " BRANCH_NAME
+      [ $BRANCH_NAME != 'master' ] && git checkout -b $BRANCH_NAME
+  checkout-master:
+    internal: true
+    cmds:
+    - git checkout master
+
+  git-add:
+    internal: true
+    cmds:
+    - git add -A
+
+  git-commit-amend:
+    internal: true
+    cmds:
+    - git commit --amend --no-edit
+
+  git-commit:
+    internal: true
+    cmds:
+    - read -p "Commit message => " COMMIT_MESSAGE && git commit -m "$COMMIT_MESSAGE"
+
+  git-push:
+    internal: true
+    cmds:
+    - git push origin $(git branch --show-current)
+
+  git-force-push:
+    internal: true
+    cmds:
+    - git push origin $(git branch --show-current) -f
+
   clean:
     cmds:
     - sudo git clean -dfX
     - mkdir -p bookshelf/drafts
+
+  create-pr:
+    cmds:
+    - task: checkout
+    - task: git-add
+    - task: git-commit
+    - task: git-push
+    - xdg-open $GIT_URL/$GIT_USER/$GIT_REPO/pull/new/$(git branch --show-current)
+
+  push-overwrite:
+    cmds:
+    - task: git-add
+    - task: git-commit-amend
+    - task: git-force-push
