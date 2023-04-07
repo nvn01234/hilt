@@ -11,7 +11,7 @@ COPY ./pom.xml /build/
 RUN mvn dependency:resolve \
         dependency:copy-dependencies -DoutputDirectory=plugins/confluent-schema-registry/;
 
-ENV DEBEZIUM_VERSION=2.1.1.Final \
+ENV DEBEZIUM_VERSION=2.1.3.Final \
     MAVEN_REPO_CENTRAL=https://repo1.maven.org/maven2
 RUN set -eux; \
     DEBEZIUM_CONNECTOR=( \
@@ -25,7 +25,7 @@ RUN set -eux; \
             | tar -xzvf - -C plugins --no-same-owner; \
     done
 
-FROM quay.io/strimzi/kafka:0.32.0-kafka-3.3.1
+FROM quay.io/strimzi/kafka:0.34.0-kafka-3.4.0
 LABEL maintainer="Do Ngoc Son <dongocson.work@gmail.com>"
 
 COPY --from=downloader /build/plugins /opt/kafka/plugins

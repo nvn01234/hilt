@@ -3,7 +3,7 @@ version: "2.5"
 services:
 
   debezium:
-    image: sondn1/debezium:2.1.1
+    image: sondn1/debezium:2.1.3
     command:
     - /opt/kafka/kafka_connect_run.sh
     environment:

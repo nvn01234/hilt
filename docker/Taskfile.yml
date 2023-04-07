@@ -22,7 +22,7 @@ includes:
     vars:
       REPOSITORY: sondn1
       IMAGE_NAME: debezium
-      IMAGE_VERSION: 2.1.1
+      IMAGE_VERSION: 2.1.3
       IMAGE_BUILD_CONTEXT: image
   nifi:
     taskfile: cmds.yml
