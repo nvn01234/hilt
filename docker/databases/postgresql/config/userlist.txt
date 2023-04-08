@@ -1,0 +1,2 @@
+"postgres" "SuperSecr3t"
+"metastore" "SuperSecr3t"
