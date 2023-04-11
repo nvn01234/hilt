@@ -173,11 +173,11 @@ tasks:
       # - task: airflow:{{ .CLI_ARGS }}
       # - task: alluvial:{{ .CLI_ARGS }}
       # - task: datahub:{{ .CLI_ARGS }}
-      # - task: debezium:{{ .CLI_ARGS }}
+      - task: debezium:{{ .CLI_ARGS }}
       # - task: fluentbit:{{ .CLI_ARGS }}
-      # - task: nifi:{{ .CLI_ARGS }}
+      - task: nifi:{{ .CLI_ARGS }}
       # - task: spark:{{ .CLI_ARGS }}
-      # - task: trino:{{ .CLI_ARGS }}
+      - task: trino:{{ .CLI_ARGS }}
 
       # - task: jupyter:{{ .CLI_ARGS }}
       # - task: superset:{{ .CLI_ARGS }}
@@ -186,7 +186,7 @@ tasks:
       # - task: mongo:{{ .CLI_ARGS }}
       # - task: mysql:{{ .CLI_ARGS }}
       # - task: neo4j:{{ .CLI_ARGS }}
-      # - task: postgresql:{{ .CLI_ARGS }}
+      - task: postgresql:{{ .CLI_ARGS }}
       # - task: rabbitmq:{{ .CLI_ARGS }}
       # - task: redis:{{ .CLI_ARGS }}
 
@@ -198,14 +198,14 @@ tasks:
       # - task: vault:{{ .CLI_ARGS }}
 
       # - task: elasticsearch:{{ .CLI_ARGS }}
-      # - task: kafka:{{ .CLI_ARGS }}
-      # - task: minio:{{ .CLI_ARGS }}
+      - task: kafka:{{ .CLI_ARGS }}
+      - task: minio:{{ .CLI_ARGS }}
       # - task: opensearch:{{ .CLI_ARGS }}
-      # - task: zookeeper:{{ .CLI_ARGS }}
+      - task: zookeeper:{{ .CLI_ARGS }}
 
-      # - task: hive:{{ .CLI_ARGS }}
+      - task: hive:{{ .CLI_ARGS }}
 
-      # - task: postgrest:{{ .CLI_ARGS }}
+      - task: postgrest:{{ .CLI_ARGS }}
       # - task: strapi:{{ .CLI_ARGS }}
 
 

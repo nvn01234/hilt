@@ -11,7 +11,7 @@ services:
       # - 11443:11443/tcp   # Cluster Node Protocol
     environment:
       SINGLE_USER_CREDENTIALS_USERNAME: admin
-      SINGLE_USER_CREDENTIALS_PASSWORD: ThisIsSuperSecr3t
+      SINGLE_USER_CREDENTIALS_PASSWORD: SuperSecr3tSuperSecr3t
       NIFI_ZK_CONNECT_STRING: zookeeper:2181
       NIFI_ZK_ROOT_NODE: /nifi
     volumes:

@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   trino:
-    image: sondn1/trino:408
+    image: trinodb/trino:408
     ports:
       - 18080:8080
     volumes:
