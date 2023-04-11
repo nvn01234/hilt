@@ -4,7 +4,7 @@ vars:
   NAMESPACE: '{{.NAMESPACE | default "default"}}'
   RELEASE: '{{.RELEASE | default "funny"}}'
   VALUES: '{{.VALUES | default "./values.yaml"}}'
-  CLUSTER_MOUNTPATH: '{{.CLUSTER_MOUNTPATH | default "/data1/minikube"}}'
+  CLUSTER_MOUNTPATH: '{{.CLUSTER_MOUNTPATH | default "/data"}}'
   CLUSTER_MEMORY: '{{.CLUSTER_MEMORY | default "10240"}}'
   CLUSTER_CPUS: '{{.CLUSTER_CPUS | default "4"}}'
 
@@ -14,7 +14,7 @@ tasks:
     cmds:
     - minikube start --driver=docker
                      --mount
-                     --mount-string="/data1/minikube:{{ .CLUSTER_MOUNTPATH }}"
+                     --mount-string="/data/sondn/testlab/k8s:{{ .CLUSTER_MOUNTPATH }}"
                      --memory {{ .CLUSTER_MEMORY }}
                      --cpus {{ .CLUSTER_CPUS }}
                      --nodes 1

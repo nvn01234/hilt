@@ -1,7 +1,7 @@
 export HELM_VERSION=v3.9.1
 # Processor architecture must be one of 386, amd64, arm, arm64, ppc64le, and s390x
-export PROCESSOR_ARCHITECTURE=amd64 
-export USER_BINNARY=/usr/local/bin
+export PROCESSOR_ARCHITECTURE=amd64
+export USER_BINNARY=${USER_BINNARY:-"/usr/local/bin"}
 
 export DOWNLOAD_LINK=https://get.helm.sh/helm-$HELM_VERSION-linux-$PROCESSOR_ARCHITECTURE.tar.gz
 

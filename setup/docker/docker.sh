@@ -9,8 +9,8 @@ read SUDO_PASSWORD
 echo $SUDO_PASSWORD | sudo -S apt remove docker docker-engine docker.io containerd runc
 
 # Update the apt package index and install packages to allow apt to use a repository over HTTPS
-sudo apt-get update
-sudo apt-get install ca-certificates curl gnupg lsb-release
+sudo apt update
+sudo apt install ca-certificates curl gnupg lsb-release
 
 # Add Docker’s official GPG key
 sudo mkdir -p /etc/apt/keyrings

@@ -1,6 +1,8 @@
 export LASTEST_STABLE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
 export DOWNLOAD_LINK=https://dl.k8s.io/release/$LASTEST_STABLE_VERSION/bin/linux/amd64/kubectl
 
+export USER_BINNARY=${USER_BINNARY:-"/usr/local/bin"}
+
 # Download binary files
 curl -Lo /tmp/kubectl $DOWNLOAD_LINK
 
@@ -8,8 +10,10 @@ echo "This installation requires password for sudo command"
 echo "Password for sudo command: "
 read SUDO_PASSWORD
 
-echo $SUDO_PASSWORD | sudo -S install -m 0755 /tmp/kubectl /usr/local/bin/kubectl \
+echo $SUDO_PASSWORD | sudo -S install -m 0755 /tmp/kubectl $USER_BINNARY/kubectl \
 && rm -rf /tmp/kubectl*
+
+echo $SUDO_PASSWORD | sudo -S chown $USER:$USER $USER_BINNARY/kubectl
 
 # Install krew - plugins manager for kubectl
 KREW_VERSION=v0.4.3
