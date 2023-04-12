@@ -1,0 +1,85 @@
+version: "3"
+
+services:
+
+  namenode:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    restart: unless-stopped
+    command: ["startup.sh", "namenode"]
+    ports:
+      - 9870:9870
+      - 9000:9000
+    environment:
+      CLUSTER_NAME: test
+      HADOOP_NAME_DIR: /data/namenode
+    volumes:
+      - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/yarn-site.xml
+      - ./config/mapred-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/mapred-site.xml
+      - hadoop_namenode_data:/data/namenode
+    networks:
+      - local
+
+  datanode:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    restart: unless-stopped
+    command: ["startup.sh", "datanode"]
+    environment:
+      HADOOP_DATA_DIR: /data/datanode
+    volumes:
+      - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/yarn-site.xml
+      - ./config/mapred-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/mapred-site.xml
+      - hadoop_datanode_data:/data/datanode
+    networks:
+      - local
+
+  nodemanager:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    restart: unless-stopped
+    command: ["startup.sh", "nodemanager"]
+    volumes:
+      - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/yarn-site.xml
+      - ./config/mapred-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/mapred-site.xml
+    networks:
+      - local
+
+  resourcemanager:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    restart: unless-stopped
+    command: ["startup.sh", "resourcemanager"]
+    volumes:
+      - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
+      - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/yarn-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/yarn-site.xml
+      - ./config/mapred-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/mapred-site.xml
+    networks:
+      - local
+
+  # TODO: Start timeline server
+  # timelineserver:
+  #   image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+  #   restart: unless-stopped
+  #   command: ["startup.sh", "timelineserver"]
+  #   volumes:
+  #     - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
+  #     - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
+  #     - ./config/yarn-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/yarn-site.xml
+  #     - ./config/mapred-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/mapred-site.xml
+  #     - hadoop_timelineserver_data:/data/timeline-store
+  #   networks:
+  #     - local
+
+volumes:
+  hadoop_namenode_data:
+  hadoop_datanode_data:
+  hadoop_timelineserver_data:
+
+networks:
+  local:
+    external: true
+

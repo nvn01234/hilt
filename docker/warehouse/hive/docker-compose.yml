@@ -4,6 +4,7 @@ services:
 
   hive-server:
     image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    restart: unless-stopped
     depends_on:
       - hive-metastore
     ports:
@@ -11,13 +12,15 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./config/hadoop/:/opt/hadoop/etc/hadoop/
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadooop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/hive/hive-site.xml:/opt/hive/apache-hive-bin/conf/hive-site.xml
     networks:
       - local
 
   hive-metastore:
     image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     command: hive --service metastore --verbose --hiveconf hive.root.logger=INFO,console
+    restart: unless-stopped
     depends_on:
       - init_metastore_db
     ports:
@@ -25,7 +28,8 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./config/hadoop/:/opt/hadoop/etc/hadoop/
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadooop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/hive/hive-site.xml:/opt/hive/apache-hive-bin/conf/hive-site.xml
     networks:
       - local
 
@@ -33,7 +37,7 @@ services:
     image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     command: >
       schematool -url jdbc:postgresql://postgresql:5432/metastore \
-                 -dbType postgres -userName hive -passWord SuperSecr3t \
+                 -dbType postgres -userName metastore -passWord SuperSecr3t \
                  -driver org.postgresql.Driver \
                  -initSchema \
                  --verbose

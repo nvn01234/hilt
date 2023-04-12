@@ -3,7 +3,7 @@
 <configuration>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:postgresql://postgresql:6432/metastore</value>
+    <value>jdbc:postgresql://postgresql:5432/metastore</value>
     <!-- <value>jdbc:mysql://mysql:3306/metastore?createDatabaseIfNotExist=true</value> -->
   </property>
 
@@ -15,7 +15,7 @@
 
   <property>
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>hive</value>
+    <value>metastore</value>
   </property>
 
   <property>
