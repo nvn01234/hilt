@@ -35,6 +35,7 @@ This project is mainly for building a local dev environment
 | 21  | Fluentbit            | no         | no     | #monitor #metrics #log #collector | 
 | 22  | Keycloak             | yes        | yes    | #security #auth | 
 | 23  | Vault                | no         | yes    | #security #secret | 
+| 24  | Apache Hadoop        | no         | yes    | #storage #fs | 
 | 24  | Apache Kafka         | yes        | yes    | #storage #cdc | 
 | 25  | Minio                | yes        | yes    | #storage #fs | 
 | 26  | Apache Zookeeper     | yes        | yes    | #storage #coordinator | 

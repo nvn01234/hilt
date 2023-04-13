@@ -45,13 +45,12 @@ services:
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_PASSWORD: SuperSecr3t
       PGBOUNCER_POOL_MODE: session # session | transaction | statement
-      PGBOUNCER_MAX_CLIENT_CONN: 120
-      PGBOUNCER_MAX_DB_CONNECTIONS: 512
-      PGBOUNCER_DEFAULT_POOL_SIZE: 100
+      PGBOUNCER_MAX_CLIENT_CONN: 20
+      PGBOUNCER_MAX_DB_CONNECTIONS: 10
+      PGBOUNCER_DEFAULT_POOL_SIZE: 50
       PGBOUNCER_IGNORE_STARTUP_PARAMETERS: extra_float_digits
-      PGBOUNCER_STATS_USERS: metastore,postgres
-    # volumes:
-    #   - ./config/:/bitnami/pgbouncer/conf/
+    volumes:
+      - ./config:/bitnami/pgbouncer/conf
     networks:
       - local
 
