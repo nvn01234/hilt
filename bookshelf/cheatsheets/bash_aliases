@@ -1,0 +1,11 @@
+alias k='kubectl'
+alias klg='kubectl logs -f'
+alias kfw='kubectl port-forward'
+alias kp='kubectl get pod'
+alias kwp='watch -n 1 kubectl get pod'
+alias kcm='kubectl get cm'
+alias ksvc='kubectl get svc'
+
+alias dps='docker ps -a'
+alias dlg='docker logs -f'
+alias dw='watch -n 1 docker ps -a'
