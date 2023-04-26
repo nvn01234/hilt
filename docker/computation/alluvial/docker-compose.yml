@@ -22,6 +22,8 @@ services:
     image: hub.teko.vn/dataops/alluvial:v0.12.1
     environment:
       AWS_REGION: aws-global
+    profiles:
+      - manager
     command:
       - alluvial
       - manage

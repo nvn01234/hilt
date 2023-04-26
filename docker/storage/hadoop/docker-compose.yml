@@ -40,6 +40,8 @@ services:
     image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     restart: unless-stopped
     command: ["startup.sh", "nodemanager"]
+    profiles:
+      - mapreduce
     volumes:
       - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
       - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
@@ -52,6 +54,8 @@ services:
     image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
     restart: unless-stopped
     command: ["startup.sh", "resourcemanager"]
+    profiles:
+      - mapreduce
     volumes:
       - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
       - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
@@ -60,11 +64,13 @@ services:
     networks:
       - local
 
-  # TODO: Start timeline server
+  # # TODO: Start timeline server
   # timelineserver:
   #   image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
   #   restart: unless-stopped
   #   command: ["startup.sh", "timelineserver"]
+  #   profiles:
+  #     - mapreduce
   #   volumes:
   #     - ./config/core-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/core-site.xml
   #     - ./config/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml

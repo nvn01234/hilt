@@ -11,6 +11,8 @@ includes:
   alluvial:
     taskfile: cmds.yml
     dir: ./computation/alluvial
+    vars:
+      EXTRAS_PROFILES: manager
   datahub:
     taskfile: cmds.yml
     dir: ./computation/datahub
@@ -70,9 +72,13 @@ includes:
   opensearch:
     taskfile: cmds.yml
     dir: ./databases/opensearch
+    vars:
+      EXTRAS_PROFILES: dashboard
   postgresql:
     taskfile: cmds.yml
     dir: ./databases/postgresql
+    vars:
+      EXTRAS_PROFILES: pgbouncer
   rabbitmq:
     taskfile: cmds.yml
     dir: ./databases/rabbitmq
@@ -117,9 +123,12 @@ includes:
       IMAGE_NAME: hadoop
       IMAGE_VERSION: 3.3.5
       IMAGE_BUILD_CONTEXT: image
+      # EXTRAS_PROFILES: mapreduce
   kafka:
     taskfile: cmds.yml
     dir: ./storage/kafka
+    vars:
+      EXTRAS_PROFILES: ui sr
   minio:
     taskfile: cmds.yml
     dir: ./storage/minio
@@ -137,6 +146,7 @@ includes:
       IMAGE_VERSION: 3.1.3
       IMAGE_BUILD_CONTEXT: image
       DEPENDENT_SERVICES: postgresql
+      EXTRAS_PROFILES: init
 
   # Other
   postgrest:

@@ -21,24 +21,12 @@ services:
     networks:
       - local
 
-  # postgresql:
-  #   image: bitnami/postgresql:15
-  #   restart: unless-stopped
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: SuperSecr3t
-  #   volumes:
-  #     - postgres_data:/bitnami/postgresql
-  #     - ./sample:/docker-entrypoint-initdb.d
-  #   networks:
-  #     - local
-
   pgbouncer:
     image: docker.io/bitnami/pgbouncer:1.18.0
     ports:
       - 6432:6432
+    profiles:
+      - pgbouncer
     environment:
       POSTGRESQL_HOST: postgresql
       # PGBOUNCER_AUTH_TYPE: trust
