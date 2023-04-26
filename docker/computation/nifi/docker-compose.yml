@@ -16,8 +16,6 @@ services:
       NIFI_ZK_ROOT_NODE: /nifi
     volumes:
       - ./external-jars:/opt/nifi/nifi-1.16.3/external
-      - ./config/nifi.properties:/opt/nifi/nifi-1.16.3/config/nifi.properties
-      - ./config/zookeeper.properties:/opt/nifi/nifi-1.16.3/config/zookeeper.properties
     networks:
       - local
 

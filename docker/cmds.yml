@@ -6,7 +6,7 @@ env:
   IMAGE_VERSION: '{{ .IMAGE_VERSION }}'
   IMAGE_BUILD_CONTEXT: '{{ .IMAGE_BUILD_CONTEXT | default "." }}'
   INIT_ON_START: '{{ .INIT_ON_START | default true }}'
-  PROFILES: '{{ .START_ON_PROFILES | default "" }}'
+  EXTRAS_PROFILES: '{{ .EXTRAS_PROFILES | default "" }}'
   DEPENDENT_SERVICES: '{{ .DEPENDENT_SERVICES | default "" }}'
   STOP_DEPENDENT_SERVICES_ON_STOP: '{{ .STOP_DEPENDENT_SERVICES_ON_STOP | default false }}'
 
@@ -29,7 +29,7 @@ tasks:
     cmds:
     - task: start-dependencies
     - task: init
-    - docker compose up -d --remove-orphans
+    - COMPOSE_PROFILES="$(echo $EXTRAS_PROFILES | sed -r 's/^ *//g' | sed -r 's/ *$//g' | sed -r 's/ +/,/g')" docker compose up -d --remove-orphans
 
   start-dependencies:
     dir: ../../
@@ -52,7 +52,7 @@ tasks:
 
   stop:
     cmds:
-    - docker compose down --volumes
+    - COMPOSE_PROFILES="$(echo $EXTRAS_PROFILES | sed -r 's/^ *//g' | sed -r 's/ *$//g' | sed -r 's/ +/,/g')"  docker compose down --volumes
     - task: stop-dependencies
 
   stop-dependencies:

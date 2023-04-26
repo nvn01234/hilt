@@ -41,6 +41,8 @@ services:
                  -driver org.postgresql.Driver \
                  -initSchema \
                  --verbose
+    profiles:
+      - init
     networks:
       - local
 
