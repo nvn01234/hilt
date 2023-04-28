@@ -77,8 +77,8 @@ includes:
   postgresql:
     taskfile: cmds.yml
     dir: ./databases/postgresql
-    vars:
-      EXTRAS_PROFILES: pgbouncer
+    # vars:
+    #   EXTRAS_PROFILES: pgbouncer
   rabbitmq:
     taskfile: cmds.yml
     dir: ./databases/rabbitmq
