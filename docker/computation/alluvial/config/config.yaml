@@ -15,7 +15,7 @@ source:
       case: lower
     - class: dev.alluvial.source.kafka.naming.MappingSchemaNamingAdjuster
       map:
-        dvdrental: dvdrental
+        public: dvdrental
 
 sink:
   kind: iceberg
@@ -58,7 +58,7 @@ stream:
   connector: postgresql
   examineInterval: 3m
   idleTimeout: 30m
-  commitBatchSize: 500000
+  commitBatchSize: 500
   commitTimespan: 15m
   rotateByDateInTz: "+7"
 

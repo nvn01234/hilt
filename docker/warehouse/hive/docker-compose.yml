@@ -12,7 +12,7 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadooop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
       - ./config/hive/hive-site.xml:/opt/hive/apache-hive-bin/conf/hive-site.xml
     networks:
       - local
@@ -28,7 +28,7 @@ services:
     environment:
       HADOOP_OPTIONAL_TOOLS: hadoop-aws
     volumes:
-      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadooop-bin/etc/hadoop/hdfs-site.xml
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/apache-hadoop-bin/etc/hadoop/hdfs-site.xml
       - ./config/hive/hive-site.xml:/opt/hive/apache-hive-bin/conf/hive-site.xml
     networks:
       - local
