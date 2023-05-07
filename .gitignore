@@ -299,14 +299,10 @@ override.tf.json
 
 # Computation
 docker/computation/airflow/logs
+docker/computation/mage/src
 
 # Other
 docker/other/strapi/app
-
-# Projects
-projects/postgresql-replication/master_data
-projects/postgresql-replication/secondary_data
-projects/postgresql-replication/slave_data
 
 # Misc
 **/drafts/

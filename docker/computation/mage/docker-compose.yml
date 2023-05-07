@@ -1,0 +1,22 @@
+version: "2.5"
+
+services:
+
+  mage-ai:
+    image: mageai/mageai:0.8.73
+    restart: unless-stopped
+    ports:
+      - 6789:6789
+    command:
+      - /app/run_app.sh
+      - mage
+      - start
+      - local_project
+    volumes:
+      - ./src:/home/src
+    networks:
+      - local
+
+networks:
+  local:
+    external: true

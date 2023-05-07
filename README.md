@@ -15,6 +15,7 @@ This project is mainly for building a local dev environment
 | 1   | Apache Airflow       | yes        | yes    | #compute #task_runner | 
 | 2   | Datahub              | no         | yes    | #compute #data_lineage #visualize | 
 | 3   | Debezium             | yes        | yes    | #cdc | 
+| 3   | Mage-ai              | no         | yes    | #compute #task_runner | 
 | 4   | Apache Nifi          | no         | yes    | #compute #task_runner #etl | 
 | 5   | Trino                | yes        | yes    | #compute #sql | 
 | 6   | Spark                | yes        | yes    | #compute | 
