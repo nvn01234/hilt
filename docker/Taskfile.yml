@@ -26,6 +26,9 @@ includes:
       IMAGE_NAME: debezium
       IMAGE_VERSION: 2.1.3
       IMAGE_BUILD_CONTEXT: image
+  mage-ai:
+    taskfile: cmds.yml
+    dir: ./computation/mage
   nifi:
     taskfile: cmds.yml
     dir: ./computation/nifi
