@@ -38,8 +38,7 @@ services:
       PGBOUNCER_MAX_DB_CONNECTIONS: 10
       PGBOUNCER_DEFAULT_POOL_SIZE: 50
       PGBOUNCER_IGNORE_STARTUP_PARAMETERS: extra_float_digits
-      PGBOUNCER_USERLIST: |
-        "metastore" "SuperSecr3t"
+      PGBOUNCER_AUTH_USER: postgres
     networks:
       - local
 

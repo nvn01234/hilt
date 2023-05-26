@@ -71,4 +71,4 @@ tasks:
 
   restart:
     cmds:
-    - docker compose restart {{ .CLI_ARGS }}
+    - COMPOSE_PROFILES="$(echo $EXTRAS_PROFILES | sed -r 's/^ *//g' | sed -r 's/ *$//g' | sed -r 's/ +/,/g')" docker compose restart {{ .CLI_ARGS }}
