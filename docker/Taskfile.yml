@@ -57,6 +57,9 @@ includes:
       DEPENDENT_SERVICES: postgresql redis
 
   # Databases
+  citus:
+    taskfile: cmds.yml
+    dir: ./databases/citus
   clickhouse:
     taskfile: cmds.yml
     dir: ./databases/clickhouse

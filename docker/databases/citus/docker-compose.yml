@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+
+  master:
+    image: citusdata/citus:11.3.0
+    ports:
+    - 5432:5432
+    env_file:
+      - ./config/env.sh
+    networks:
+      - local
+
+  manager:
+    image: citusdata/membership-manager:0.3.0
+    depends_on:
+    - master
+    env_file:
+      - ./config/env.sh
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - healthcheck:/healthcheck
+    networks:
+      - local
+
+  worker:
+    image: citusdata/citus:11.3.0
+    depends_on:
+    - manager
+    env_file:
+      - ./config/env.sh
+    command: /wait-for-manager.sh
+    volumes:
+      - healthcheck:/healthcheck
+    networks:
+      - local
+
+volumes:
+  healthcheck:
+
+networks:
+  local:
+    external: true
