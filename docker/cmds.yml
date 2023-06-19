@@ -2,7 +2,7 @@ version: '3'
 
 env:
   REPOSITORY: '{{ .REPOSITORY }}'
-  IMAGE_NAME: '{{ .IMAGE_NAME | default "sondn1" }}'
+  IMAGE_NAME: '{{ .IMAGE_NAME | default "nhatnv" }}'
   IMAGE_VERSION: '{{ .IMAGE_VERSION }}'
   IMAGE_BUILD_CONTEXT: '{{ .IMAGE_BUILD_CONTEXT | default "." }}'
   INIT_ON_START: '{{ .INIT_ON_START | default true }}'
