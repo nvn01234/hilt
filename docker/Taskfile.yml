@@ -98,6 +98,9 @@ includes:
     dir: ./monitoring/grafana
     vars:
       DEPENDENT_SERVICES: postgresql
+  mimir:
+    taskfile: cmds.yml
+    dir: ./monitoring/grafana-mimir
   on-call:
     taskfile: cmds.yml
     dir: ./monitoring/on-call

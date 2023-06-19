@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+
+  mimir:
+    image: grafana/mimir:2.5.0
+    command:
+      - -target=all,alertmanager
+      - -config.file=/etc/mimir/config.yaml
+    ports:
+      - 9009:9009
+    volumes:
+      - ./configs:/etc/mimir
+      - mimir_data:/mimir_data
+      - mimir_local:/mimir_local
+
+volumes:
+  mimir_data: # long-term storage
+  mimir_local:
+
+networks:
+  local:
+    external: true
+
+##### References #####
+# * https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/
+# * https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/
+# * https://grafana.com/docs/mimir/latest/operators-guide/reference-http-api/
