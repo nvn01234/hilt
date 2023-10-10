@@ -123,6 +123,16 @@ includes:
     taskfile: cmds.yml
     dir: ./security/vault
 
+  # Serving
+  flink:
+    taskfile: cmds.yml
+    dir: ./serving/flink
+    vars:
+      REPOSITORY: nhatnv
+      IMAGE_NAME: flink
+      IMAGE_VERSION: 1.17.1
+      IMAGE_BUILD_CONTEXT: image
+
   # Storage
   hadoop:
     taskfile: cmds.yml

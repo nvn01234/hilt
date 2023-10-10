@@ -301,6 +301,9 @@ override.tf.json
 docker/computation/airflow/logs
 docker/computation/mage/src
 
+# data-mining
+docker/data-mining/jupyter/workspace
+
 # Other
 docker/other/strapi/app
 

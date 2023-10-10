@@ -1,0 +1,41 @@
+version: "2.2"
+services:
+  jobmanager:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        s3.endpoint: http://minio:9000
+        s3.access-key: admin
+        s3.secret-key: SuperSecr3t
+        s3.path.style.access: true
+      - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.17.1.jar
+    networks:
+      - local
+
+  taskmanager:
+    image: $REPOSITORY/$IMAGE_NAME:$IMAGE_VERSION
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+        s3.endpoint: http://minio:9000
+        s3.access-key: admin
+        s3.secret-key: SuperSecr3t
+        s3.path.style.access: true
+      - ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.17.1.jar
+    networks:
+      - local
+
+networks:
+  local:
+    external: true
