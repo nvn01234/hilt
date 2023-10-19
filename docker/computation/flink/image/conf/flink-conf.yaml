@@ -1,0 +1,7 @@
+# Custom
+jobmanager.rpc.address: jobmanager
+taskmanager.numberOfTaskSlots: 2
+s3.endpoint: http://minio:9000
+s3.access-key: admin
+s3.secret-key: SuperSecr3t
+s3.path.style.access: true

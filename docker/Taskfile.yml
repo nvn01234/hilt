@@ -26,6 +26,14 @@ includes:
       IMAGE_NAME: debezium
       IMAGE_VERSION: 2.1.3
       IMAGE_BUILD_CONTEXT: image
+  flink:
+    taskfile: cmds.yml
+    dir: ./serving/flink
+    vars:
+      REPOSITORY: nhatnv
+      IMAGE_NAME: flink
+      IMAGE_VERSION: 1.17.1
+      IMAGE_BUILD_CONTEXT: image
   mage-ai:
     taskfile: cmds.yml
     dir: ./computation/mage
@@ -122,16 +130,6 @@ includes:
   vault:
     taskfile: cmds.yml
     dir: ./security/vault
-
-  # Serving
-  flink:
-    taskfile: cmds.yml
-    dir: ./serving/flink
-    vars:
-      REPOSITORY: nhatnv
-      IMAGE_NAME: flink
-      IMAGE_VERSION: 1.17.1
-      IMAGE_BUILD_CONTEXT: image
 
   # Storage
   hadoop:
